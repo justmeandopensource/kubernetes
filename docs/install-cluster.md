@@ -9,7 +9,7 @@ This documentation guides you in setting up a cluster with one master node and o
 |Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|1|
 |Worker|kworker.example.com|172.42.42.101|CentOS 7|1G|1|
 
-## On Kmaster
+## On both Kmaster and Kworker
 Perform all the commands as root user unless otherwise specified
 ### Pre-requisites
 ##### Update /etc/hosts
@@ -72,6 +72,7 @@ yum install -y kubeadm kubelet kubectl
 systemctl enable kubelet
 systemctl start kubelet
 ```
+## On kmaster
 ##### Initialize Kubernetes Cluster
 ```
 kubeadm init --apiserver-advertise-address=172.42.42.100 --pod-network-cidr=10.244.0.0/16
