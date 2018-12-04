@@ -6,7 +6,7 @@ This documentation guides you in setting up a cluster with one master node and o
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
-|Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|1|
+|Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|2|
 |Worker|kworker.example.com|172.42.42.101|CentOS 7|1G|1|
 
 ## On both Kmaster and Kworker
