@@ -8,9 +8,11 @@ cat >>/etc/hosts<<EOF
 172.42.42.102 kworker2.example.com kworker2
 EOF
 
-# Install docker
+# Install docker from Docker-ce repository
 echo "[TASK 2] Install docker container engine"
-yum install -y -q docker >/dev/null 2>&1
+yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
+yum install -y -q docker-ce >/dev/null 2>&1
 
 # Enable docker service
 echo "[TASK 3] Enable and start docker service"
