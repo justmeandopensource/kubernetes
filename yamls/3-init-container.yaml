@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: nginx
+  name: nginx-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+
+    spec:
+
+      volumes:
+      - name: shared-volume
+        emptyDir: {}
+
+      initContainers:
+      - name: busybox
+        image: busybox
+        volumeMounts:
+        - name: shared-volume
+          mountPath: /nginx-data
+        command: ["/bin/sh"]
+        args: ["-c", "echo '<h1>Hello Kubernetes</h1>' > /nginx-data/index.html"]
+
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: shared-volume
+          mountPath: /usr/share/nginx/html
