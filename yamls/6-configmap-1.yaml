@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-configmap
+data:
+  channel.name: "justmeandopensource"
+  channel.owner: "Venkat Nagappan"
