@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limitrange
+  namespace: quota-demo-ns
+spec:
+  limits:
+  - default:
+      memory: 300Mi
+    defaultRequest:
+      memory: 50Mi
+    type: Container

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: quota-demo1
+  namespace: quota-demo-ns
+spec:
+  hard:
+    pods: "2"
+    configmaps: "1"
