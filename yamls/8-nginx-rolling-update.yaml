@@ -22,5 +22,5 @@ spec:
         run: nginx
     spec:
       containers:
-              - image: nginx:1.14
+      - image: nginx:1.14
         name: nginx
