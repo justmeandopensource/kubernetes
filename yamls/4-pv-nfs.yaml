@@ -9,7 +9,7 @@ spec:
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   nfs:
-    server: 10.251.42.139
-    path: "/srv/nfs/kubedata/pv1"
+    server: <nfs server ip>
+    path: "/srv/nfs/kubedata"
