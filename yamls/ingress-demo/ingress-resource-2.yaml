@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource-2
+spec:
+  rules:
+  - host: nginx.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-deploy-main
+          servicePort: 80
+  - host: blue.nginx.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-deploy-blue
+          servicePort: 80
+  - host: green.nginx.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-deploy-green
+          servicePort: 80
