@@ -96,6 +96,20 @@ This has to be done as the user in the above step (in my case it is __venkatn__)
 ```
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
+>Important Note:
+>
+>If your virtual machine just has one network interface, the above flannel resource will work.
+If you used Vagrant to provision the virtual machine (using VirtualBox provider), the default eth0 interface will have ip address like 10.0.2.15. This is vagrant specific. You won't be able to connect to the virtual machine using ssh if you have only this network interface. This interface is useful only for doing "vagrant ssh" to get into the machine.
+>
+>In your vagrant file you will have to add a public network with an IP address so that you can get to the machine from your host machine. This network interface will be added as eth1.
+>
+>If this is the case, we need to modify the flannel resource to make eth1 as the standard interface. Otherwise it will pick eth0 and pod to pod communication won't work.
+>
+>You can use the below command with the modified kube-flannel.yml (from my repo). I have added --iface eth1 option to the container.
+```
+kubectl apply -f https://raw.githubusercontent.com/justmeandopensource/kubernetes/master/vagrant-provisioning/kube-flannel.yml
+```
+
 ##### Cluster join command
 ```
 kubeadm token create --print-join-command
