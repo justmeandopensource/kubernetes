@@ -57,7 +57,7 @@ then
 
   # Initialize Kubernetes
   echo "[TASK 9] Initialize Kubernetes Cluster"
-  kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables >> /root/kubeinit.log 2>&1
+  kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification >> /root/kubeinit.log 2>&1
 
   # Copy Kube admin config
   echo "[TASK 10] Copy kube admin config to root user .kube directory"
@@ -71,7 +71,7 @@ then
   # Generate Cluster join command
   echo "[TASK 12] Generate and save cluster join command to /joincluster.sh"
   joinCommand=$(kubeadm token create --print-join-command) 
-  echo "$joinCommand --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables" > /joincluster.sh
+  echo "$joinCommand --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification" > /joincluster.sh
 
 fi
 
