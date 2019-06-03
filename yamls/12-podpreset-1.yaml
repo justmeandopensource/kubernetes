@@ -1,0 +1,11 @@
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: app1-env
+spec:
+  selector:
+    matchLabels:
+      role: app1
+  env:
+    - name: CHANNEL
+      value: "Just Me and Opensource"
