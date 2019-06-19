@@ -12,7 +12,6 @@ rm -rf kubernetes-ingress
 ```
 
 #### Haproxy configuration
-Delete the default frontend and backend and paste the below content in **/etc/haproxy/haproxy.cfg**
 ```
 frontend http_front
   bind *:80
