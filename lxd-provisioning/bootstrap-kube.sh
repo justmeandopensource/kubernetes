@@ -37,6 +37,7 @@ systemctl start kubelet >/dev/null 2>&1
 # Install Openssh server
 echo "[TASK 6] Install and configure ssh"
 yum install -y -q openssh-server >/dev/null 2>&1
+sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
 systemctl enable sshd >/dev/null 2>&1
 systemctl start sshd >/dev/null 2>&1
 
