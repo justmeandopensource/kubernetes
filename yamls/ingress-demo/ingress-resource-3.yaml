@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: ingress-resource-2
+spec:
+  rules:
+  - host: nginx.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx-deploy-main
+          servicePort: 80
+      - path: /blue
+        backend:
+          serviceName: nginx-deploy-blue
+          servicePort: 80
+      - path: /green
+        backend:
+          serviceName: nginx-deploy-green
+          servicePort: 80
