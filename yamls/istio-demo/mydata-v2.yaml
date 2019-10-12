@@ -1,0 +1,52 @@
+---
+#################################################
+# ConfigMap for index.html for mydata v2
+#################################################
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mydata-cm-v2
+data:
+  index.html: |
+    <body bgcolor="gray">
+      <center>
+        <h1>Just Me and Opensource</h1>
+        <h1>V2</h1>
+      </center>
+    </body>
+---
+#################################################
+# Deployment: mydata v2
+#################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydata-v2
+  labels:
+    app: mydata
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mydata
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: mydata
+        version: v2
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: index-html
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: index-html
+        configMap:
+          name: mydata-cm-v2
