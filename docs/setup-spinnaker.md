@@ -86,3 +86,10 @@ hal config security ui edit --override-base-url "http://<LoadBalancerIP>:9000"
 hal config security api edit --override-base-url "http://<LoadBalancerIP>:8084"
 hal deploy apply
 ```
+*If you used NodePort*
+```
+
+hal config security ui edit --override-base-url "http://<worker-node-ip>:<nodePort>"
+hal config security api edit --override-base-url "http://worker-node-ip>:<nodePort>"
+hal deploy apply
+```
