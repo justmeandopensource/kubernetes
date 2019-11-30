@@ -8,7 +8,7 @@ Kubernetes cluster with atleast **4 cores** and **8GB memory**
 
 ```
 mkdir ~/.hal
-docker run --name halyard -v ~/.hal:/home/spinnaker/.hal -v ~/.kube/config:/home/spinnaker/.kube/config -it -d gcr.io/spinnaker-marketplace/halyard:stable
+docker run --name halyard -v ~/.hal:/home/spinnaker/.hal -v ~/.kube/config:/home/spinnaker/.kube/config -d gcr.io/spinnaker-marketplace/halyard:stable
 ```
 
 Get a shell into Halyard container
