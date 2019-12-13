@@ -26,7 +26,7 @@ EOF
 
 # Install Kubernetes
 echo "[TASK 4] Install Kubernetes (kubeadm, kubelet and kubectl)"
-yum install -y -q kubeadm-1.14.3 kubelet-1.14.3 kubectl-1.14.3 >/dev/null 2>&1
+yum install -y -q kubeadm-1.17.0 kubelet-1.17.0 kubectl-1.17.0 >/dev/null 2>&1
 
 # Start and Enable kubelet service
 echo "[TASK 5] Enable and start kubelet service"
@@ -49,6 +49,9 @@ echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
 echo "[TASK 8] Install additional packages"
 yum install -y -q which net-tools sudo sshpass less >/dev/null 2>&1
 
+# Hack required to provision K8s v1.15+ in LXC containers
+mknod /dev/kmsg c 1 11
+
 #######################################
 # To be executed only on master nodes #
 #######################################
@@ -58,7 +61,7 @@ then
 
   # Initialize Kubernetes
   echo "[TASK 9] Initialize Kubernetes Cluster"
-  kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification >> /root/kubeinit.log 2>&1
+  kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all >> /root/kubeinit.log 2>&1
 
   # Copy Kube admin config
   echo "[TASK 10] Copy kube admin config to root user .kube directory"
@@ -71,8 +74,8 @@ then
 
   # Generate Cluster join command
   echo "[TASK 12] Generate and save cluster join command to /joincluster.sh"
-  joinCommand=$(kubeadm token create --print-join-command) 
-  echo "$joinCommand --ignore-preflight-errors=Swap,FileContent--proc-sys-net-bridge-bridge-nf-call-iptables,SystemVerification" > /joincluster.sh
+  joinCommand=$(kubeadm token create --print-join-command 2>/dev/null) 
+  echo "$joinCommand --ignore-preflight-errors=all" > /joincluster.sh
 
 fi
 
