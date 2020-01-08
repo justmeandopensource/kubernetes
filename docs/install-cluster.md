@@ -94,7 +94,7 @@ chown -R venkatn:venkatn /home/venkatn/.kube
 ##### Deploy Calico network
 This has to be done as the user in the above step (in my case it is __venkatn__)
 ```
-kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 ```
 
 ##### Cluster join command
