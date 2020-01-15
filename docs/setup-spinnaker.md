@@ -49,6 +49,10 @@ hal config deploy edit --type distributed --account-name my-k8s
 kubectl create ns spinnaker
 helm install minio --namespace spinnaker --set accessKey="myaccesskey" --set secretKey="mysecretkey" --set persistence.enabled=false stable/minio
 ```
+The above helm install command will only work if you are running Helm v3+. If you are using Helm v2, use this command instead
+```
+helm install --name minio --namespace spinnaker --set accessKey="myaccesskey" --set secretKey="mysecretkey" --set persistence.enabled=false stable/minio
+```
 
 ### Back inside the halyard container
 #### For minio, disable s3 versioning
