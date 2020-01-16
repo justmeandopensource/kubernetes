@@ -4,7 +4,7 @@
 echo "[TASK 1] Install docker container engine"
 yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
-yum install -y -q docker-ce-18.06.0.ce-3.el7 >/dev/null 2>&1
+yum install -y -q docker-ce-19.03.5 >/dev/null 2>&1
 
 # Enable docker service
 echo "[TASK 2] Enable and start docker service"
@@ -26,7 +26,7 @@ EOF
 
 # Install Kubernetes
 echo "[TASK 4] Install Kubernetes (kubeadm, kubelet and kubectl)"
-yum install -y -q kubeadm-1.17.0 kubelet-1.17.0 kubectl-1.17.0 >/dev/null 2>&1
+yum install -y -q kubeadm-1.17.1 kubelet-1.17.1 kubectl-1.17.1 >/dev/null 2>&1
 
 # Start and Enable kubelet service
 echo "[TASK 5] Enable and start kubelet service"
