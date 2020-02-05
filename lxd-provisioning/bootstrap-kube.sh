@@ -51,6 +51,8 @@ yum install -y -q which net-tools sudo sshpass less >/dev/null 2>&1
 
 # Hack required to provision K8s v1.15+ in LXC containers
 mknod /dev/kmsg c 1 11
+chmod +x /etc/rc.d/rc.local
+echo 'mknod /dev/kmsg c 1 11' >> /etc/rc.d/rc.local
 
 #######################################
 # To be executed only on master nodes #
