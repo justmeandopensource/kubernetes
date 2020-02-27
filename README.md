@@ -48,4 +48,21 @@ helm install --values /tmp/prom.values --name myprom1 stable/prometheus
  #kubectl delete svc myprom1-prometheus-server
  #kubectl expose deployment myprom1-prometheus-server --type=NodePort --port=80 --target-port=9090
 ```
+## installé grafana 
+
+helm inspect stable/grafana > /tmp/grafana.values
+
+vim /tmp/grafana.values
+```
+service:
+  type: NodePort
+  port: 80
+  nodePort: 32211
+  targetPort: 3000
+    # targetPort: 4181 To be used with a proxy extraContainer
+  annotations: {}
+  labels: {}
+  portName: service
+```
+kubectl expose deployment grafana1 --type=NodePort --port=80 --target-port=3000
 
