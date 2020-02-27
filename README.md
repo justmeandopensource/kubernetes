@@ -70,4 +70,10 @@ service:
   portName: service
 ```
 kubectl expose deployment grafana1 --type=NodePort --port=80 --target-port=3000
+user: admin 
+password nous pouvons le récuperé depuis le secret du chart
 
+```
+kubectl get secret --namespace default mygrafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+mygrafana: nom du chart
