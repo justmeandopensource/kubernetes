@@ -19,7 +19,12 @@ data:
     - name: k8s-master-ip-space
       protocol: layer2
       addresses:
-      - 172.23.0.100-172.23.0.250                                
+      - 172.23.0.100-172.23.0.250    
+```
+# install storageClass nfs
+
+```
+helm install stable/nfs-client-provisioner --set nfs.server=172.23.0.1 --set nfs.path=/srv/nfs/kubedata
 ```
 # installation prometheus avec grafana en utilisant helm
 install helm in your cluster
