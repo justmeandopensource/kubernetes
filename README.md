@@ -69,7 +69,9 @@ service:
   labels: {}
   portName: service
 ```
+```
 kubectl expose deployment grafana1 --type=NodePort --port=80 --target-port=3000
+```
 user: admin 
 password nous pouvons le récuperé depuis le secret du chart
 
