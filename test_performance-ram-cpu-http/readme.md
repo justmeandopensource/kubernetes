@@ -1,17 +1,23 @@
-------------------test performance web cpu----------
+# ------------------test performance web cpu----------
 pacman -S siege
+```
 siege -q -c 5 -t 2m http://kworker1:32298
+```
 -q, --quiet
 -c:concurrent nbr de requette http envoyé
 -t:time (pour combient de temp)
 
------------test site web with script curl---------
+# -----------test site web with script curl---------
+```
 for i in {1..35}; do
    kubectl exec --namespace=kube-public curl -- sh -c 'test=`wget -qO- -T 2  http://webapp-service.default.svc.cluster.local:8080/info 2>&1` && echo "$test OK" || echo "Failed"';
    echo ""
-------------------test performance web mem----------
-pod avec stress
+```
+# ------------------test performance web mem----------
+## pod avec stress
 -------------------yaml-stress avec container qui consomme 15Mi Ram--------
+
+```
 apiVersion: v1
 kind: Pod
 metadata:
@@ -55,8 +61,12 @@ spec:
   securityContext: {}
   serviceAccount: default
   serviceAccountName: default
+  ```
 ---------------------------------------------------------------
 
 
-entrer dans le conteneur et executer la commande
+## utiliser la commande stress à l'interieur du conteneur
+```
 stress --vm 2 --vm-bytes 200M
+```
+
