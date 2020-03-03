@@ -54,7 +54,19 @@ helm install --values /tmp/prom.values --name myprom1 stable/prometheus
  #kubectl expose deployment myprom1-prometheus-server --type=NodePort --port=80 --target-port=9090
 ```
 ## installé grafana 
+1) methode :
+```
+helm install stable/grafana --name mygrafana --set persistence.enabled=true --set persistence.accessModes={ReadWriteOnce} --set persistence.size=8Gi --set service.type=NodePort --set service.nodePort=32221
+```
+user: admin 
+password nous pouvons le récuperé depuis le secret du chart
 
+```
+kubectl get secret --namespace default mygrafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+mygrafana: nom du chart
+
+2) méthode
 helm inspect stable/grafana > /tmp/grafana.values
 
 vim /tmp/grafana.values
