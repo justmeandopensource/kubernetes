@@ -24,8 +24,12 @@ data:
 # install storageClass nfs
 1)installer nfs server
 2)create partage /srv/nfs/kubedata
+3)dans chaque serveur du cluster k8s installé nfs-utils
 
-3)sur le cluster kubernetes lancer la creation d'une storageclass avec la charte helm
+```
+yum install nfs-utils
+```
+4)sur le cluster kubernetes lancer la creation d'une storageclass avec la charte helm
 
 ```
 helm install stable/nfs-client-provisioner --set nfs.server=172.23.0.1 --set nfs.path=/srv/nfs/kubedata
