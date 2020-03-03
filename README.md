@@ -22,10 +22,17 @@ data:
       - 172.23.0.100-172.23.0.250    
 ```
 # install storageClass nfs
+1)installer nfs server
+2)create partage /srv/nfs/kubedata
+
+3)sur le cluster kubernetes lancer la creation d'une storageclass avec la charte helm
 
 ```
 helm install stable/nfs-client-provisioner --set nfs.server=172.23.0.1 --set nfs.path=/srv/nfs/kubedata
 ```
+nfs.server=l'adresse du serveur phisique nfs
+nfs.path=le dossier partagé ou export nfs
+
 # installation prometheus avec grafana en utilisant helm
 install helm in your cluster
 install chart prometheus
