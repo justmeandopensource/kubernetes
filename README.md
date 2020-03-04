@@ -163,7 +163,7 @@ spec:
           mountPath: "/usr/share/nginx/html"
 ```
 
-### second deployment an pod with page blue
+### Third deployment an pod with page blue
 
 ```bash
 apiVersion: apps/v1
@@ -275,6 +275,12 @@ vim /tmp/prom.values
 ```
 helm install --values /tmp/prom.values --name myprom1 stable/prometheus
 ```
+or 
+
+```
+helm install --name myprom1 --set server.service.type=NodePort --set server.service.nodePort=32222  stable/prometheus 
+```
+
 ### si votre service n'est pas créer en mode NodePort il faut supprimer le service et le recrier manuellement
 
 ```
