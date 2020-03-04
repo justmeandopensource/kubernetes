@@ -1,0 +1,24 @@
+[1;31m
+==========================================================
+  _____    _____           _____   _____    ____   _____
+ |  __ \  / ____|         |  __ \ |  __ \  / __ \ |  __ \
+ | |  | || (___    _____  | |__) || |__) || |  | || |  | |
+ | |  | | \___ \  |_____| |  ___/ |  _  / | |  | || |  | |
+ | |__| | ____) |         | |     | | \ \ | |__| || |__| |
+ |_____/ |_____/          |_|     |_|  \_\ \____/ |_____/
+
+==========================================================
+[0;00m
+Backend server 2
+
+Installation details:
+ - Tomcats with Digipoint, Searchproxy, Apiproxy and Location extractor works in LB with be01 and be03.
+ - JBoss with Keyword, RSS and WebNews agents
+
+Help:
+ - To start a jboss server manually: service jboss start
+ - To start JMX planner manually: service jmxplanner start
+ - To log agent output: tail -f /JEvolution/AppServer/server/standard/log/server.log
+ - To log JMX planner output: tail -f /JEvolution/AgServer/log/Out.log
+
+===========================================================
