@@ -335,4 +335,30 @@ sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher
 ```
 curl --insecure -sfL https://localhost/v3/import/qv476x7mtw2kw2fp6fz452glcmknsgwj6cvx7jqxt9mrv2qts2mwdd.yaml | kubectl apply -f -
 ```
+## maintenance d'un cluster kubernetes kubeadm
+1)sur le master
+pour désinstaller tous les composants k8s
+```
+#kubeadm reset all
+```
+pour reinstaller a nouveau votre master
+il va te générer le tocken pour faire rejoindre les workers
+```
+#kubeadm init
+.
+.
+.
 
+kubeadm join 192.168.1.247:6443 --token 0g9j4w.fzc8nc7jhmkvttiv \
+    --discovery-token-ca-cert-hash sha256:34ee91bf998850c90c88bb49206a9b2758441d427fc47d50cc4157f9d4a7e5d6 
+```
+2) sur le worker s'il est déja joigné à un autre master il faut le disjoigné 
+```
+#kubeadm reset all
+```
+3) executé cette commande pour joigné au nouveau master
+
+```
+#kubeadm join 192.168.1.247:6443 --token 0g9j4w.fzc8nc7jhmkvttiv \
+    --discovery-token-ca-cert-hash sha256:34ee91bf998850c90c88bb49206a9b2758441d427fc47d50cc4157f9d4a7e5d6
+```
