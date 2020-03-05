@@ -362,3 +362,9 @@ kubeadm join 192.168.1.247:6443 --token 0g9j4w.fzc8nc7jhmkvttiv \
 #kubeadm join 192.168.1.247:6443 --token 0g9j4w.fzc8nc7jhmkvttiv \
     --discovery-token-ca-cert-hash sha256:34ee91bf998850c90c88bb49206a9b2758441d427fc47d50cc4157f9d4a7e5d6
 ```
+4) installé un CNI calico ou weave-net 
+```
+kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+```
+
+
