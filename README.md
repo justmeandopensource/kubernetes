@@ -239,7 +239,7 @@ spec:
 
 # install storageClass nfs avec une helm nfs-client-provisioner
 
-1)installer nfs server
+1)installer nfs server voir la doc https://github.com/soufianem370/admin_linux
 2)create partage /srv/nfs/kubedata
 3)dans chaque serveur du cluster k8s installé nfs-utils
 
