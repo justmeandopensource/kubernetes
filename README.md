@@ -449,3 +449,62 @@ kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 https://varlogdiego.com/kubernetes-cluster-with-autoscaling-on-aws-and-kops
 
 
+### Using Helm v3 with Kubernetes
+
+1. Install Helm from Script
+
+You can always to refer to other ways of installation by accessing https://helm.sh/docs/intro/install/
+
+Helm now has an installer script that will automatically grab the latest version of Helm and install it locally.
+
+You can fetch that script, and then execute it locally. It’s well documented so that you can read through it and understand what it is doing before you run it.
+```sh
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+2. helm completion
+Generate autocompletions script for the specified shell bash 
+```sh
+source <(helm completion bash)
+```
+ref: https://helm.sh/docs/helm/helm_completion/
+
+
+3. Initialize a Helm Chart Repository
+Once you have Helm ready, you can add a chart repository. One popular starting location is the official Helm stable charts:
+```sh
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+```
+to add another repository either locally or remotely:
+Install the binary:
+ref: https://chartmuseum.com/docs/#using-with-local-filesystem-storage
+```sh
+# on Linux
+curl -LO https://s3.amazonaws.com/chartmuseum/release/latest/bin/linux/amd64/chartmuseum
+chmod +x ./chartmuseum
+mv ./chartmuseum /usr/local/bin
+```
+USING WITH LOCAL FILESYSTEM STORAGE
+```sh
+chartmuseum --debug --port=8080 --storage="local" --storage-local-rootdir="./charts-repo"&
+```
+then helm servecm plugin
+```sh
+helm plugin install https://github.com/jdolitsky/helm-servecm
+```
+before adding your repo try to index this directory by runing the cmd bellow: 
+```sh
+mkdir charts-repo && cd charts-repo/ && helm repo index .
+```
+finnaly add the custom repo you have been created
+```sh
+helm repo add local http://127.0.0.1:8080
+```sh
+to see the repo available just run the bellow cmd:
+```sh
+helm repo list
+```sh
+Normally you should have two repos, the default one "stable and the customized one "local"
+
+
