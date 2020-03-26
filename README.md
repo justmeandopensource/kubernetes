@@ -448,4 +448,39 @@ kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 ### kubernetes-cluster-with-autoscaling for worker-node
 https://varlogdiego.com/kubernetes-cluster-with-autoscaling-on-aws-and-kops
 
+### pour l'envirennement de test installé kind kubernetes in docker
+prérequise: docker installé
 
+==> installation go
+aller sur le site officiel golang
+https://golang.org/dl/
+
+```
+wget https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
+sudo tar zxf go1.14.1.linux-amd64.tar.gz -C /usr/local/
+```
+
+```
+echo -n 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshrc
+```
+
+==> installation Kind
+```
+curl -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(uname)-amd64
+chmod +x ./kind
+mv ./kind /home/smakhloufi/go/kind
+```
+```
+echo -n 'export PATH=$PATH:/home/smakhloufi/go/kind' >> ~/.zshrc
+```
+==> créer un cluster
+```
+#kind create cluster --name kind-2 
+
+afficher les cluster créer
+
+#kind get clusters
+
+pour imposter le kubeconfig
+#kind get kubeconfig --name kind-2 > ~/.kube/config
+```
