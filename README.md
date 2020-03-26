@@ -448,7 +448,7 @@ kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 ### kubernetes-cluster-with-autoscaling for worker-node
 https://varlogdiego.com/kubernetes-cluster-with-autoscaling-on-aws-and-kops
 
-### pour l'envirennement de test installé kind kubernetes in docker
+## pour l'envirennement de test installé kind kubernetes in docker
 prérequise: docker installé
 
 ==> installation go
