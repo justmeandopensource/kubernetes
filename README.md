@@ -473,7 +473,7 @@ mv ./kind /home/smakhloufi/go/kind
 ```
 echo -n 'export PATH=$PATH:/home/smakhloufi/go/kind' >> ~/.zshrc
 ```
-==> créer un cluster
+==> créer un cluster avec un seul node
 ```
 #kind create cluster --name kind-2 
 
@@ -484,3 +484,23 @@ afficher les cluster créer
 pour imposter le kubeconfig
 #kind get kubeconfig --name kind-2 > ~/.kube/config
 ```
+==> créer un cluster avec un master et plusieurs worker
+creer un fichier de config
+```
+#vim kind_config.yaml
+```
+copier coller cette config
+```
+# three node (two workers) cluster config
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+```
+créer le cluster
+```
+kind create cluster --name cluster1 --config kind_config.yaml
+```
+
