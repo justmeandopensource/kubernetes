@@ -556,11 +556,73 @@ mkdir charts-repo && cd charts-repo/ && helm repo index .
 finnaly add the custom repo you have been created
 ```sh
 helm repo add local http://127.0.0.1:8080
-```sh
+```
 to see the repo available just run the bellow cmd:
 ```sh
 helm repo list
-```sh
+```
 Normally you should have two repos, the default one "stable and the customized one "local"
+
+4.Install an Example Chart
+To install a chart, you can run the helm install command. Helm has several ways to find and install a chart, but the easiest is to use one of the official stable charts.
+```sh
+helm repo update              # Make sure we get the latest list of charts
+helm search repo stable/mysql      # choose the appropriate repo to you
+helm install stable/mysql --generate-name    # if you didn't mention any name for your install you must add --generate-name 
+```
+5. Uninstall a Release
+To uninstall a release, use the helm uninstall command:
+```sh
+helm uninstall smiling-penguin
+```
+This will uninstall smiling-penguin from Kubernetes, which will remove all resources associated with the release as well as the release history.
+
+6. Creating your first Helm Chart
+to avoid creating all files and directories from scratch, use the command bellow will give you the whole chart template, make the necessary changes then apply it:
+```sh
+helm create my-chart
+```
+tree tool is a very useful managing helm charts, to highlight the files created by this cmd you can run:
+```sh
+tree ./my-chart
+```
+to install your chart use the common comd we have already used before:
+```sh
+helm install my-chart .
+```
+you can always use values.yaml file as a reference of values, it's helpful to apply your changes on it then upgrade your app already installed by runing:
+```sh
+helm upgrade my-chart .
+```
+7. How to set up a local helm Chart 
+After creating your own chart, and applying all the requierements on it, absoletly you need to share this chart on work environment using the local repo or any other remote repos:
+first of all copy this chart on you local repo "repostorage, then access the dir chart and package it:
+```sh
+mv mmy-chart ./repostorage
+cd ./repostorage/my-chart && helm package .
+```
+update your local repo by executing:
+```sh
+helm repo update
+```
+search for your chart on that repo:
+```sh
+helm search repo local/
+```
+6. Other useful commands:
+```sh
+helm help
+helm inspect stable/jenkins     # to get details about the app desired
+helm fetch stable/jenkins      # to download the app chart
+helm list                 # to get the app already installed on your k8s cluster
+helm home                # to check your home dir if it contains the mandatory files
+helm upgrade             # to upgrade your app after making some changes on your chart files
+helm rollback my-chart 1      # to call off the last change and return back to the roolout nu 1
+helm delete --purge my-chart 
+```
+N.B: take a look on this https://helm.sh/docs/topics/v2_v3_migration/ to know about all changes and all cmds which are outdated on helm v3, also to learn using all helm best practice. 
+
+
+
 
 
