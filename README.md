@@ -732,6 +732,7 @@ you can customize the vendor name/directory for your installation by tweaking in
             - name: DRIVER
               value: mycifs
 ```
+Réf: https://k8scifsvol.juliohm.com.br/
 
 
 
