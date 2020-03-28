@@ -623,6 +623,116 @@ helm delete --purge my-chart
 N.B: take a look on this https://helm.sh/docs/topics/v2_v3_migration/ to know about all changes and all cmds which are outdated on helm v3, also to learn using all helm best practice. 
 
 
+### Use Samba share as a Persistent storage in Kubernetes Cluster
+
+## 1.Pre-requisites
+On your Kubernetes nodes, simply install the dependency:
+```bash
+yum -y install cifs-utils
+```
+## 2.DaemonSet Installation
+the recommended driver deployment method is to have a DaemonSet install the driver cluster-wide automatically.
+A Docker image juliohm/kubernetes-cifs-volumedriver-intaller is available for this purpose, which can be deployed into a Kubernetes cluster using the install.yaml from this repository. The image is built FROM busybox, so the it’s essentially very small.
+
+The installer image allows you to install without the need to compile the project. Deploying the volume driver should be as easy as bellow:
+```sh
+git clone https://github.com/juliohm1978/kubernetes-cifs-volumedriver.git
+
+cd kubernetes-cifs-volumedriver
+
+make install
+```
+The install target uses kubectl to create a privileged DaemonSet with pods that mount the host directory /usr/libexec/kubernetes/kubelet-plugins/volume/exec/ for installation. Check the output from the deployed containers to make sure it did not produce any errors. Crashing pods mean something went wrong.
+So, once you have verified that it’s completed, the DaemonSet can be safely removed, by runing:
+```sh
+make delete
+```
+the kubelet’s default directory for volume plugins is /usr/libexec/kubernetes/kubelet-plugins/volume/exec/. This could be different if your installation changed this directory using the --volume-plugin-dir parameter.
+
+## 3.Create a kubernetes Secret
+ this secret will contain the username and the password which are used to join the cifs share:
+ ```sh
+kubectl  create secret generic --from-literal=username=yelmir --from-literal=password=root --type=juliohm/cifs
+```
+## 4. Create a Persistent Volume
+The following is an example of PersistentVolume that uses the volume driver
+```sh
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cifs-pv2
+spec:
+  capacity:
+    storage: 1Gi
+  flexVolume:
+    driver: juliohm/cifs
+    options:
+      server: 192.168.43.43
+      share: /partage
+    secretRef:
+      name: my-secret
+  accessModes:
+    - ReadWriteMany
+```
+## 5. Create the Persistent Volume Claim
+The following is an example of PersistentVolumeClaim that uses the PV we created previously
+```sh
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cifs-pvc2
+spec:
+  resources:
+   requests:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+```
+
+## 6. Use the PVC in pod
+This is an examle of using PVC based on Samba storage on pods:
+```sh
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: data
+            mountPath: /dados
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: cifs-pv2
+```
+## N.B: To customize vendor name/directory
+you can customize the vendor name/directory for your installation by tweaking install.yaml and defining VENDOR and DRIVER environment variables.
+```sh
+      containers:
+        - image: juliohm/kubernetes-cifs-volumedriver-installer:2.0
+          env:
+            - name: VENDOR
+              value: mycompany
+            - name: DRIVER
+              value: mycifs
+```
+
 
 
 
