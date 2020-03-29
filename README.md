@@ -652,7 +652,7 @@ the kubelet’s default directory for volume plugins is /usr/libexec/kubernetes/
 ### 3.Create a kubernetes Secret
  this secret will contain the username and the password which are used to join the cifs share:
  ```sh
-kubectl  create secret generic --from-literal=username=yelmir --from-literal=password=root --type=juliohm/cifs
+kubectl  create secret generic mycifspass --from-literal=username=yelmir --from-literal=password=root --type=juliohm/cifs
 ```
 ### 4. Create a Persistent Volume
 The following is an example of PersistentVolume that uses the volume driver
