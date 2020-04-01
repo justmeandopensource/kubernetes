@@ -254,6 +254,12 @@ helm install stable/nfs-client-provisioner --set nfs.server=172.23.0.1 --set nfs
 nfs.server=l'adresse du serveur phisique nfs
 nfs.path=le dossier partagé ou export nfs
 
+5)mettre le storage classe créer entant que storageclasse par-defaut
+
+```
+kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' 
+```
+
 # installation prometheus avec grafana en utilisant helm
 install helm in your cluster
 install chart prometheus
