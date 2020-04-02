@@ -343,6 +343,49 @@ sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher
 ```
 curl --insecure -sfL https://localhost/v3/import/qv476x7mtw2kw2fp6fz452glcmknsgwj6cvx7jqxt9mrv2qts2mwdd.yaml | kubectl apply -f -
 ```
+## installation cluster with kubeadm
+
+```
+cat <<EOF>> /etc/hosts
+10.128.0.27 master-node
+10.128.0.29 node-1 worker-node-1
+10.128.0.30 node-2 worker-node-2
+EOF
+```
+```
+setenforce 0
+sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+reboot
+```
+```
+firewall-cmd --permanent --add-port=6443/tcp
+firewall-cmd --permanent --add-port=2379-2380/tcp
+firewall-cmd --permanent --add-port=10250/tcp
+firewall-cmd --permanent --add-port=10251/tcp
+firewall-cmd --permanent --add-port=10252/tcp
+firewall-cmd --permanent --add-port=10255/tcp
+firewall-cmd –reload
+modprobe br_netfilter
+echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+```
+```
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+```
+```
+yum install kubeadm docker -y 
+systemctl enable kubelet
+systemctl start kubelet
+systemctl enable docker
+systemctl start docker
+```
 ## maintenance d'un cluster kubernetes kubeadm
 1)sur le master
 pour désinstaller tous les composants k8s
