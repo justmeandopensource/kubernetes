@@ -344,6 +344,7 @@ sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher
 curl --insecure -sfL https://localhost/v3/import/qv476x7mtw2kw2fp6fz452glcmknsgwj6cvx7jqxt9mrv2qts2mwdd.yaml | kubectl apply -f -
 ```
 ## installation cluster with kubeadm
+==>tous ces taches à executer sur l'ensemble des machines worker et master
 
 ```
 cat <<EOF>> /etc/hosts
@@ -386,6 +387,22 @@ systemctl start kubelet
 systemctl enable docker
 systemctl start docker
 ```
+==> sur le neud master intier le cluster
+```
+swapoff -a
+kubeadm init
+```
+apres l'execution de cette commande nous aurons le token pour joingné les workers
+```
+kubeadm join 172.17.0.10:6443 --token jlsu5g.1wp4m5i3aza82yjf \
+    --discovery-token-ca-cert-hash sha256:f246b98d354a5371dad50153d751b36f59f4866c0d4ce4f6b8bda8167cb49e71
+```
+==> sur chaque machine worker executer cette commande pour joigné le worker au cluster
+```
+worker# kubeadm join 172.17.0.10:6443 --token jlsu5g.1wp4m5i3aza82yjf \
+    --discovery-token-ca-cert-hash sha256:f246b98d354a5371dad50153d751b36f59f4866c0d4ce4f6b8bda8167cb49e71
+```
+
 ## maintenance d'un cluster kubernetes kubeadm
 1)sur le master
 pour désinstaller tous les composants k8s
