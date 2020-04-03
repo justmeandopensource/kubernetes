@@ -409,6 +409,9 @@ pour désinstaller tous les composants k8s
 ```
 #kubeadm reset all
 ```
+```
+kubectl delete node <node-name>
+```
 pour reinstaller a nouveau votre master
 il va te générer le tocken pour faire rejoindre les workers
 ```
