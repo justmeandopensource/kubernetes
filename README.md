@@ -420,6 +420,18 @@ il va te générer le tocken pour faire rejoindre les workers
 kubeadm join 192.168.1.247:6443 --token 0g9j4w.fzc8nc7jhmkvttiv \
     --discovery-token-ca-cert-hash sha256:34ee91bf998850c90c88bb49206a9b2758441d427fc47d50cc4157f9d4a7e5d6 
 ```
+==> si tu as oublier le token master
+
+```
+#kubeadm token generate
+
+naoynf.c7il2s44pimqg3w0
+```
+
+==> copier le nouveau token et générer la commande join
+```
+#kubeadm token create naoynf.c7il2s44pimqg3w0 --print-join-command --ttl=0 
+```
 2) sur le worker s'il est déja joigné à un autre master il faut le disjoigné 
 ```
 #kubeadm reset all
