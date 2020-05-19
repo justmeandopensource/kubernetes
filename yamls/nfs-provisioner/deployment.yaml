@@ -17,7 +17,7 @@ spec:
       serviceAccountName: nfs-client-provisioner
       containers:
         - name: nfs-client-provisioner
-          image: quay.io/external_storage/nfs-client-provisioner:latest
+          image:  quay.io/repository/kubernetes_incubator/nfs-provisioner:latest
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
