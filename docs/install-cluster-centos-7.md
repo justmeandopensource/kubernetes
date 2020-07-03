@@ -6,8 +6,8 @@ This documentation guides you in setting up a cluster with one master node and o
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
-|Master|kmaster.example.com|172.42.42.100|CentOS 7|2G|2|
-|Worker|kworker.example.com|172.42.42.101|CentOS 7|1G|1|
+|Master|kmaster.example.com|172.16.42.100|CentOS 7|2G|2|
+|Worker|kworker.example.com|172.16.42.101|CentOS 7|1G|1|
 
 ## On both Kmaster and Kworker
 Perform all the commands as root user unless otherwise specified
@@ -16,8 +16,8 @@ Perform all the commands as root user unless otherwise specified
 So that we can talk to each of the nodes in the cluster
 ```
 cat >>/etc/hosts<<EOF
-172.42.42.100 kmaster.example.com kmaster
-172.42.42.101 kworker.example.com kworker
+172.16.42.100 kmaster.example.com kmaster
+172.16.42.101 kworker.example.com kworker
 EOF
 ```
 ##### Install, enable and start docker service
@@ -80,7 +80,7 @@ systemctl start kubelet
 ## On kmaster
 ##### Initialize Kubernetes Cluster
 ```
-kubeadm init --apiserver-advertise-address=172.42.42.100 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=172.16.42.100 --pod-network-cidr=192.168.0.0/16
 ```
 ##### Copy kube config
 To be able to use kubectl command to connect and interact with the cluster, the user needs kube config file.
