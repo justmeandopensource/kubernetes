@@ -14,6 +14,6 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 172.42.42.240-172.42.42.250
+      - 172.16.16.240-172.16.16.250
 EOF
 ```
