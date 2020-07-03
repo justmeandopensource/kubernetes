@@ -6,8 +6,8 @@ This documentation guides you in setting up a cluster with one master node and o
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
-|Master|kmaster.example.com|172.16.42.100|Ubuntu 20.04|2G|2|
-|Worker|kworker.example.com|172.16.42.101|Ubuntu 20.04|1G|1|
+|Master|kmaster.example.com|172.16.16.100|Ubuntu 20.04|2G|2|
+|Worker|kworker.example.com|172.16.16.101|Ubuntu 20.04|1G|1|
 
 ## On both Kmaster and Kworker
 Perform all the commands as root user unless otherwise specified
@@ -50,7 +50,7 @@ apt install -y kubeadm=1.18.5-00 kubelet=1.18.5-00 kubectl=1.18.5-00
 ##### Initialize Kubernetes Cluster
 Update the below command with the ip address of kmaster
 ```
-kubeadm init --apiserver-advertise-address=172.16.42.100 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16
 ```
 ##### Deploy Calico network
 ```
