@@ -17,8 +17,7 @@ ufw disable
 ```
 ##### Disable swap
 ```
-swapoff -a
-sed -i '/swap/d' /etc/fstab
+swapoff -a; sed -i '/swap/d' /etc/fstab
 ```
 ##### Update sysctl settings for Kubernetes networking
 ```
@@ -43,8 +42,7 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.
 ```
 ##### Install Kubernetes components
 ```
-apt update
-apt install -y kubeadm=1.18.5-00 kubelet=1.18.5-00 kubectl=1.18.5-00
+apt update && apt install -y kubeadm=1.18.5-00 kubelet=1.18.5-00 kubectl=1.18.5-00
 ```
 ## On kmaster
 ##### Initialize Kubernetes Cluster
