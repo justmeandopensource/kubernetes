@@ -19,6 +19,11 @@ Vagrant.configure(2) do |config|
       # Prevent VirtualBox from interfering with host audio stack
       v.customize ["modifyvm", :id, "--audio", "none"]
     end
+    kmaster.vm.provider :libvirt do |v|
+      v.memory = 2048
+      v.nested = true
+      v.cpus = 2
+    end
     kmaster.vm.provision "shell", path: "bootstrap_kmaster.sh"
   end
 
@@ -36,6 +41,11 @@ Vagrant.configure(2) do |config|
         v.cpus = 1
         # Prevent VirtualBox from interfering with host audio stack
         v.customize ["modifyvm", :id, "--audio", "none"]
+      end
+      workernode.vm.provider :libvirt do |v|
+        v.memory = 1048
+        v.nested = true
+        v.cpus = 1
       end
       workernode.vm.provision "shell", path: "bootstrap_kworker.sh"
     end
