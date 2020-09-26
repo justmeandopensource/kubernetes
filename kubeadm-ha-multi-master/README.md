@@ -11,8 +11,8 @@ This documentation guides you in setting up a cluster with two master nodes, one
 |Master|kmaster2.example.com|172.16.16.102|Ubuntu 20.04|2G|2|
 |Worker|kworker1.example.com|172.16.16.201|Ubuntu 20.04|1G|1|
 
-Password for the **root** account on all these virtual machines is **kubeadmin**
-Perform all the commands as root user unless otherwise specified
+> * Password for the **root** account on all these virtual machines is **kubeadmin**
+> * Perform all the commands as root user unless otherwise specified
 
 ## Pre-requisites
 If you want to try this in a virtualized environment on your workstation
@@ -102,8 +102,9 @@ kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectca
 ```
 
 ## Join other nodes to the cluster (kmaster2 & kworker1)
-Use the respective kubeadm join commands you copied from the output of kubeadm init command on the first master.
-IMPORTANT: You also need to pass --apiserver-advertise-address to the join command when you join the other master node.
+> Use the respective kubeadm join commands you copied from the output of kubeadm init command on the first master.
+
+> IMPORTANT: You also need to pass --apiserver-advertise-address to the join command when you join the other master node.
 
 ## Downloading kube config to your local machine
 On your host machine
