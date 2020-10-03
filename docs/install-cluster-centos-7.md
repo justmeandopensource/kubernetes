@@ -69,6 +69,13 @@ kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.
 ##### Deploy Calico network
 ```
 kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+
+##### Create the following directory and config files before using kubectl command
+
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+
 ```
 
 ##### Cluster join command
