@@ -76,8 +76,8 @@ kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectca
 kubeadm token create --print-join-command
 ```
 
-##### To be able to run 'kubectl get nodes'
-Run this as non root user
+##### To be able to run kubectl commands as non-root user
+If you want to be able to run kubectl commands as non-root user, then as a non-root user perform these
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
