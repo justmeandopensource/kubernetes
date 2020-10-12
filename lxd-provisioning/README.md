@@ -134,7 +134,7 @@ replicaset.apps/nginx-6799fc88d8   1         1         1       10s
 [root@kmaster ~]# kubectl expose deploy nginx --port 80 --type NodePort
 service/nginx exposed
 
-[root@kmaster ~]# kubectl get svc
+[root@kmaster ~]# kubectl get service
 NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
 kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP        11m
 nginx        NodePort    10.96.21.25   <none>        80:30310/TCP   4s
@@ -179,7 +179,7 @@ total 8
 ```
 ##### Try to access k8s cluster without execing into kmaster node.
 ```
-➤ ➤ ADIL .kube  kubectl get no
+➤ ➤ ADIL .kube  kubectl get nodes
 NAME        STATUS   ROLES    AGE   VERSION
 kmaster     Ready    master   23m   v1.19.2
 kworker01   Ready    <none>   19m   v1.19.2
