@@ -95,7 +95,7 @@ The bootstrap script will deploy flannel for networking.
 ```
 #### Verifying Nodes
 ```
-[root@kmaster ~]# kubectl get no
+[root@kmaster ~]# kubectl get nodes
 NAME        STATUS   ROLES    AGE     VERSION
 kmaster     Ready    master   8m53s   v1.19.2
 kworker01   Ready    <none>   5m35s   v1.19.2
