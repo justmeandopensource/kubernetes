@@ -9,7 +9,7 @@ For running LXC, Create a EC2 instance of t2.medium size which will sufficient f
 ➤ ➤ ADIL ~  sudo apt-get update && apt-get install lxc -y
 ➤ ➤ ADIL ~  systemctl status lxc
 ➤ ➤ ADIL ~  lxd init
-Provide default option for all excepy these two line:
+Provide default option for all except these two line:
 Name of the storage backend to use (btrfs, dir, lvm) [default=btrfs]: dir
 Would you like LXD to be available over the network? (yes/no) [default=no]: yes
 ```
