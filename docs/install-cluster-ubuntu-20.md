@@ -60,6 +60,15 @@ kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectca
 ```
 kubeadm token create --print-join-command
 ```
+
+##### To be able to run 'kubectl get nodes'
+Run this as non root user
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
 ## On Kworker
 ##### Join the cluster
 Use the output from __kubeadm token create__ command in previous step from the master server and run here.
