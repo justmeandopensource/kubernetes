@@ -1,5 +1,5 @@
 ### Setting up K8s Cluster using LXC/LXD 
-This is not a recommended way to create k8s cluster, but for learning and testing purpose we can use this.
+Note: For development purpose and not recommended for Production use
 
 ```
 For running LXC, Create a EC2 instance of t2.medium size which will sufficient for running LXC with 3 nodes, each of 2 CPU's and 2Gi of memory.
