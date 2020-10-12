@@ -20,16 +20,6 @@ $ lxc profile create k8s
 $ lxc profile edit k8s
 ```
 Copy the content from file **k8s-profile-config** and paste
-config:
-  limits.cpu: "2"
-  limits.memory: 2GB
-  limits.memory.swap: "false"
-  linux.kernel_modules: ip_tables,ip6_tables,netlink_diag,nf_nat,overlay
-  raw.lxc: "lxc.apparmor.profile=unconfined\nlxc.cap.drop= \nlxc.cgroup.devices.allow=a\nlxc.mount.auto=proc:rw
-    sys:rw"
-  security.nesting: "true"
-  security.privileged: "true"
-
 ```
 $ lxc profile list
 +---------+---------+
