@@ -15,12 +15,10 @@ $ lxd init
 Name of the storage backend to use (btrfs, dir, lvm) [default=btrfs]: dir
 
 #### Let's create profile for k8s cluster
+Make sure to clone this repo and run these commands moving into lxd-provisioning directory
 ```
 $ lxc profile create k8s
-$ lxc profile edit k8s
-```
-Copy the content from file **k8s-profile-config** and paste
-```
+$ cat k8s-profile-config | lxc profile edit k8s
 $ lxc profile list
 +---------+---------+
 |  NAME   | USED BY |
