@@ -31,10 +31,6 @@ kubedestroy()
     echo "==> Destroying $node..."
     lxc delete --force $node
   done
-  rm -rf $KUBE_DIR
-  sudo sed -i '/example.com/d' /etc/hosts
-  : > $HOME/.ssh/known_hosts
-  echo
 }
 
 case "$1" in
