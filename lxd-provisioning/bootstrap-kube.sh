@@ -1,58 +1,41 @@
 #!/bin/bash
 
-# Install docker from Docker-ce repository
-echo "[TASK 1] Install docker container engine"
-yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
-yum install -y -q docker-ce-19.03.5 >/dev/null 2>&1
+# This script has been tested on Ubuntu 20.04
+# For other versions of Ubuntu, you might need some tweaking
 
-# Enable docker service
-echo "[TASK 2] Enable and start docker service"
-systemctl enable docker >/dev/null 2>&1
-systemctl start docker
+echo "[TASK 1] Install containerd runtime"
+apt update -qq >/dev/null 2>&1
+apt install -qq -y containerd apt-transport-https >/dev/null 2>&1
+mkdir /etc/containerd
+containerd config default > /etc/containerd/config.toml
+systemctl restart containerd
+systemctl enable containerd >/dev/null 2>&1
 
-# Add yum repo file for Kubernetes
-echo "[TASK 3] Add yum repo file for kubernetes"
-cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=0
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
+echo "[TASK 2] Add apt repo for kubernetes"
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - >/dev/null 2>&1
+apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" >/dev/null 2>&1
 
-# Install Kubernetes
-echo "[TASK 4] Install Kubernetes (kubeadm, kubelet and kubectl)"
-yum install -y -q kubeadm-1.17.1 kubelet-1.17.1 kubectl-1.17.1 >/dev/null 2>&1
+echo "[TASK 3] Install Kubernetes components (kubeadm, kubelet and kubectl)"
+apt install -qq -y kubeadm=1.20.0-00 kubelet=1.20.0-00 kubectl=1.20.0-00 >/dev/null 2>&1
+echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/default/kubelet
+systemctl restart kubelet
 
-# Start and Enable kubelet service
-echo "[TASK 5] Enable and start kubelet service"
-systemctl enable kubelet >/dev/null 2>&1
-echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/sysconfig/kubelet
-systemctl start kubelet >/dev/null 2>&1
+echo "[TASK 4] Enable ssh password authentication"
+sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+systemctl reload sshd
 
-# Install Openssh server
-echo "[TASK 6] Install and configure ssh"
-yum install -y -q openssh-server >/dev/null 2>&1
-sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
-systemctl enable sshd >/dev/null 2>&1
-systemctl start sshd >/dev/null 2>&1
+echo "[TASK 5] Set root password"
+echo -e "kubeadmin\nkubeadmin" | passwd root >/dev/null 2>&1
+echo "export TERM=xterm" >> /etc/bash.bashrc
 
-# Set Root password
-echo "[TASK 7] Set root password"
-echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
-
-# Install additional required packages
-echo "[TASK 8] Install additional packages"
-yum install -y -q which net-tools sudo sshpass less >/dev/null 2>&1
+echo "[TASK 6] Install additional packages"
+apt install -qq -y net-tools >/dev/null 2>&1
 
 # Hack required to provision K8s v1.15+ in LXC containers
 mknod /dev/kmsg c 1 11
-chmod +x /etc/rc.d/rc.local
-echo 'mknod /dev/kmsg c 1 11' >> /etc/rc.d/rc.local
+echo 'mknod /dev/kmsg c 1 11' >> /etc/rc.local
+chmod +x /etc/rc.local
 
 #######################################
 # To be executed only on master nodes #
@@ -61,21 +44,20 @@ echo 'mknod /dev/kmsg c 1 11' >> /etc/rc.d/rc.local
 if [[ $(hostname) =~ .*master.* ]]
 then
 
-  # Initialize Kubernetes
-  echo "[TASK 9] Initialize Kubernetes Cluster"
+  echo "[TASK 7] Pull required containers"
+  kubeadm config images pull >/dev/null 2>&1
+
+  echo "[TASK 8] Initialize Kubernetes Cluster"
   kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all >> /root/kubeinit.log 2>&1
 
-  # Copy Kube admin config
-  echo "[TASK 10] Copy kube admin config to root user .kube directory"
+  echo "[TASK 9] Copy kube admin config to root user .kube directory"
   mkdir /root/.kube
-  cp /etc/kubernetes/admin.conf /root/.kube/config
+  cp /etc/kubernetes/admin.conf /root/.kube/config  
 
-  # Deploy flannel network
-  echo "[TASK 11] Deploy flannel network"
+  echo "[TASK 10] Deploy Flannel network"
   kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /dev/null 2>&1
 
-  # Generate Cluster join command
-  echo "[TASK 12] Generate and save cluster join command to /joincluster.sh"
+  echo "[TASK 11] Generate and save cluster join command to /joincluster.sh"
   joinCommand=$(kubeadm token create --print-join-command 2>/dev/null) 
   echo "$joinCommand --ignore-preflight-errors=all" > /joincluster.sh
 
@@ -87,10 +69,8 @@ fi
 
 if [[ $(hostname) =~ .*worker.* ]]
 then
-
-  # Join worker nodes to the Kubernetes cluster
-  echo "[TASK 9] Join node to Kubernetes Cluster"
+  echo "[TASK 7] Join node to Kubernetes Cluster"
+  apt install -qq -y sshpass >/dev/null 2>&1
   sshpass -p "kubeadmin" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no kmaster.lxd:/joincluster.sh /joincluster.sh 2>/tmp/joincluster.log
   bash /joincluster.sh >> /tmp/joincluster.log 2>&1
-
 fi
