@@ -14,7 +14,7 @@
 
 # ------------------- Dashboard Secret ------------------- #
 
-apiVersion: v1
+apiVersion: v2
 kind: Secret
 metadata:
   labels:
