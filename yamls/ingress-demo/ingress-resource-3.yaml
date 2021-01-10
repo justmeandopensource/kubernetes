@@ -1,8 +1,7 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
   name: ingress-resource-3
 spec:
@@ -11,14 +10,23 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: nginx-deploy-main
-          servicePort: 80
+          service:
+            name: nginx-deploy-main
+            port:
+              number: 80
       - path: /blue
+        pathType: Prefix
         backend:
-          serviceName: nginx-deploy-blue
-          servicePort: 80
+          service:
+            name: nginx-deploy-blue
+            port:
+              number: 80
       - path: /green
+        pathType: Prefix
         backend:
-          serviceName: nginx-deploy-green
-          servicePort: 80
+          service:
+            name: nginx-deploy-green
+            port:
+              number: 80
