@@ -10,6 +10,10 @@ This documentation guides you in setting up a cluster with one master node and o
 |Worker|kworker.example.com|172.16.16.101|Ubuntu 20.04|1G|1|
 
 ## On both Kmaster and Kworker
+##### Login as `root` user
+```
+sudo su -
+```
 Perform all the commands as root user unless otherwise specified
 ##### Disable Firewall
 ```
@@ -88,7 +92,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ##### Join the cluster
 Use the output from __kubeadm token create__ command in previous step from the master server and run here.
 
-## Verifying the cluster
+## Verifying the cluster (On kmaster)
 ##### Get Nodes status
 ```
 kubectl get nodes
