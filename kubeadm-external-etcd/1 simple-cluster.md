@@ -13,6 +13,17 @@
   rm -rf etcd*
 }
 ```
+```
+{
+  sudo groupadd --system etcd
+  sudo useradd -s /sbin/nologin --system -g etcd etcd
+  sudo mkdir -p /var/lib/etcd/
+  sudo mkdir /etc/etcd
+  sudo chown -R etcd:etcd /var/lib/etcd/
+  sudo ufw allow proto tcp from any to any port 2379,2380
+  chmod 700 /var/lib/etcd
+}
+```
 
 ##### Create systemd unit file for etcd service
 > Set NODE_IP to the correct IP of the machine where you are running this
