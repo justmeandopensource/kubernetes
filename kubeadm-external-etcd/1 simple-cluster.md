@@ -43,8 +43,10 @@ Description=etcd
 
 [Service]
 Type=notify
+User=etcd
 ExecStart=/usr/local/bin/etcd \\
   --name ${ETCD_NAME} \\
+  --data-dir=/var/lib/etcd \\
   --initial-advertise-peer-urls http://${NODE_IP}:2380 \\
   --listen-peer-urls http://${NODE_IP}:2380 \\
   --advertise-client-urls http://${NODE_IP}:2379 \\
@@ -73,3 +75,6 @@ EOF
 ```
 ETCDCTL_API=3 etcdctl --endpoints=http://127.0.0.1:2379 member list
 ```
+
+##### if error message "etcd cluster id mistmatch" is seen
+delete the member folder under /var/lib/etcd
