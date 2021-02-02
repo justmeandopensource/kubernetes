@@ -97,12 +97,13 @@ cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=etcd
 ```
 ##### Copy the certificates to etcd nodes
 ```
+
 {
 
-declare -a NODES=(172.16.16.221 172.16.16.222 172.16.16.223)
-
-for node in ${NODES[@]}; do
-  scp ca.pem etcd.pem etcd-key.pem root@$node: 
+declare -a NODES=(172.16.200.38 172.16.200.39)
+declare -a username=(etcd-2 etcd-3) //hostname
+for i in ${!NODES[@]}; do
+  scp ca.pem etcd.pem etcd-key.pem ${username[i]}@${NODES[i]}: 
 done
 
 }
