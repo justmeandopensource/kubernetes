@@ -76,4 +76,4 @@ EOF
 ETCDCTL_API=3 etcdctl --endpoints=http://127.0.0.1:2379 member list
 ```
 
-##### NOTE : if error message "etcd cluster id mistmatch" is seen delete the member folder under /var/lib/etcd
+##### NOTE : if error message "etcd cluster id mistmatch" is seen, delete the member folder under /var/lib/etcd.
