@@ -13,6 +13,7 @@
   rm -rf etcd*
 }
 ```
+##### Create etcd system account, directory, allow ports and change permission for /var/lib/etcd
 ```
 {
   sudo groupadd --system etcd
@@ -24,7 +25,6 @@
   chmod 700 /var/lib/etcd
 }
 ```
-
 ##### Create systemd unit file for etcd service
 > Set NODE_IP to the correct IP of the machine where you are running this
 ```
@@ -76,5 +76,4 @@ EOF
 ETCDCTL_API=3 etcdctl --endpoints=http://127.0.0.1:2379 member list
 ```
 
-##### if error message "etcd cluster id mistmatch" is seen
-delete the member folder under /var/lib/etcd
+##### NOTE : if error message "etcd cluster id mistmatch" is seen delete the member folder under /var/lib/etcd
