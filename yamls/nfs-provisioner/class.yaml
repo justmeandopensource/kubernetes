@@ -5,3 +5,5 @@ metadata:
 provisioner: example.com/nfs
 parameters:
   archiveOnDelete: "false"
+allowVolumeExpansion: true
+reclaimPolicy: Delete
