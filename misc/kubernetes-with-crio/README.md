@@ -18,8 +18,8 @@ If you want to try this in a virtualized environment on your workstation
 * Virtualbox installed
 * Vagrant installed
 * Host machine has atleast 4 cores, if you want minimal 2 node k8s cluster
- * 3 cores will be needed
- * 2 for kmaster and 1 for kworker1
+  * 3 cores will be needed
+  * 2 for kmaster and 1 for kworker1
 * Host machine has atleast 8G memory
 
 ## Bring up the virtual machines
