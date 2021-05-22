@@ -24,6 +24,10 @@ metadata:
   namespace: kube-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      task: monitoring
+      k8s-app: heapster
   template:
     metadata:
       labels:
