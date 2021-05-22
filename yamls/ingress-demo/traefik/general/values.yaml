@@ -1,0 +1,15 @@
+
+additionalArguments:
+  - --certificatesresolvers.myresolver.acme.tlschallenge=true
+  - --certificatesresolvers.letsencrypt.acme.email=test@hello.com
+  - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
+  - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+
+
+# Lets Encrypt servers
+
+# Staging
+# https://acme-staging-v02.api.letsencrypt.org/directory
+
+# Production Lets Encrypt
+# https://acme-v02.api.letsencrypt.org/directory
