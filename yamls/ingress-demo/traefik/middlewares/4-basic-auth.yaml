@@ -1,0 +1,39 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nginx-basic-auth
+spec:
+  basicAuth:
+    secret: authsecret
+
+---
+# Example:
+#   htpasswd -nb venkat hello | base64
+#   dmVua2F0OiRhcHIxJE52L0lPTDZlJDRqdFlwckpjUk1aWU5aeG45M0xCNi8KCg==
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authsecret
+
+data:
+  users: |
+    dmVua2F0OiRhcHIxJE52L0lPTDZlJDRqdFlwckpjUk1aWU5aeG45M0xCNi8KCg==
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`nginx.example.com`)
+      kind: Rule
+      middlewares:
+        - name: nginx-basic-auth
+      services:
+        - name: nginx-deploy-main
+          port: 80
