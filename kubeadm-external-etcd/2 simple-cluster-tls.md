@@ -196,3 +196,17 @@ ETCDCTL_API=3 etcdctl \
   --key=/etc/etcd/pki/etcd-key.pem \
   member list
 ```
+Better to export these as environment variables and connect to the clutser instead of a specific node
+```
+export ETCDCTL_API=3 
+export ETCDCTL_ENDPOINTS=https://172.16.16.221:2379,https://172.16.16.222:2379,https://172.16.16.223:2379
+export ETCDCTL_CACERT=/etc/etcd/pki/ca.pem
+export ETCDCTL_CERT=/etc/etcd/pki/etcd.pem
+export ETCDCTL_KEY=/etc/etcd/pki/etcd-key.pem
+```
+And now its a lot easier
+```
+etcdctl member list
+etcdctl endpoint status
+etcdctl endpoint health
+```
