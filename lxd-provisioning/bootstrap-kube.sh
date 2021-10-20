@@ -34,11 +34,6 @@ echo "export TERM=xterm" >> /etc/bash.bashrc
 echo "[TASK 6] Install additional packages"
 apt install -qq -y net-tools >/dev/null 2>&1
 
-# Hack required to provision K8s v1.15+ in LXC containers
-mknod /dev/kmsg c 1 11
-echo 'mknod /dev/kmsg c 1 11' >> /etc/rc.local
-chmod +x /etc/rc.local
-
 #######################################
 # To be executed only on master nodes #
 #######################################
