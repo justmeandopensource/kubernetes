@@ -2,7 +2,9 @@
 
 # This script has been tested on Ubuntu 20.04
 # For other versions of Ubuntu, you might need some tweaking
-
+echo "[TASK 0] Install packages and update"
+apt-get install -y -qq apt-transport-https ca-certificates curl gnupg lsb-release openssh-server net-tools software-properties-common >/dev/null 2>&1
+apt-get update -qq
 echo "[TASK 1] Install containerd runtime"
 apt update -qq >/dev/null 2>&1
 apt install -qq -y containerd apt-transport-https >/dev/null 2>&1
@@ -74,3 +76,4 @@ then
   sshpass -p "kubeadmin" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no kmaster.lxd:/joincluster.sh /joincluster.sh 2>/tmp/joincluster.log
   bash /joincluster.sh >> /tmp/joincluster.log 2>&1
 fi
+
