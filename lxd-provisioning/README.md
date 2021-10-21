@@ -31,15 +31,15 @@ $ lxc profile list
 
 #### It's time to create node for k8s cluster
 ```
-$ lxc launch ubuntu:20.04 kmaster --profile k8s
+$ lxc launch ubuntu:21.04 kmaster --profile k8s
 Creating kmaster
 Starting kmaster
 
-$ lxc launch ubuntu:20.04 kworker1 --profile k8s
+$ lxc launch ubuntu:21.04 kworker1 --profile k8s
 Creating kworker1
 Starting kworker1
 
-$ lxc launch ubuntu:20.04 kworker2 --profile k8s
+$ lxc launch ubuntu:21.04 kworker2 --profile k8s
 Creating kworker2
 Starting kworker2
 ```
