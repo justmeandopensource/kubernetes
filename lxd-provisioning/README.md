@@ -71,7 +71,6 @@ devices:
 name: k8s
 used_by: []
 ```
-
 Step 0.2:  Prepare the LXD k8s containers using the scripts in my fork here:
 
 https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
@@ -103,6 +102,86 @@ List the k8s containers and make sure they have obtained an IP address from Orab
 +----------+---------+----------------------+------+-----------+-----------+----------+
 ```
 Get the master.zip or clone my fork and then use this script to push the required scripts to kmaster, kworker1, and kworker2.
+```
+Run the script host-oracle8.sh to configure the LXD Host (in this case Oracle Linux 8) for Kubernetes LXD.
+[ubuntu@o83sv3 lxd-provisioning]$ cat host-oracle8.sh
+./host-oracle8-firewalld.sh
+./host-oracle8-firewalld-check.sh
+./host-oracle8-modules.sh
+# ./host-oracle8-mount.sh
+./host-oracle8-storage.sh
+./host-oracle8-gen-hosts.sh
+
+[ubuntu@o83sv3 lxd-provisioning]$ ./host-oracle8.sh
+[sudo] password for ubuntu: 
+Warning: ALREADY_ENABLED: 10250:tcp
+Warning: ALREADY_ENABLED: 30000-32767:tcp
+success
+Warning: ALREADY_ENABLED: 6443:tcp
+Warning: ALREADY_ENABLED: 2379-2380:tcp
+Warning: ALREADY_ENABLED: 10250-10252:tcp
+Warning: ALREADY_ENABLED: 10255:tcp
+Warning: ALREADY_ENABLED: 8472:udp
+success
+Warning: ALREADY_ENABLED: 6783-6784:udp
+Warning: ALREADY_ENABLED: 6781-6783:tcp
+success
+You're performing an operation over default zone ('public'),
+but your connections/interfaces are in zone 'docker,libvirt,trusted' (see --get-active-zones)
+You most likely need to use --zone=docker option.
+
+Warning: ALREADY_ENABLED: masquerade
+success
+Warning: ALREADY_ENABLED: dns
+success
+Warning: ALREADY_ENABLED: dhcp
+success
+Warning: ALREADY_ENABLED: https
+success
+success
+You're performing an operation over default zone ('public'),
+but your connections/interfaces are in zone 'docker,trusted' (see --get-active-zones)
+You most likely need to use --zone=docker option.
+
+10250/tcp 30000-32767/tcp 6443/tcp 2379-2380/tcp 10250-10252/tcp 10255/tcp 8472/udp 6783-6784/udp 6781-6783/tcp
+public
+  target: default
+  icmp-block-inversion: no
+  interfaces: 
+  sources: 
+  services: cockpit dhcp dhcpv6-client dns https ssh
+  ports: 10250/tcp 30000-32767/tcp 6443/tcp 2379-2380/tcp 10250-10252/tcp 10255/tcp 8472/udp 6783-6784/udp 6781-6783/tcp
+  protocols: 
+  masquerade: yes
+  forward-ports: 
+  source-ports: 
+Device libs added to kmaster
+Device libs added to kworker1
+Device libs added to kworker2
+Error: The storage pool already exists: The record already exists
+Error: Volume name "kmaster" already exists.
+Error: Volume name "kworker1" already exists.
+Error: Volume name "kworker2" already exists.
+Device containerd added to kmaster
+Device containerd added to kworker1
+Device containerd added to kworker2
+Error: The storage pool already exists: The record already exists
+Error: Volume name "kmaster" already exists.
+Error: Volume name "kworker1" already exists.
+Error: Volume name "kworker2" already exists.
+Device kubelet added to kmaster
+Device kubelet added to kworker1
+Device kubelet added to kworker2
+Error: The storage pool already exists: The record already exists
+Error: Volume name "kmaster" already exists.
+Error: Volume name "kworker1" already exists.
+Error: Volume name "kworker2" already exists.
+Device docker added to kmaster
+Device docker added to kworker1
+Device docker added to kworker2
+[ubuntu@o83sv3 lxd-provisioning]$ 
+```
+Run cont-centos8-push.sh as shown below
 ```
 [ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-push.sh 
 lxc file push cont-centos8-[0123456].sh kmaster/root/
