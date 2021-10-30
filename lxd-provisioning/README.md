@@ -20,6 +20,27 @@ naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
 ```
 Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 (of the older overlay).
 
+Step 0:  All of the following is done after preparing the LXD k8s containers using the scripts in my fork here:
+
+https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
+
+Get the master.zip or clone my fork and then use this script to push the required scripts to kmaster, kworker1, and kworker2.
+```
+[ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-push.sh 
+lxc file push cont-centos8-[0123456].sh kmaster/root/
+lxc file push cont-centos8-[012346].sh kworker1/root/
+lxc file push cont-centos8-[012346].sh kworker2/root/
+```
+The cont-centos8-0.sh file is shown below.
+```
+[ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-0.sh
+/root/cont-centos8-1.sh
+/root/cont-centos8-2.sh
+/root/cont-centos8-3.sh
+/root/cont-centos8-4.sh
+/root/cont-centos8-6.sh
+```
+
 A needed "secret sauce" is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
 
 https://www.claudiokuenzler.com/blog/1106/unable-to-deploy-rancher-managed-kubernetes-cluster-lxc-lxd-nodes
