@@ -1,3 +1,9 @@
-echo 'kmaster' >> /etc/hosts
-echo 'kworker1' >> /etc/hosts
-echo 'kworker2' >> /etc/hosts
+echo 'IPV6 STATE' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts
+echo 'RUNNING' >> /etc/hosts

@@ -1,0 +1,2 @@
+sudo modinfo openvswitch | grep depends
+sudo modinfo openvswitch | grep depends | cut -f2 -d':' |  sed 's/^[ \t]*//;s/[ \t]*$//'
