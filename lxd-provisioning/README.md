@@ -1,4 +1,4 @@
-Setting up K8s Cluster using LXD on Oracle Linux 8.4 LXD Host running CentOS Linux 8.4 LXD containers
+# K8s Cluster in LXD on Oracle Linux 8.4 Host in CentOS Linux 8.4 LXD containers
 
 The EXCELLENT guide here:
 
