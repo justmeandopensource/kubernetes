@@ -49,6 +49,21 @@ Note 3:  It would be far simpler to install docker from the Canonical snap. (not
 [ubuntu@o83sv3 ]$  sudo service docker start
 [ubuntu@o83sv3 ]$  sudo service docker status
 ```
+Step 1A:  My build actually installed the kubernetes binaries from the repo as shown below before pushing the updated binaries.
+```
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+[root@kmaster ~]# dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+```
 Step 2:  Clone the kubernetes repo from github
 
 Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
