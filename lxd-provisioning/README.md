@@ -20,7 +20,9 @@ A quick check of the kubernetes github shows that the code needed for the kube-p
 Therefore I had to build the required binaries as follows:
 
 Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
+
 Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
+
 Note 2:  So this step is simply getting docker-ce installed on the LXD HOST server.
 
 sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc
