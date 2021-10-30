@@ -40,13 +40,13 @@ Note 2:  So this step is simply getting docker-ce installed on the LXD HOST serv
 
 Note 3:  It would be far simpler to install docker from the Canonical snap. (note to self: try build using docker snap alternatively)
 ```
-sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc net-tools openssh-server perl
-sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf -y remove runc
-sudo dnf -y install containerd.io docker-ce docker-ce-cli
-sudo systemctl enable docker
-sudo service docker start
-sudo service docker status
+[ubuntu@o83sv3 ]$  sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc net-tools openssh-server perl
+[ubuntu@o83sv3 ]$  sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+[ubuntu@o83sv3 ]$  sudo dnf -y remove runc
+[ubuntu@o83sv3 ]$  sudo dnf -y install containerd.io docker-ce docker-ce-cli
+[ubuntu@o83sv3 ]$  sudo systemctl enable docker
+[ubuntu@o83sv3 ]$  sudo service docker start
+[ubuntu@o83sv3 ]$  sudo service docker status
 ```
 Step 2:  Clone the kubernetes repo from github
 
