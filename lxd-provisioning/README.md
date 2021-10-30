@@ -141,9 +141,9 @@ kubeadm version: &version.Info{Major:"1", Minor:"23+", GitVersion:"v1.23.0-alpha
 [root@kmaster ~]# 
 ```
 A quick test shows that what is needed for the "kubeadm init" --kubernetes-version parameter is abbreviated version info as show below.
-
-kubeadm init --kubernetes-version=v1.23.0-alpha.3
-
+```
+[root@kmaster ~]# kubeadm init --kubernetes-version=v1.23.0-alpha.3
+```
 
 
 ### Setting up K8s Cluster using LXC/LXD 
