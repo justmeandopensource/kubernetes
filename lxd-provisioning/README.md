@@ -25,7 +25,7 @@ Note 1:  This is all done so that the kubernetes binaries can be built from the 
 
 Note 2:  So this step is simply getting docker-ce installed on the LXD HOST server.
 ```
-sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc
+sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc net-tools openssh-server perl
 sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 sudo dnf -y remove runc
 sudo dnf -y install containerd.io docker-ce docker-ce-cli
@@ -34,34 +34,42 @@ sudo service docker start
 sudo service docker status
 ```
 Step 2:  Clone the kubernetes repo from github
-Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
-Note 2:  https://github.com/kubernetes/kubernetes > (scroll to) > To start developing K8s > (scroll to) > You have a working Docker environment.
 
+Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
+
+Note 2:  https://github.com/kubernetes/kubernetes > (scroll to) > To start developing K8s > (scroll to) > You have a working Docker environment.
+```
 git clone https://github.com/kubernetes/kubernetes
 cd kubernetes
 make quick-release
-
+```
 Note 3:  The "make quick-release" is actually not very quick on Lenovo P72 Mobile Workstation with 128 GB RAM and Intel® Core™ i7-8750H CPU @ 2.20GHz × 12.
+
 Note 4:  Therefore next time I may try using "-j8" on it or other method to make it a bit faster.  I'd say it took 5 minutes or so, just a guess.
 
 Step 3:  Find the newly-built kubernetes binaries that are needed
-Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubectl, and kubelet").
 
+Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubectl, and kubelet").
+```
 lxc exec kmaster bash
 cd /
 sudo find . -name kubeadm
 sudo find . -name kubelet
 sudo find . -name kubectl
-
+```
 These binaries which are of the 1.23 version level which have just been built above will be found in locations such as these:
 
 (still in the "kubernetes" directory of the github clone)
+```
 mkdir orabuntu-lxc
 cd orabuntu-lxc/
-
+```
 Note 2:  Now for example after finding the kubectl as described above, copy it to the orabuntu-lxc subdirectory.
+
 Note 3:  This step is just so that all three required kubernetes binaries are in the same "staging directory"
+
 Note 4:  The binaries are created in serveral subdirectories but are exactly the same binaries.  Verify using diff as shown below for example.
+
 Note 5:  Then put the three needed version 1.23 kubernetes binaries in the "orabuntu-lxc" staging directory (or any other staging location)
 
 ```
