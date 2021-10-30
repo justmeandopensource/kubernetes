@@ -29,7 +29,7 @@ Therefore I built the required kubernetes binaries from the kubernetes github so
 
 https://github.com/kubernetes/kubernetes
 
-Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
+### Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
 
 Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
 
@@ -45,7 +45,7 @@ sudo systemctl enable docker
 sudo service docker start
 sudo service docker status
 ```
-Step 2:  Clone the kubernetes repo from github
+### Step 2:  Clone the kubernetes repo from github
 
 Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
 
@@ -55,11 +55,13 @@ git clone https://github.com/kubernetes/kubernetes
 cd kubernetes
 make quick-release
 ```
-Note 3:  The "make quick-release" is actually not very quick on Lenovo P72 Mobile Workstation with 128 GB RAM and Intel® Core™ i7-8750H CPU @ 2.20GHz × 12.
+Note 3:  The "make quick-release" is actually not very quick on Lenovo P72 Mobile Workstation. I'd say it took 5 minutes or so, just a guess.
 
-Note 4:  Therefore next time I may try using "-j8" on it or other method to make it a bit faster.  I'd say it took 5 minutes or so, just a guess.
+Note 4:  This Lenovo workstation has 128 GB RAM and Intel® Core™ i7-8750H CPU @ 2.20GHz × 12.
 
-Step 3:  Find the newly-built kubernetes binaries that are needed
+Note 5:  (note to self: try using "-j8" on it or other method to make it a bit faster). 
+
+### Step 3:  Find the newly-built kubernetes binaries that are needed
 
 Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubectl, and kubelet").
 ```
