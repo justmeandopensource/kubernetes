@@ -13,7 +13,7 @@ Oracle Linux Server release 8.4
 
 Note 1: The Oracle Linux 8 host server is "default install" "out-of-the-box" "vanilla" Oracle Linux 8 host using XFS for the root FS.
 
-Note 2: As regards running the LXD containers on a host directory that uses XFS it is required that the XFS was created ftype=1:
+Note 2: As regards running K8S in LXD containers on a host using XFS it is required that the XFS was created ftype=1:
 ```
 [ubuntu@o83sv3 ]$  xfs_info / | grep ftype
 naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
