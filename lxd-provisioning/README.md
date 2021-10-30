@@ -77,7 +77,31 @@ Step 0.2:  Prepare the LXD k8s containers using the scripts in my fork here:
 https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
 
 As far as host storage, if XFS and ftype=1 or if EXT4 then no SCST storage needed. if XFS and ftype!=1 then user SCST LUNs.
-
+```
+[ubuntu@o83sv3 lxd-provisioning]$ lxc launch images:centos/8/amd64 kmaster --profile k8s-antrea
+Creating kmaster
+Starting kmaster
+[ubuntu@o83sv3 lxd-provisioning]$ lxc launch images:centos/8/amd64 kworker1 --profile k8s-antrea
+Creating kworker1
+Starting kworker1
+[ubuntu@o83sv3 lxd-provisioning]$ lxc launch images:centos/8/amd64 kworker2 --profile k8s-antrea
+Creating kworker2
+Starting kworker2
+[ubuntu@o83sv3 lxd-provisioning]$ 
+```
+List the k8s containers and make sure they have obtained an IP address from Orabuntu-LXC containerized DNS on the Openvswitch network.
+```
+[ubuntu@o83sv3 lxd-provisioning]$ lxc list
++----------+---------+----------------------+------+-----------+-----------+----------+
+|   NAME   |  STATE  |         IPV4         | IPV6 |   TYPE    | SNAPSHOTS | LOCATION |
++----------+---------+----------------------+------+-----------+-----------+----------+
+| kmaster  | RUNNING | 10.209.53.20 (eth0)  |      | CONTAINER | 0         | o83sv3   |
++----------+---------+----------------------+------+-----------+-----------+----------+
+| kworker1 | RUNNING | 10.209.53.21 (eth0)  |      | CONTAINER | 0         | o83sv3   |
++----------+---------+----------------------+------+-----------+-----------+----------+
+| kworker2 | RUNNING | 10.209.53.22 (eth0)  |      | CONTAINER | 0         | o83sv3   |
++----------+---------+----------------------+------+-----------+-----------+----------+
+```
 Get the master.zip or clone my fork and then use this script to push the required scripts to kmaster, kworker1, and kworker2.
 ```
 [ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-push.sh 
