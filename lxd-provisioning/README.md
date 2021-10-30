@@ -18,7 +18,7 @@ Note 2: As regards running K8S in LXD containers on a host using XFS it is requi
 [ubuntu@o83sv3 ]$  xfs_info / | grep ftype
 naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
 ```
-Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 (of the older overlay).
+Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 FS (or the older overlay FS).
 
 Step 0:  Prepare the LXD k8s containers using the scripts in my fork here:
 
