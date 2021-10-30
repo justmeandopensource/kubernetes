@@ -9,6 +9,10 @@ was my primary reference for this build on Oracle Linux 8.  The above guide uses
 Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
 Oracle Linux Server release 8.4
 
+Note 1: The Oracle Linux 3 host server is "default install" "out-of-the-box" "vanilla" Oracle Linux 8 host using XFS for the root FS.
+
+Note 2: As regards XFS using for kubernetes it is recommended/probably required that the XFS have 
+
 The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
 
 https://www.claudiokuenzler.com/blog/1106/unable-to-deploy-rancher-managed-kubernetes-cluster-lxc-lxd-nodes
@@ -119,6 +123,17 @@ Note 5:  Then put the three needed version 1.23 kubernetes binaries in the "orab
 [ubuntu@o83sv3 orabuntu-lxc]$ cp -p .././_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubelet .
 [ubuntu@o83sv3 orabuntu-lxc]$ 
 ```
+Note: When running "kubeadm init" the correct version of the built kubernetes binaries needs to be passed explicitly to kubeadm.
+```
+[root@kmaster ~]# kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"23+", GitVersion:"v1.23.0-alpha.3.679+08bf54678e2bef", GitCommit:"08bf54678e2bef8b4c72c8c6d104b0bdf19a6f75", GitTreeState:"clean", BuildDate:"2021-10-30T14:50:37Z", GoVersion:"go1.17.2", Compiler:"gc", Platform:"linux/amd64"}
+[root@kmaster ~]# 
+```
+A quick test shows that what is needed for the "kubeadm init" --kubernetes-version parameter is abbreviated version info as show below.
+
+kubeadm init --kubernetes-version=v1.23.0-alpha.3
+
+
 
 ### Setting up K8s Cluster using LXC/LXD 
 > **Note:** For development purpose and not recommended for Production use
