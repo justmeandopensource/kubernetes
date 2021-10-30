@@ -1,4 +1,4 @@
-# K8s Cluster in LXD on Oracle Linux 8.4 Host in CentOS Linux 8.4 LXD containers
+# K8s LXD-containerized CentOS 8 on Oracle Linux 8.4 UEK Host
 
 The EXCELLENT guide here:
 
