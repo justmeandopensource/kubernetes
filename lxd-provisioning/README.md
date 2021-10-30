@@ -1,4 +1,4 @@
-### Setting up K8s Cluster using LXD on Oracle Linux 8.4 LXD Host running CentOS Linux 8.4 LXD containers
+## Setting up K8s Cluster using LXD on Oracle Linux 8.4 LXD Host running CentOS Linux 8.4 LXD containers
 
 The EXCELLENT guide here:
 
@@ -29,7 +29,7 @@ Therefore I built the required kubernetes binaries from the kubernetes github so
 
 https://github.com/kubernetes/kubernetes
 
-### Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
+## Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
 
 Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
 
@@ -61,7 +61,7 @@ Note 4:  This Lenovo workstation has 128 GB RAM and Intel® Core™ i7-8750H CPU
 
 Note 5:  (note to self: try using "-j8" on it or other method to make it a bit faster). 
 
-### Step 3:  Find the newly-built kubernetes binaries that are needed
+## Step 3:  Find the newly-built kubernetes binaries that are needed
 
 Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubectl, and kubelet").
 ```
