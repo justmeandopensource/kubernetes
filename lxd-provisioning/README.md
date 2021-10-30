@@ -24,6 +24,8 @@ Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3
 Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
 
 Note 2:  So this step is simply getting docker-ce installed on the LXD HOST server.
+
+Note 3:  It would be far simpler to install docker from the Canonical snap. (note to self: try again using docker snap)
 ```
 sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc net-tools openssh-server perl
 sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
