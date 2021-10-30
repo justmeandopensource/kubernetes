@@ -13,7 +13,9 @@ The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (
 
 https://www.claudiokuenzler.com/blog/1106/unable-to-deploy-rancher-managed-kubernetes-cluster-lxc-lxd-nodes
 
-So the kube-proxy containers will NOT run correctly on these newer kernels such as Oracle Linux UEK 5.x kernels unless you are using the kubernetes 1.23+ versions. A quick check of the kubernetes github shows that the code needed for the kube-proxy fix as discussed in the post by Claudio is only in master as of today (October 30, 2021).
+So the kube-proxy containers will NOT run correctly on these newer kernels such as Oracle Linux UEK 5.x kernels unless you are using the kubernetes 1.23+ versions. Consequently the CoreDNS containers will remain stuck at "ContainerCreating" as well.  
+
+A quick check of the kubernetes github shows that the code needed for the kube-proxy fix as discussed in the post by Claudio is only in master as of today (October 30, 2021).
 
 Therefore I had to build the required binaries as follows:
 
