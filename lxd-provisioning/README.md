@@ -40,7 +40,8 @@ Note 2:  So this step is simply getting docker-ce installed on the LXD HOST serv
 
 Note 3:  It would be far simpler to install docker from the Canonical snap. (note to self: try build using docker snap alternatively)
 ```
-[ubuntu@o83sv3 ]$  sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc net-tools openssh-server perl
+[ubuntu@o83sv3 ]$  sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 
+[ubuntu@o83sv3 ]$  sudo dnf -y install iproute-tc net-tools openssh-server perl
 [ubuntu@o83sv3 ]$  sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 [ubuntu@o83sv3 ]$  sudo dnf -y remove runc
 [ubuntu@o83sv3 ]$  sudo dnf -y install containerd.io docker-ce docker-ce-cli
