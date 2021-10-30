@@ -15,7 +15,7 @@ Note 2: As regards running the LXD containers on a host directory that uses XFS 
 ```
 [ubuntu@o83sv3 ]$  xfs_info / | grep ftype
 
-naming   =version 2              bsize=4096   ascii-ci=0, **ftype=1**
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
 ```
 
 The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
