@@ -4,7 +4,7 @@ The EXCELLENT guide here:
 
 https://www.golinuxcloud.com/install-kubernetes-cluster-kubeadm-centos-8/
 
-was my primary reference for this build on Oracle Linux 8:
+was my primary reference for this build on Oracle Linux 8.  Note that the above guide uses VM's or bare-metal and that I have adapted it for LXD containers.
 
 Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
 Oracle Linux Server release 8.4
