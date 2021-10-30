@@ -48,6 +48,8 @@ Step 0.2:  Prepare the LXD k8s containers using the scripts in my fork here:
 
 https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
 
+As far as host storage, if XFS and ftype=1 or if EXT4 then no SCST storage needed. if XFS and ftype!=1 then user SCST LUNs.
+
 Get the master.zip or clone my fork and then use this script to push the required scripts to kmaster, kworker1, and kworker2.
 ```
 [ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-push.sh 
