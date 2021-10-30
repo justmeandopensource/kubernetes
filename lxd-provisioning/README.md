@@ -21,6 +21,8 @@ naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
 Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 FS (or the older overlay FS).
 
 Step 0.1: Use the following profile for the k8s containers if an Orabuntu-LXC install has been completed already on the host.
+
+This config is Kubernetes LXD Generic and would be used with lxd profile 'k8s-generic'.
 ```
 config:
   limits.cpu: "2"
@@ -31,7 +33,7 @@ config:
     sys:rw\nlxc.mount.entry = /dev/kmsg dev/kmsg none defaults,bind,create=file"
   security.nesting: "true"
   security.privileged: "true"
-description: LXD profile for Kubernetes
+description: Kubernetes LXD Generic
 devices:
   eth0:
     name: eth0
@@ -44,6 +46,32 @@ devices:
     type: disk
 name: k8s
 ```
+This config is Kubernetes LXD Antrea and would be used to define 'k8s-antrea' profile.
+```
+config:
+  limits.cpu: "2"
+  limits.memory: 2GB
+  limits.memory.swap: "false"
+  linux.kernel_modules: ip_tables,ip6_tables,nf_nat,overlay,br_netfilter,openvswitch,nf_conntrack,nf_conncount,libcrc32c,nf_defrag_ipv6,nsh
+  raw.lxc: "lxc.apparmor.profile=unconfined\nlxc.cap.drop= \nlxc.cgroup.devices.allow=a\nlxc.mount.auto=proc:rw
+    sys:rw\nlxc.mount.entry = /dev/kmsg dev/kmsg none defaults,bind,create=file"
+  security.privileged: "true"
+  security.nesting: "true"
+description: Kubernetes LXD Antrea
+devices:
+  eth0:
+    name: eth0
+    nictype: bridged
+    parent: sw1a
+    type: nic
+  root:
+    path: /
+    pool: local
+    type: disk
+name: k8s
+used_by: []
+```
+
 Step 0.2:  Prepare the LXD k8s containers using the scripts in my fork here:
 
 https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
