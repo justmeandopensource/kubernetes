@@ -6,6 +6,8 @@ https://www.golinuxcloud.com/install-kubernetes-cluster-kubeadm-centos-8/
 
 was my primary reference for this build on Oracle Linux 8.  The above guide uses VM/bare metal. I have adapted it for LXD containers.
 
+The LXD HOST server information:
+
 Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
 Oracle Linux Server release 8.4
 
