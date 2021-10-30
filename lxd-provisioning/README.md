@@ -1,3 +1,111 @@
+### Setting up K8s Cluster using LXD on Oracle Linux 8 LXD Host running Oracle Linux 8 LXD containers
+
+The EXCELLENT guide here:
+
+https://www.golinuxcloud.com/install-kubernetes-cluster-kubeadm-centos-8/
+
+was my primary reference for this build on Oracle Linux 8:
+
+Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
+Oracle Linux Server release 8.4
+
+The main "secret sauce" here was gleaned from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY):
+
+https://www.claudiokuenzler.com/blog/1106/unable-to-deploy-rancher-managed-kubernetes-cluster-lxc-lxd-nodes
+
+So the kube-proxy containers will NOT run correctly on these newer kernels such as Oracle Linux UEK 5.x kernels unless you are using the kubernetes 1.23+ versions. A quick check of the kubernetes github shows that the code needed for the kube-proxy fix as discussed in the post by Claudio is only in master as of today (October 30, 2021).
+
+Therefore I had to build the required binaries as follows:
+
+Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
+Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
+Note 2:  So this step is simply getting docker-ce installed on the LXD HOST server.
+
+sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc
+sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf -y remove runc
+sudo dnf -y install containerd.io docker-ce docker-ce-cli
+sudo systemctl enable docker
+sudo service docker start
+sudo service docker status
+
+Step 2:  Clone the kubernetes repo from github
+Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
+Note 2:  https://github.com/kubernetes/kubernetes > (scroll to) > To start developing K8s > (scroll to) > You have a working Docker environment.
+
+git clone https://github.com/kubernetes/kubernetes
+cd kubernetes
+make quick-release
+
+Note 3:  The "make quick-release" is actually not very quick on Lenovo P72 Mobile Workstation with 128 GB RAM and Intel® Core™ i7-8750H CPU @ 2.20GHz × 12.
+Note 4:  Therefore next time I may try using "-j8" on it or other method to make it a bit faster.  I'd say it took 5 minutes or so, just a guess.
+
+Step 3:  Find the newly-built kubernetes binaries that are needed
+Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubectl, and kubelet").
+
+lxc exec kmaster bash
+cd /
+sudo find . -name kubeadm
+sudo find . -name kubelet
+sudo find . -name kubectl
+
+These binaries which are of the 1.23 version level which have just been built above will be found in locations such as these:
+
+(still in the "kubernetes" directory of the github clone)
+mkdir orabuntu-lxc
+cd orabuntu-lxc/
+
+Note 2:  Now for example after finding the kubectl as described above, copy it to the orabuntu-lxc subdirectory.
+Note 3:  This step is just so that all three required kubernetes binaries are in the same "staging directory"
+Note 4:  The binaries are created in serveral subdirectories but are exactly the same binaries.  Verify using diff as shown below for example.
+Note 5:  Then put the three needed version 1.23 kubernetes binaries in the "orabuntu-lxc" staging directory (or any other staging location)
+
+```
+[ubuntu@o83sv3 kubernetes]$ find . -name kubeadm
+./cmd/kubeadm
+./cmd/kubeadm/app/apis/kubeadm
+./_output/dockerized/bin/linux/amd64/kubeadm
+./_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubeadm
+./_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubeadm
+./orabuntu-lxc/kubeadm
+[ubuntu@o83sv3 kubernetes]$ find . -name kubectl
+./cmd/kubectl
+./pkg/kubectl
+./staging/src/k8s.io/kubectl
+./staging/src/k8s.io/kubectl/pkg/util/i18n/translations/kubectl
+./test/e2e/framework/kubectl
+./test/e2e/kubectl
+./test/e2e/testing-manifests/kubectl
+./test/fixtures/pkg/kubectl
+./vendor/k8s.io/kubectl
+./_output/dockerized/bin/linux/amd64/kubectl
+./_output/release-stage/client/linux-amd64/kubernetes/client/bin/kubectl
+./_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubectl
+./_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubectl
+./_output/release-stage/test/kubernetes/test/e2e/testing-manifests/kubectl
+./orabuntu-lxc/kubectl
+[ubuntu@o83sv3 kubernetes]$ find . -name kubelet
+./cmd/kubeadm/app/phases/kubelet
+./cmd/kubelet
+./pkg/kubelet
+./staging/src/k8s.io/kubelet
+./test/e2e/framework/kubelet
+./test/instrumentation/testdata/pkg/kubelet
+./test/integration/kubelet
+./vendor/k8s.io/kubelet
+./_output/dockerized/bin/linux/amd64/kubelet
+./_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubelet
+./_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubelet
+./orabuntu-lxc/kubelet
+[ubuntu@o83sv3 kubernetes]$ diff ./_output/release-stage/client/linux-amd64/kubernetes/client/bin/kubectl ./_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubectl
+[ubuntu@o83sv3 kubernetes]$ diff ./_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubectl ./_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubectl
+[ubuntu@o83sv3 kubernetes]$ cd orabuntu-lxc
+[ubuntu@o83sv3 orabuntu-lxc]$ cp -p .././_output/release-stage/node/linux-amd64/kubernetes/node/bin/kubectl .
+[ubuntu@o83sv3 orabuntu-lxc]$ cp -p .././_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubeadm .
+[ubuntu@o83sv3 orabuntu-lxc]$ cp -p .././_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubelet .
+[ubuntu@o83sv3 orabuntu-lxc]$ 
+```
+
 ### Setting up K8s Cluster using LXC/LXD 
 > **Note:** For development purpose and not recommended for Production use
 
