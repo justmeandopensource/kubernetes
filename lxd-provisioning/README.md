@@ -1,4 +1,4 @@
-# K8S LXD-containerized CentOS8 on OL 8.4 UEK Host
+# K8S LXD-containerized CentOS8 on OL 8.4 UEK LXD Host
 
 The EXCELLENT guide here:
 
