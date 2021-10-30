@@ -26,7 +26,7 @@ So the kube-proxy containers will NOT run correctly on these newer kernels such 
 
 A quick check of the kubernetes github shows that the code needed for the kube-proxy fix as discussed in the post by Claudio is only in master as of today (October 30, 2021).
 
-Therefore I had built the required kubernetes binaries from the kubernetes github source code as follows:
+Therefore I built the required kubernetes binaries from the kubernetes github source code as follows:
 
 Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
 
