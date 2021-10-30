@@ -42,8 +42,8 @@ Note 3:  It would be far simpler to install docker from the Canonical snap. (not
 ```
 [ubuntu@o83sv3 ]$  sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 
 [ubuntu@o83sv3 ]$  sudo dnf -y install iproute-tc net-tools openssh-server perl
-[ubuntu@o83sv3 ]$  sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 [ubuntu@o83sv3 ]$  sudo dnf -y remove runc
+[ubuntu@o83sv3 ]$  sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 [ubuntu@o83sv3 ]$  sudo dnf -y install containerd.io docker-ce docker-ce-cli
 [ubuntu@o83sv3 ]$  sudo systemctl enable docker
 [ubuntu@o83sv3 ]$  sudo service docker start
