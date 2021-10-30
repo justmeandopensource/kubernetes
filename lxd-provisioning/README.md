@@ -27,7 +27,7 @@ A quick check of the kubernetes github shows that the code needed for the kube-p
 
 Therefore I built the required kubernetes binaries from the kubernetes github source code as described here:
 
-https://github.com/kubernetes/kubernetes :
+https://github.com/kubernetes/kubernetes
 
 Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP)
 
