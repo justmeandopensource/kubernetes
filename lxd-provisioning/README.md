@@ -40,6 +40,8 @@ The cont-centos8-0.sh file is shown below.
 /root/cont-centos8-4.sh
 /root/cont-centos8-6.sh
 ```
+The only script that is not run on each node is the cont-centos8-5.sh script which is the script that is used to run "kubeadm --init".  
+Currently that is run manually one line at a time but it will be put into the orabuntu-lxc automation also.
 
 A needed "secret sauce" is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
 
