@@ -70,9 +70,9 @@ Note 1:  The binaries that are needed for the kubernete init are "kubeadm, kubec
 ```
 lxc exec kmaster bash
 cd /
-sudo find . -name kubeadm
-sudo find . -name kubelet
-sudo find . -name kubectl
+[root@kmaster ~]# sudo find . -name kubeadm
+[root@kmaster ~]# sudo find . -name kubelet
+[root@kmaster ~]# sudo find . -name kubectl
 ```
 These binaries which are of the 1.23 version level which have just been built above will be found in locations such as these:
 
