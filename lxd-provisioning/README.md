@@ -11,7 +11,7 @@ The LXD HOST server information:
 Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
 Oracle Linux Server release 8.4
 
-Note 1: The Oracle Linux 3 host server is "default install" "out-of-the-box" "vanilla" Oracle Linux 8 host using XFS for the root FS.
+Note 1: The Oracle Linux 8 host server is "default install" "out-of-the-box" "vanilla" Oracle Linux 8 host using XFS for the root FS.
 
 Note 2: As regards running the LXD containers on a host directory that uses XFS it is required that the XFS was created ftype=1:
 ```
