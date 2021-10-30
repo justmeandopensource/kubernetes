@@ -9,7 +9,7 @@ was my primary reference for this build on Oracle Linux 8:
 Linux o83sv3 5.4.17-2102.205.7.3.el8uek.x86_64 #2 SMP
 Oracle Linux Server release 8.4
 
-The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY):
+The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
 
 https://www.claudiokuenzler.com/blog/1106/unable-to-deploy-rancher-managed-kubernetes-cluster-lxc-lxd-nodes
 
