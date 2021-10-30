@@ -11,7 +11,11 @@ Oracle Linux Server release 8.4
 
 Note 1: The Oracle Linux 3 host server is "default install" "out-of-the-box" "vanilla" Oracle Linux 8 host using XFS for the root FS.
 
-Note 2: As regards XFS using for kubernetes it is recommended/probably required that the XFS have 
+Note 2: As regards running the LXD containers on a host directory that uses XFS it is required that the XFS be created with ftype=1:
+```
+[ubuntu@o83sv3 ]$  xfs_info / | grep ftype
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+```
 
 The main "secret sauce" here is from this EXCELLENT post from Claudio Kuenzler (and shared on LinkedIn by Efstathios Efstathio TY both !! )
 
