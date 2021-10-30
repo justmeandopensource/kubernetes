@@ -126,7 +126,7 @@ Note 5:  Then put the three needed version 1.23 kubernetes binaries in the "orab
 Note: When running "kubeadm init" the correct version of the built kubernetes binaries needs to be passed explicitly to kubeadm.
 ```
 [root@kmaster ~]# kubeadm version
-kubeadm version: &version.Info{Major:"1", Minor:"23+", GitVersion:"v1.23.0-alpha.3.679+08bf54678e2bef", GitCommit:"08bf54678e2bef8b4c72c8c6d104b0bdf19a6f75", GitTreeState:"clean", BuildDate:"2021-10-30T14:50:37Z", GoVersion:"go1.17.2", Compiler:"gc", Platform:"linux/amd64"}
+kubeadm version: &version.Info{Major:"1", Minor:"23+", GitVersion:"v1.23.0-alpha.3.679+08bf54678e2bef", ... (truncated for brevity)
 [root@kmaster ~]# 
 ```
 A quick test shows that what is needed for the "kubeadm init" --kubernetes-version parameter is abbreviated version info as show below.
