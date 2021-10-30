@@ -14,7 +14,9 @@ sudo snap install lxd
 ```
 **Provide default option for all except this:**
 
-Name of the storage backend to use (btrfs, dir, lvm) [default=btrfs]: dir
+Install Orabuntu-LXD in LXD mode
+
+# Name of the storage backend to use (btrfs, dir, lvm) [default=btrfs]: dir
 
 #### Let's create profile for k8s cluster
 Make sure to clone this repo and run these commands moving into lxd-provisioning directory
