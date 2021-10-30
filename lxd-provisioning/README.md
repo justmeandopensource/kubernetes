@@ -181,6 +181,53 @@ Device docker added to kworker1
 Device docker added to kworker2
 [ubuntu@o83sv3 lxd-provisioning]$ 
 ```
+The kmaster config should look like this at this point:
+```[ubuntu@o83sv3 lxd-provisioning]$ lxc config show kmaster
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Centos 8 amd64 (20211027_07:08)
+  image.os: Centos
+  image.release: "8"
+  image.serial: "20211027_07:08"
+  image.type: squashfs
+  image.variant: default
+  volatile.base_image: efb603d87fd4d0db2917046dc50ecdf56701412b86a7d07b588d9332330bd7a7
+  volatile.eth0.host_name: veth989474a5
+  volatile.eth0.hwaddr: 00:16:3e:45:88:7f
+  volatile.idmap.base: "0"
+  volatile.idmap.current: '[]'
+  volatile.idmap.next: '[]'
+  volatile.last_state.idmap: '[]'
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 7d069b1a-e124-4ab0-b992-5b6221de302f
+devices:
+  containerd:
+    path: /var/lib/containerd
+    pool: containerd
+    source: kmaster
+    type: disk
+  docker:
+    path: /var/lib/docker
+    pool: docker
+    source: kmaster
+    type: disk
+  kubelet:
+    path: /var/lib/kubelet
+    pool: kubelet
+    source: kmaster
+    type: disk
+  libs:
+    path: /lib/modules
+    source: /lib/modules
+    type: disk
+ephemeral: false
+profiles:
+- k8s-antrea
+stateful: false
+description: ""
+[ubuntu@o83sv3 lxd-provisioning]$ 
+```
 Run cont-centos8-push.sh as shown below
 ```
 [ubuntu@o83sv3 lxd-provisioning]$ cat cont-centos8-push.sh 
