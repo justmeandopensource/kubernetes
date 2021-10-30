@@ -22,7 +22,7 @@ Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 FS (
 
 Step 0.1: Use the following profile for the k8s containers if an Orabuntu-LXC install has been completed already on the host.
 
-This config is Kubernetes LXD Generic and would be used with lxd profile 'k8s-generic'.
+This config is Kubernetes LXD Generic and would be to define 'k8s-generic' LXD profile.
 ```
 config:
   limits.cpu: "2"
@@ -46,7 +46,7 @@ devices:
     type: disk
 name: k8s
 ```
-This config is Kubernetes LXD Antrea and would be used to define 'k8s-antrea' profile.
+This config is Kubernetes LXD Antrea and would be used to define 'k8s-antrea' LXD profile.
 ```
 config:
   limits.cpu: "2"
