@@ -135,6 +135,14 @@ Note 5:  Then put the three needed version 1.23 kubernetes binaries in the "orab
 [ubuntu@o83sv3 orabuntu-lxc]$ cp -p .././_output/release-stage/server/linux-amd64/kubernetes/server/bin/kubelet .
 [ubuntu@o83sv3 orabuntu-lxc]$ 
 ```
+All three required v1.23.x kubernetes binaries are now staged in the "orabuntu-lxc"directory.
+```
+[ubuntu@o83sv3 orabuntu-lxc]$ ls -lrt
+total 206840
+-rwxr-xr-x. 1 ubuntu ubuntu  45924352 Oct 30 09:54 kubectl
+-rwxr-xr-x. 1 ubuntu ubuntu 121376192 Oct 30 09:55 kubelet
+-rwxr-xr-x. 1 ubuntu ubuntu  44503040 Oct 30 09:55 kubeadm
+```
 Note: When running "kubeadm init" the correct version of the built kubernetes binaries needs to be passed explicitly to kubeadm.
 ```
 [root@kmaster ~]# kubeadm version
