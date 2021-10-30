@@ -24,7 +24,7 @@ Step 1:  Install docker-ce on the LXD HOST server (in this example: Linux o83sv3
 Note 1:  This is all done so that the kubernetes binaries can be built from the cloned kubernetes github.
 
 Note 2:  So this step is simply getting docker-ce installed on the LXD HOST server.
-
+```
 sudo dnf -y install yum-utils device-mapper-persistent-data lvm2 iproute-tc
 sudo  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 sudo dnf -y remove runc
@@ -32,7 +32,7 @@ sudo dnf -y install containerd.io docker-ce docker-ce-cli
 sudo systemctl enable docker
 sudo service docker start
 sudo service docker status
-
+```
 Step 2:  Clone the kubernetes repo from github
 Note 1:  Following the steps as described here: https://github.com/kubernetes/kubernetes
 Note 2:  https://github.com/kubernetes/kubernetes > (scroll to) > To start developing K8s > (scroll to) > You have a working Docker environment.
