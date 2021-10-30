@@ -20,7 +20,7 @@ naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
 ```
 Note 3: The fstype=1 is a requirement for docker to be able to use overlay2 (of the older overlay).
 
-Step 0:  All of the following is done after preparing the LXD k8s containers using the scripts in my fork here:
+Step 0:  Prepare the LXD k8s containers using the scripts in my fork here:
 
 https://github.com/gstanden/kubernetes/tree/master/lxd-provisioning
 
