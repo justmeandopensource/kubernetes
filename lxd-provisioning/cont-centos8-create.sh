@@ -1,18 +1,21 @@
-lxc init images:centos/8/amd64 kmaster --profile k8s-antrea
+lxc profile create k8s-weavenet
+cat k8s-profile-config-weavenet | lxc profile edit k8s-weavenet
+
+lxc init images:centos/8/amd64 kmaster --profile k8s-weavenet
 lxc start kmaster
 lxc stop  kmaster
 cp ifcfg-eth0-kmaster ifcfg-eth0
 lxc file push ifcfg-eth0 kmaster/etc/sysconfig/network-scripts/
 lxc start kmaster
 
-lxc init images:centos/8/amd64 kworker1 --profile k8s-antrea
+lxc init images:centos/8/amd64 kworker1 --profile k8s-weavenet
 lxc start kworker1
 lxc stop  kworker1
 cp ifcfg-eth0-kworker1 ifcfg-eth0
 lxc file push ifcfg-eth0 kworker1/etc/sysconfig/network-scripts/
 lxc start kworker1
 
-lxc init images:centos/8/amd64 kworker2 --profile k8s-antrea
+lxc init images:centos/8/amd64 kworker2 --profile k8s-weavenet
 lxc start kworker2
 lxc stop  kworker2
 cp ifcfg-eth0-kworker2 ifcfg-eth0
