@@ -11,7 +11,7 @@ yum -y install yum-utils
 yum -y install scl-utils
 yum -y install centos-release-scl
 yum -y install python27
-scp ubuntu@10.209.53.1:/home/ubuntu/Downloads/orabuntu-lxc-master/rpmstage/python-six-1.9.0-2.el7.noarch.rpm .
+scp ubuntu@10.207.39.1:/home/ubuntu/Downloads/orabuntu-lxc-master/rpmstage/python-six-1.9.0-2.el7.noarch.rpm .
 rpm -ivh python-six-1.9.0-2.el7.noarch.rpm 
 rpm -ivh openvswitch-*.rpm
 cd /usr/local/etc

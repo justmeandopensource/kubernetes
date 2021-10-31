@@ -5,9 +5,9 @@ config:
     subnets:
       - type: static
         ipv4: true
-        address: 10.209.53.4
+        address: 10.207.39.4
         netmask: 255.255.255.0
-        gateway: 10.209.53.1
+        gateway: 10.207.39.1
         control: auto
   - type: nameserver
-    address: 10.209.53.2
+    address: 10.207.39.2
