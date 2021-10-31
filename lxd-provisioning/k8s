@@ -1,0 +1,450 @@
+#!/bin/bash
+
+#    Copyright 2015-2021 Gilbert Standen
+#    This file is part of Orabuntu-LXC.
+
+#    Orabuntu-LXC is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    Orabuntu-LXC is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with Orabuntu-LXC.  If not, see <http://www.gnu.org/licenses/>.
+
+clear
+MajorRelease=$1
+PointRelease=$2
+OracleRelease=$1$2
+OracleVersion=$1.$2
+Domain1=$3
+Domain2=$4
+NameServer=$5
+OSMemRes=$6
+MultiHost=$7
+LxcOvsVersion=$8
+DistDir=$9
+SubDirName=${10}
+
+function GetMultiHostVar4 {
+	echo $MultiHost | cut -f4 -d':'
+}
+MultiHostVar4=$(GetMultiHostVar4)
+
+DistDir="/home/ubuntu/Downloads/orabuntu-lxc-master"
+SubDirName=orabuntu
+MultiHostVar4=ubuntu
+
+echo ''
+echo "=============================================="
+echo "Script: k8s                                   "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Establish sudo privileges...                  "
+echo "=============================================="
+echo ''
+
+echo $MultiHostVar4 | sudo -S date
+
+echo ''
+echo "=============================================="
+echo "Privileges established.                       "
+echo "=============================================="
+
+sleep 5
+
+clear
+
+
+echo ''
+echo "=============================================="
+echo "Display DistDir...                            "
+echo "=============================================="
+echo ''
+
+DistDir="/home/ubuntu/Downloads/orabuntu-lxc-master"
+echo $DistDir
+
+echo ''
+echo "=============================================="
+echo "Done: Display DistDir.                        "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+if [ -e /sys/hypervisor/uuid ]
+then
+        function CheckAWS {
+                cat /sys/hypervisor/uuid | cut -c1-3 | grep -c ec2
+        }
+        AWS=$(CheckAWS)
+else
+        AWS=0
+fi
+
+function GetNameServerBase {
+        echo $NameServer | cut -f1 -d'-'
+}
+NameServerBase=$(GetNameServerBase)
+
+function GetGroup {
+        id | cut -f2 -d' ' | cut -f2 -d'(' | cut -f1 -d')'
+}
+Group=$(GetGroup)
+
+function GetOwner {
+        id | cut -f1 -d' ' | cut -f2 -d'(' | cut -f1 -d')'
+}
+Owner=$(GetOwner)
+
+function GetLxcVersion {
+	echo $LxcOvsVersion | cut -f1 -d':'
+}
+LxcVersion=$(GetLxcVersion)
+
+function GetOvsVersion {
+	echo $LxcOvsVersion | cut -f2 -d':'
+}
+OvsVersion=$(GetOvsVersion)
+
+function GetMultiHostVar1 {
+	echo $MultiHost | cut -f1 -d':'
+}
+MultiHostVar1=$(GetMultiHostVar1)
+
+function GetMultiHostVar2 {
+	echo $MultiHost | cut -f2 -d':'
+}
+MultiHostVar2=$(GetMultiHostVar2)
+
+function GetMultiHostVar3 {
+	echo $MultiHost | cut -f3 -d':'
+}
+MultiHostVar3=$(GetMultiHostVar3)
+
+function GetMultiHostVar5 {
+	echo $MultiHost | cut -f5 -d':'
+}
+MultiHostVar5=$(GetMultiHostVar5)
+
+function GetMultiHostVar6 {
+	echo $MultiHost | cut -f6 -d':'
+}
+MultiHostVar6=$(GetMultiHostVar6)
+
+function GetMultiHostVar7 {
+	echo $MultiHost | cut -f7 -d':'
+}
+MultiHostVar7=$(GetMultiHostVar7)
+
+function GetMultiHostVar8 {
+	echo $MultiHost | cut -f8 -d':'
+}
+MultiHostVar8=$(GetMultiHostVar8)
+
+function GetMultiHostVar9 {
+	echo $MultiHost | cut -f9 -d':'
+}
+MultiHostVar9=$(GetMultiHostVar9)
+
+function GetMultiHostVar10 {
+	echo $MultiHost | cut -f10 -d':'
+}
+MultiHostVar10=$(GetMultiHostVar10)
+GRE=$MultiHostVar10
+GREValue=$MultiHostVar10
+
+function GetMultiHostVar11 {
+        echo $MultiHost | cut -f11 -d':'
+}
+MultiHostVar11=$(GetMultiHostVar11)
+Product=$MultiHostVar11
+
+function GetMultiHostVar12 {
+        echo $MultiHost | cut -f12 -d':'
+}
+MultiHostVar12=$(GetMultiHostVar12)
+LXDValue=$MultiHostVar12
+LXD=$LXDValue
+
+function GetMultiHostVar13 {
+        echo $MultiHost | cut -f13 -d':'
+}
+MultiHostVar13=$(GetMultiHostVar13)
+K8S=$MultiHostVar13
+
+function GetMultiHostVar14 {
+        echo $MultiHost | cut -f14 -d':'
+}
+MultiHostVar14=$(GetMultiHostVar14)
+PreSeed=$MultiHostVar14
+
+function GetMultiHostVar15 {
+        echo $MultiHost | cut -f15 -d':'
+}
+MultiHostVar15=$(GetMultiHostVar15)
+LXDCluster=$MultiHostVar15
+
+function GetMultiHostVar16 {
+        echo $MultiHost | cut -f16 -d':'
+}
+MultiHostVar16=$(GetMultiHostVar16)
+LXDStorageDriver=$MultiHostVar16
+
+function GetMultiHostVar17 {
+        echo $MultiHost | cut -f17 -d':'
+}
+MultiHostVar17=$(GetMultiHostVar17)
+StoragePoolName=$MultiHostVar17
+
+function GetMultiHostVar18 {
+        echo $MultiHost | cut -f18 -d':'
+}
+MultiHostVar18=$(GetMultiHostVar18)
+BtrfsLun=$MultiHostVar18
+
+function GetMultiHostVar19 {
+        echo $MultiHost | cut -f19 -d':'
+}
+MultiHostVar19=$(GetMultiHostVar19)
+Docker=$MultiHostVar19
+
+function GetMultiHostVar20 {
+        echo $MultiHost | cut -f20 -d':'
+}
+MultiHostVar20=$(GetMultiHostVar20)
+TunType=$MultiHostVar20
+
+function GetMultiHostVar21 {
+        echo $MultiHost | cut -f21 -d':'
+}
+MultiHostVar20=$(GetMultiHostVar21)
+TunType=$MultiHostVar20
+
+function CheckSystemdResolvedInstalled {
+        sudo netstat -ulnp | grep 53 | sed 's/  */ /g' | rev | cut -f1 -d'/' | rev | sort -u | grep systemd- | wc -l
+}
+SystemdResolvedInstalled=$(CheckSystemdResolvedInstalled)
+
+function CheckNetworkManagerRunning {
+	ps -ef | grep NetworkManager | grep -v grep | wc -l
+}
+NetworkManagerRunning=$(CheckNetworkManagerRunning)
+
+GetLinuxFlavors(){
+if   [[ -e /etc/oracle-release ]]
+then
+        LinuxFlavors=$(cat /etc/oracle-release | cut -f1 -d' ')
+elif [[ -e /etc/redhat-release ]]
+then
+        LinuxFlavors=$(cat /etc/redhat-release | cut -f1 -d' ')
+elif [[ -e /usr/bin/lsb_release ]]
+then
+        LinuxFlavors=$(lsb_release -d | awk -F ':' '{print $2}' | cut -f1 -d' ')
+elif [[ -e /etc/issue ]]
+then
+        LinuxFlavors=$(cat /etc/issue | cut -f1 -d' ')
+else
+        LinuxFlavors=$(cat /proc/version | cut -f1 -d' ')
+fi
+}
+GetLinuxFlavors
+
+function TrimLinuxFlavors {
+echo $LinuxFlavors | sed 's/^[ \t]//;s/[ \t]$//'
+}
+LinuxFlavor=$(TrimLinuxFlavors)
+
+if   [ $LinuxFlavor = 'Oracle' ]
+then
+        function GetOracleDistroRelease {
+                sudo cat /etc/oracle-release | cut -f5 -d' ' | cut -f1 -d'.'
+        }
+        OracleDistroRelease=$(GetOracleDistroRelease)
+        if   [ $OracleDistroRelease -eq 7 ] || [ $OracleDistroRelease -eq 6 ]
+        then
+                CutIndex=7
+        elif [ $OracleDistroRelease -eq 8 ]
+        then
+                CutIndex=6
+        fi
+
+	function GetRedHatVersion {
+                sudo cat /etc/redhat-release | cut -f"$CutIndex" -d' ' | cut -f1 -d'.'
+        }
+
+	function GetRedHatMinorVersion {
+		sudo cat /etc/redhat-release | cut -f"$CutIndex" -d' ' | cut -f2 -d'.'
+	}
+
+        RedHatVersion=$(GetRedHatVersion)
+	RedHatMinorVersion=$(GetRedHatMinorVersion)
+	RHV=$RedHatVersion
+	RHMV=$RedHatMinorVersion
+        function GetOracleDistroRelease {
+                sudo cat /etc/oracle-release | cut -f5 -d' ' | cut -f1 -d'.'
+        }
+        OracleDistroRelease=$(GetOracleDistroRelease)
+        Release=$OracleDistroRelease
+        LF=$LinuxFlavor
+        RL=$Release
+elif [ $LinuxFlavor = 'Red' ] || [ $LinuxFlavor = 'CentOS' ]
+then
+	if   [ $LinuxFlavor = 'Red' ]
+        then
+                function GetRedHatVersion {
+                        sudo cat /etc/redhat-release | rev | cut -f2 -d' ' | cut -f2 -d'.'
+                }
+        elif [ $LinuxFlavor = 'CentOS' ]
+        then
+                function GetRedHatVersion {
+                        cat /etc/redhat-release | sed 's/ Linux//' | cut -f1 -d'.' | rev | cut -f1 -d' '
+                }
+        fi
+	RedHatVersion=$(GetRedHatVersion)
+	RHV=$RedHatVersion
+        Release=$RedHatVersion
+        LF=$LinuxFlavor
+        RL=$Release
+elif [ $LinuxFlavor = 'Fedora' ]
+then
+        CutIndex=3
+        function GetRedHatVersion {
+                sudo cat /etc/redhat-release | cut -f"$CutIndex" -d' ' | cut -f1 -d'.'
+        }
+        RedHatVersion=$(GetRedHatVersion)
+	RHV=$RedHatVersion
+        if   [ $RedHatVersion -ge 28 ]
+        then
+                Release=8
+        elif [ $RedHatVersion -ge 19 ] && [ $RedHatVersion -le 27 ]
+        then
+                Release=7
+        elif [ $RedHatVersion -ge 12 ] && [ $RedHatVersion -le 18 ]
+        then
+                Release=6
+        fi
+        LF=$LinuxFlavor
+        RL=$Release
+elif [ $LinuxFlavor = 'Ubuntu' ]
+then
+        function GetUbuntuVersion {
+                cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -f2 -d'='
+        }
+        UbuntuVersion=$(GetUbuntuVersion)
+        LF=$LinuxFlavor
+        RL=$UbuntuVersion
+        function GetUbuntuMajorVersion {
+                cat /etc/lsb-release | grep DISTRIB_RELEASE | cut -f2 -d'=' | cut -f1 -d'.'
+        }
+        UbuntuMajorVersion=$(GetUbuntuMajorVersion)
+fi
+
+function GetOperation {
+echo $MultiHost | cut -f1 -d':'
+}
+Operation=$(GetOperation)
+
+echo ''
+echo "=============================================="
+echo "Evaluate CGROUP_SUFFIX variable...            "
+echo "=============================================="
+echo ''
+
+function GetCgroupv2Warning1 {
+        echo "/var/lib/snapd/snap/bin/lxc cluster list" | sg lxd 2> >(grep -c 'WARNING: cgroup v2 is not fully supported yet, proceeding with partial confinement') >/dev/null
+}
+Cgroupv2Warning1=$(GetCgroupv2Warning1)
+
+if [ $Cgroupv2Warning1 -eq 1 ]
+then
+        echo "=============================================="
+        echo "On $LinuxFlavor $RedHatVersion the WARNING:   "
+        echo "                                              "
+        echo "WARNING: cgroup v2 is not fully supported yet "
+        echo "proceeding with partial confinement.          "
+        echo "                                              "
+        echo "can be safely IGNORED.                        "
+        echo "This is a snapd issue not an LXD issue.       "
+        echo "                                              "
+        echo "This specific warning has been suppressed     "
+        echo "during this install of Orabuntu-LXC.          "
+        echo "                                              "
+        echo " More info here:                              "
+        echo "                                              "
+        echo "https://discuss.linuxcontainers.org/t/lxd-cgroup-v2-support/10455"
+        echo "https://bugs.launchpad.net/ubuntu/+source/snapd/+bug/1850667"
+        echo "                                              "
+        echo "=============================================="
+
+        CGROUP_SUFFIX='2>/dev/null'
+else
+        CGROUP_SUFFIX=''
+fi
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Done: Evaluate CGROUP_SUFFIX variable.        "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Create K8S cluster...                         "
+echo "=============================================="
+echo ''
+
+echo "Product = "$Product
+sudo dnf -y install wget unzip
+cd "$DistDir"/products/k8s
+wget -4 https://github.com/gstanden/kubernetes/archive/refs/heads/master.zip
+unzip master.zip
+cd ./kubernetes-master/lxd-provisioning
+cp -p ~/kube* .
+chmod +x *.sh
+./cont-centos8-create.sh $CGROUP_SUFFIX
+./host-oracle8.sh $CGROUP_SUFFIX
+./cont-centos8-push.sh $CGROUP_SUFFIX
+./cont-centos8-exec-kmaster.sh $CGROUP_SUFFIX
+./cont-centos8-exec-kworker1.sh $CGROUP_SUFFIX
+./cont-centos8-exec-kworker2.sh $CGROUP_SUFFIX
+./cont-centos8-push-kube.sh
+
+#######################################
+# To be executed only on master nodes #
+#######################################
+
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster -- /root/cont-centos8-5.sh' | sg lxd $CGROUP_SUFFIX"
+
+#######################################
+# To be executed only on worker nodes #
+#######################################
+
+echo ''
+echo "=============================================="
+echo "Done: Create K8S cluster.                     "
+echo "=============================================="
+echo ''
+

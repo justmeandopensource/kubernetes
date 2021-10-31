@@ -7,16 +7,16 @@ config:
     sys:rw\nlxc.mount.entry = /dev/kmsg dev/kmsg none defaults,bind,create=file"
   security.privileged: "true"
   security.nesting: "true"
-description: "Kubernetes LXD WeaveNet"
+description: "Kubernetes LXD lxdbr0"
 devices:
   eth0:
     name: eth0
     nictype: bridged
-    parent: sw1a
+    parent: lxdbr0
     type: nic
   root:
     path: /
-    pool: local
+    pool: default
     type: disk
 name: k8s
 used_by: []

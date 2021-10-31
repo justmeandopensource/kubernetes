@@ -1,7 +1,7 @@
 #!/bin/bash
 CGROUP_SUFFIX=$1
 
-eval echo "'/var/lib/snapd/snap/bin/lxc profile create k8s-weavenet' | sg lxd $CGROUP_SUFFIX"a
+eval echo "'/var/lib/snapd/snap/bin/lxc profile create k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
 eval echo "'cat k8s-profile-config-weavenet | /var/lib/snapd/snap/bin/lxc profile edit k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
 
 eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8/amd64 kmaster --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"

@@ -7,7 +7,7 @@ config:
     sys:rw\nlxc.mount.entry = /dev/kmsg dev/kmsg none defaults,bind,create=file"
   security.privileged: "true"
   security.nesting: "true"
-description: Kubernetes LXD Antrea
+description: "Kubernetes LXD Antrea"
 devices:
   eth0:
     name: eth0
