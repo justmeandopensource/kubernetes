@@ -6,7 +6,27 @@
  service sshd start
  dnf remove -y runc
  usermod --password `perl -e "print crypt('root','root');"` root
- yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
- dnf install containerd.io docker-ce docker-ce-cli -y
+ 
+ n=1
+ Cmd0=1
+ while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
+ do
+ 	yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	Cmd0=`echo $?`
+	n=$((n+1))
+	sleep 5
+ done
+ 
  mkdir -p /etc/docker
+ 
+ n=1
+ Cmd1=1
+ while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
+ do
+ 	dnf install containerd.io docker-ce docker-ce-cli -y
+	Cmd1=`echo $?`
+	n=$((n+1))
+	sleep 5
+ done
+ 
 

@@ -1,2 +1,6 @@
-sudo modinfo openvswitch | grep depends
+# Find all modules on which openvswitch depends
 sudo modinfo openvswitch | grep depends | cut -f2 -d':' |  sed 's/^[ \t]*//;s/[ \t]*$//'
+
+# Get the ftype of an XFS file system.
+# Use in orabuntu-lxc with K8S Y/N to decide if SCST must deploy ext4 LUNs for kubernetes
+xfs_info / | grep ftype | cut -f2 -d',' |  sed 's/^[ \t]*//;s/[ \t]*$//' | cut -f2 -d'='
