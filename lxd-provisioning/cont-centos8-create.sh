@@ -1,3 +1,5 @@
+#!/bin/bash
+
 lxc profile create k8s-weavenet
 cat k8s-profile-config-weavenet | lxc profile edit k8s-weavenet
 
