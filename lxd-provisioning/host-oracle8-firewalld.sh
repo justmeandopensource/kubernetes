@@ -1,3 +1,11 @@
+#!/bin/bash
+
+echo ''
+echo "=============================================="
+echo "Configure Firewalld ...                       "
+echo "=============================================="
+echo ''
+
 Zone=public
 # worker nodes
 sudo firewall-cmd --zone=$Zone --add-port 10250/tcp --add-port 30000-32767/tcp --permanent
@@ -11,4 +19,31 @@ sudo firewall-cmd --zone=$Zone --permanent --add-service=dns
 sudo firewall-cmd --zone=$Zone --permanent --add-service=dhcp
 sudo firewall-cmd --zone=$Zone --permanent --add-service=https
 sudo firewall-cmd --reload
+
+echo ''
+echo "=============================================="
+echo "Done: Configure Firewalld.                    "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "==============================================" 
+echo "Check Firewalld ...                           "
+echo "=============================================="
+echo ''
+
 sudo firewall-cmd --list-ports
+
+echo ''
+echo "==============================================" 
+echo "Done: Check Firewalld.                        "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear

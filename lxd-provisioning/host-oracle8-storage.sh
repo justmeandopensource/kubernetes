@@ -1,5 +1,16 @@
 #!/bin/bash
 
+echo ''
+echo "=============================================="
+echo "Configure CGROUP_SUFFIX...                    "
+echo "=============================================="
+echo ''
+
+function GetCgroupv2Warning1 {
+	echo "/var/lib/snapd/snap/bin/lxc cluster list" | sg lxd 2> >(grep -c 'WARNING: cgroup v2 is not fully supported yet, proceeding with partial confinement') >/dev/null
+}
+Cgroupv2Warning1=$(GetCgroupv2Warning1)
+
 if [ $Cgroupv2Warning1 -eq 1 ]
 then
         echo "=============================================="
@@ -26,9 +37,22 @@ else
         CGROUP_SUFFIX=''
 fi
 
+echo ''
+echo "=============================================="
+echo "Done: Configure CGROUP_SUFFIX.                "
+echo "=============================================="
+echo ''
+
 sleep 5
 
 clear
+
+echo ''
+echo "=============================================="
+echo "Configure LXD K8S Storage ...                 "
+echo "=============================================="
+echo ''
+
 
 eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd kmaster' | sg lxd $CGROUP_SUFFIX"
@@ -53,4 +77,11 @@ eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker kworker2' |
 eval echo "'/var/lib/snapd/snap/bin/lxc config device add kmaster  docker disk pool=docker source=kmaster  path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc config device add kworker1 docker disk pool=docker source=kworker1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc config device add kworker2 docker disk pool=docker source=kworker2 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+
+
+echo ''
+echo "=============================================="
+echo "Done: Configure LXD K8S Storage.              "
+echo "=============================================="
+echo ''
 

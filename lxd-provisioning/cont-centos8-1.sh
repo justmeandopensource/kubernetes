@@ -1,3 +1,11 @@
+#!/bin/bash
+
+echo ''
+echo "==============================================" 
+echo "Install Docker daemon.json ...                "
+echo "=============================================="
+echo ''
+
 mkdir -p /etc/docker
 cat > /etc/docker/daemon.json <<EOF
 {
@@ -12,3 +20,13 @@ cat > /etc/docker/daemon.json <<EOF
   ]
 }
 EOF
+
+echo ''
+echo "==============================================" 
+echo "Done: Install Docker daemon.json.             "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
