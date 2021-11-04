@@ -121,14 +121,14 @@ Status=1
 n=1
 while [ $Status -ne 0 ] && [ $n -le 5 ]
 do
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster -- dnf -y install openssh-server net-tools bind-utils git' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
 	Status=`echo $?`
 	n=$((n+1))
 	sleep 5
 done
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- dnf -y install openssh-server net-tools bind-utils git' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- dnf -y install openssh-server net-tools bind-utils git' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
