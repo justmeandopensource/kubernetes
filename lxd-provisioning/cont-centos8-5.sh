@@ -72,7 +72,26 @@ clear
 
 echo ''
 echo "==============================================" 
-echo "Install sshpass...                            "
+echo "Turn off swap...                              "
+echo "=============================================="
+echo ''
+
+sudo swapoff -a
+sudo free -m
+
+echo ''
+echo "==============================================" 
+echo "Done: Turn off swap.                          "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "==============================================" 
+echo "Run kubeadm...                                "
 echo "=============================================="
 echo ''
 
@@ -80,7 +99,7 @@ kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.23.0-alpha
 
 echo ''
 echo "==============================================" 
-echo "Done: Install sshpass.                        "
+echo "Done: Run kubeadm.                            "
 echo "=============================================="
 echo ''
 
@@ -90,7 +109,6 @@ clear
 
 echo "Sleeping 30 seconds while kubernetes master starts running ..."
 sleep 30
-
 
 echo ''
 echo "==============================================" 
