@@ -26,9 +26,9 @@ echo "Takes quite awhile ... patience ... wait ...  "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- git clone https://github.com/kubernetes/kubernetes' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- cd kubernetes' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- make quick-release' | sg lxd $CGROUP_SUFFIX"
+git clone https://github.com/kubernetes/kubernetes
+cd kubernetes
+make quick-release
 
 echo ''
 echo "=============================================="
