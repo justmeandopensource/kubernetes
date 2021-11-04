@@ -18,3 +18,22 @@ echo ''
 sleep 5
 
 clear
+
+echo ''
+echo "=============================================="
+echo "Build kubernetes v1.23 from source...         "
+echo "Takes quite awhile ... patience ... wait ...  "
+echo "=============================================="
+echo ''
+
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- git clone https://github.com/kubernetes/kubernetes' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- cd kubernetes' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- make quick-release' | sg lxd $CGROUP_SUFFIX"
+
+echo ''
+echo "=============================================="
+echo "Done: Build kubernetes v1.23 from source.     "
+echo "=============================================="
+echo ''
+
+sleep 300
