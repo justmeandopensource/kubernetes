@@ -34,7 +34,7 @@ echo "Clone kubernetes github...                    "
 echo "=============================================="
 echo ''
 
-git clone https://github.com/kubernetes/kubernetes
+git clone --depth 1 https://github.com/kubernetes/kubernetes
 
 echo ''
 echo "=============================================="
@@ -51,7 +51,14 @@ echo "=============================================="
 echo ''
 
 cd kubernetes
-make quick-release
+make -d quick-release
+Cmd0=`echo $?`
+
+if [ $Cmd0 -ne 0 ]
+then
+	make quick-release
+	Cmd0=`echo $?`
+fi
 
 echo ''
 echo "=============================================="
