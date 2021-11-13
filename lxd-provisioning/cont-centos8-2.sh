@@ -127,5 +127,7 @@ echo "Done: Install Docker.                         "
 echo "=============================================="
 echo ''
  
- 
+sleep 5
+
+clear 
 

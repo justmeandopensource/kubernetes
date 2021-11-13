@@ -8,6 +8,7 @@ echo ''
 
 systemctl daemon-reload
 systemctl enable docker --now
+service docker start
 
 echo ''
 echo "==============================================" 
@@ -34,7 +35,7 @@ echo "Clone kubernetes github...                    "
 echo "=============================================="
 echo ''
 
-git clone --depth 1 https://github.com/kubernetes/kubernetes
+git clone https://github.com/kubernetes/kubernetes
 
 echo ''
 echo "=============================================="
