@@ -35,7 +35,7 @@ echo "Clone kubernetes github...                    "
 echo "=============================================="
 echo ''
 
-git clone https://github.com/kubernetes/kubernetes
+# git clone https://github.com/kubernetes/kubernetes
 
 echo ''
 echo "=============================================="
@@ -51,15 +51,15 @@ echo "Make kubernetes quick-release...              "
 echo "=============================================="
 echo ''
 
-cd kubernetes
-make -d quick-release
-Cmd0=`echo $?`
+# cd kubernetes
+# make -d quick-release
+# Cmd0=`echo $?`
 
-if [ $Cmd0 -ne 0 ]
-then
-	make quick-release
-	Cmd0=`echo $?`
-fi
+# if [ $Cmd0 -ne 0 ]
+# then
+# 	make quick-release
+# 	Cmd0=`echo $?`
+# fi
 
 echo ''
 echo "=============================================="
@@ -75,10 +75,10 @@ echo "Copy k8s binaries to /usr/bin...              "
 echo "=============================================="
 echo ''
 
-cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubeadm /usr/bin/.
-cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubectl /usr/bin/.
-cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubelet /usr/bin/.
-ls -l /usr/bin/kube*
+# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubeadm /usr/bin/.
+# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubectl /usr/bin/.
+# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubelet /usr/bin/.
+# ls -l /usr/bin/kube*
 
 echo ''
 echo "=============================================="
