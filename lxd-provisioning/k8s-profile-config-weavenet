@@ -1,6 +1,6 @@
 config:
-  limits.cpu: "2"
-  limits.memory: 4GB
+  limits.cpu: "4"
+  limits.memory: 8GB
   limits.memory.swap: "false"
   linux.kernel_modules: ip_tables,ip6_tables,nf_nat,overlay,br_netfilter
   raw.lxc: "lxc.apparmor.profile=unconfined\nlxc.cap.drop= \nlxc.cgroup.devices.allow=a\nlxc.mount.auto=proc:rw
