@@ -7,6 +7,6 @@ DNS1=10.207.39.2
 DOMAIN=urdomain1.com
 PREFIX=24
 ONBOOT=yes
-HOSTNAME=kworker1
-DHCP_HOSTNAME=kworker1
+HOSTNAME=violin1
+DHCP_HOSTNAME=violin1
 

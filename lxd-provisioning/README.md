@@ -31,17 +31,17 @@ $ lxc profile list
 
 #### It's time to create node for k8s cluster
 ```
-$ lxc launch ubuntu:21.04 kmaster --profile k8s
-Creating kmaster
-Starting kmaster
+$ lxc launch ubuntu:21.04 maestro --profile k8s
+Creating maestro
+Starting maestro
 
-$ lxc launch ubuntu:21.04 kworker1 --profile k8s
-Creating kworker1
-Starting kworker1
+$ lxc launch ubuntu:21.04 violin1 --profile k8s
+Creating violin1
+Starting violin1
 
-$ lxc launch ubuntu:21.04 kworker2 --profile k8s
-Creating kworker2
-Starting kworker2
+$ lxc launch ubuntu:21.04 violin2 --profile k8s
+Creating violin2
+Starting violin2
 ```
 > **Note:** The naming convention is k8s master node name has to have **master** keyword in the name and for k8s worker nodes **worker** keyword in the name.
 ```
@@ -49,34 +49,34 @@ $ lxc list
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
 |   NAME    |  STATE  |         IPV4          |                     IPV6                     |    TYPE    | SNAPSHOTS |
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
-| kmaster   | RUNNING | 10.127.221.187 (eth0) | fd42:d04d:d3e7:433:216:3eff:fe61:e128 (eth0) | PERSISTENT | 0         |
+| maestro   | RUNNING | 10.127.221.187 (eth0) | fd42:d04d:d3e7:433:216:3eff:fe61:e128 (eth0) | PERSISTENT | 0         |
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
-| kworker1  | RUNNING | 10.127.221.49 (eth0)  | fd42:d04d:d3e7:433:216:3eff:fef8:af2d (eth0) | PERSISTENT | 0         |
+| violin1  | RUNNING | 10.127.221.49 (eth0)  | fd42:d04d:d3e7:433:216:3eff:fef8:af2d (eth0) | PERSISTENT | 0         |
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
-| kworker2  | RUNNING | 10.127.221.151 (eth0) | fd42:d04d:d3e7:433:216:3eff:fe28:77dc (eth0) | PERSISTENT | 0         |
+| violin2  | RUNNING | 10.127.221.151 (eth0) | fd42:d04d:d3e7:433:216:3eff:fe28:77dc (eth0) | PERSISTENT | 0         |
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
 ```
 #### Now, run bootstrap script on all node.
 It is mandatory to run this bootstrap script on master node first.
 ```
-$ cat bootstrap-kube.sh | lxc exec kmaster bash
-$ cat bootstrap-kube.sh | lxc exec kworker1 bash
-$ cat bootstrap-kube.sh | lxc exec kworker2 bash
+$ cat bootstrap-kube.sh | lxc exec maestro bash
+$ cat bootstrap-kube.sh | lxc exec violin1 bash
+$ cat bootstrap-kube.sh | lxc exec violin2 bash
 
 $ lxc list
 +-----------+---------+------------------------+----------------------------------------------+------------+-----------+
 |   NAME    |  STATE  |          IPV4          |                     IPV6                     |    TYPE    | SNAPSHOTS |
 +-----------+---------+------------------------+----------------------------------------------+------------+-----------+
-| kmaster   | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fe61:e128 (eth0) | PERSISTENT | 0         |
+| maestro   | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fe61:e128 (eth0) | PERSISTENT | 0         |
 |           |         | 10.244.0.1 (cni0)      |                                              |            |           |
 |           |         | 10.244.0.0 (flannel.1) |                                              |            |           |
 |           |         | 10.127.221.187 (eth0)  |                                              |            |           |
 +-----------+---------+------------------------+----------------------------------------------+------------+-----------+
-| kworker1  | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fef8:af2d (eth0) | PERSISTENT | 0         |
+| violin1  | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fef8:af2d (eth0) | PERSISTENT | 0         |
 |           |         | 10.244.1.0 (flannel.1) |                                              |            |           |
 |           |         | 10.127.221.49 (eth0)   |                                              |            |           |
 +-----------+---------+------------------------+----------------------------------------------+------------+-----------+
-| kworker2  | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fe28:77dc (eth0) | PERSISTENT | 0         |
+| violin2  | RUNNING | 172.17.0.1 (docker0)   | fd42:d04d:d3e7:433:216:3eff:fe28:77dc (eth0) | PERSISTENT | 0         |
 |           |         | 10.244.2.0 (flannel.1) |                                              |            |           |
 |           |         | 10.127.221.151 (eth0)  |                                              |            |           |
 +-----------+---------+------------------------+----------------------------------------------+------------+-----------+
@@ -84,17 +84,17 @@ $ lxc list
 The bootstrap script will deploy flannel for networking.
 
 #### Verify
-##### Exec into kmaster node
+##### Exec into maestro node
 ```
-$ lxc exec kmaster bash
+$ lxc exec maestro bash
 ```
 #### Verifying Nodes
 ```
 $ kubectl get nodes
 NAME        STATUS   ROLES    AGE     VERSION
-kmaster     Ready    master   8m53s   v1.19.2
-kworker1   Ready    <none>   5m35s   v1.19.2
-kworker2   Ready    <none>   3m39s   v1.19.2
+maestro     Ready    master   8m53s   v1.19.2
+violin1   Ready    <none>   5m35s   v1.19.2
+violin2   Ready    <none>   3m39s   v1.19.2
 ```
 
 #### Verifying cluster version
@@ -134,7 +134,7 @@ kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP        11m
 nginx        NodePort    10.96.21.25   <none>        80:30310/TCP   4s
 ```
 
-#### Exit out from kmaster node
+#### Exit out from maestro node
 ```
 $ exit
 ```
@@ -153,7 +153,7 @@ Accept-Ranges: bytes
 ```
 ##### We can access nginx.. !!!
 
-#### To access k8s cluster without execing into kmaster node
+#### To access k8s cluster without execing into maestro node
 
 ##### Download the kubectl command into your local, I have already present..!
 ```
@@ -164,18 +164,18 @@ $ which kubectl
 ```
 $ mkdir ~/.kube
 ```
-##### copy config from kmaster into .kube directory
+##### copy config from maestro into .kube directory
 ```
-$ lxc file pull kmaster/etc/kubernetes/admin.conf ~/.kube/config
+$ lxc file pull maestro/etc/kubernetes/admin.conf ~/.kube/config
 $ ls -l ~/.kube
 total 8
 -rw------- 1 root root 5570 Oct 12 08:05 config
 ```
-##### Try to access k8s cluster without execing into kmaster node.
+##### Try to access k8s cluster without execing into maestro node.
 ```
 $ kubectl get nodes
 NAME        STATUS   ROLES    AGE   VERSION
-kmaster     Ready    master   23m   v1.19.2
+maestro     Ready    master   23m   v1.19.2
 kworker01   Ready    <none>   19m   v1.19.2
 kworker02   Ready    <none>   17m   v1.19.2
 ```

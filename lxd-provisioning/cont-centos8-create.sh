@@ -20,30 +20,30 @@ sleep 5
 
 echo ''
 echo "=============================================="
-echo "Create kmaster LXD container...               "
+echo "Create maestro LXD container...               "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 kmaster --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
-cp ifcfg-eth0-kmaster ifcfg-eth0
+eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 maestro --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+cp ifcfg-eth0-maestro ifcfg-eth0
 sleep 5
 
 Status=1
 n=1
 while [ $Status -ne 0 ] && [ $n -le 5 ]
 do
-	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 kmaster/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 maestro/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
 	Status=`echo $?`
 	n=$((n+1))
 	sleep 5
 done
 
-eval echo "'/var/lib/snapd/snap/bin/lxc stop  kmaster' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc start kmaster' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc stop  maestro' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc start maestro' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
-echo "Done: Create kmaster LXD container.           "
+echo "Done: Create maestro LXD container.           "
 echo "=============================================="
 echo ''
 
@@ -51,30 +51,30 @@ sleep 5
 
 echo ''
 echo "=============================================="
-echo "Create kworker1 LXD container...              "
+echo "Create violin1 LXD container...              "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 kworker1 --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
-cp ifcfg-eth0-kworker1 ifcfg-eth0
+eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 violin1 --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+cp ifcfg-eth0-violin1 ifcfg-eth0
 sleep 5
 
 Status=1
 n=1
 while [ $Status -ne 0 ] && [ $n -le 5 ]
 do
-	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 kmaster/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 violin1/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
 	Status=`echo $?`
 	n=$((n+1))
 	sleep 5
 done
 
-eval echo "'/var/lib/snapd/snap/bin/lxc stop  kworker1' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc start kworker1' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc stop  violin1' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc start violin1' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
-echo "Done: Create kworker1 LXD container.          "
+echo "Done: Create violin1 LXD container.          "
 echo "=============================================="
 echo ''
 
@@ -82,30 +82,30 @@ sleep 5
 
 echo ''
 echo "=============================================="
-echo "Create kworker2 LXD container...              "
+echo "Create violin2 LXD container...              "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 kworker2 --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
-cp ifcfg-eth0-kworker2 ifcfg-eth0
+eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8/amd64 violin2 --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+cp ifcfg-eth0-violin2 ifcfg-eth0
 sleep 5
 
 Status=1
 n=1
 while [ $Status -ne 0 ] && [ $n -le 5 ]
 do
-	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 kmaster/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc file push ifcfg-eth0 violin2/etc/sysconfig/network-scripts/' | sg lxd $CGROUP_SUFFIX"
 	Status=`echo $?`
 	n=$((n+1))
 	sleep 5
 done
 
-eval echo "'/var/lib/snapd/snap/bin/lxc stop  kworker2' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc start kworker2' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc stop  violin2' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc start violin2' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
-echo "Create kworker2 LXD container...              "
+echo "Create violin2 LXD container...              "
 echo "=============================================="
 echo ''
 
@@ -121,14 +121,14 @@ Status=1
 n=1
 while [ $Status -ne 0 ] && [ $n -le 5 ]
 do
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec maestro -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
 	Status=`echo $?`
 	n=$((n+1))
 	sleep 5
 done
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin1 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin2 -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
@@ -144,13 +144,13 @@ echo "Enables and start sshd ...                    "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster --  systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec maestro --  systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin1 -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin2 -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster --  service sshd start' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- service sshd start' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- service sshd start' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec maestro --  service sshd start' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin1 -- service sshd start' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin2 -- service sshd start' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "=============================================="
@@ -166,9 +166,9 @@ echo "Set root password in containers...            "
 echo "=============================================="
 echo ''
 
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kmaster  -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker1 -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc exec kworker2 -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec maestro  -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin1 -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
+eval echo "'/var/lib/snapd/snap/bin/lxc exec violin2 -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
 
 sleep 5
 

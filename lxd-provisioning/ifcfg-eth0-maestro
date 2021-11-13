@@ -7,6 +7,6 @@ DNS1=10.207.39.2
 DOMAIN=urdomain1.com
 PREFIX=24
 ONBOOT=yes
-HOSTNAME=kmaster
-DHCP_HOSTNAME=kmaster
+HOSTNAME=maestro
+DHCP_HOSTNAME=maestro
 

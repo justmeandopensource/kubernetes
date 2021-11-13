@@ -6,7 +6,7 @@ usage()
   exit 1
 }
 
-NODES="kmaster kworker1 kworker2"
+NODES="maestro violin1 violin2"
 
 kubeprovision()
 {
