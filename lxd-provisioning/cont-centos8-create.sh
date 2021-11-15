@@ -1,6 +1,6 @@
 #!/bin/bash
-CGROUP_SUFFIX=$1
-NameServer=$2
+CGROUP_SUFFIX=$2
+NameServer=$1
 
 echo ''
 echo "=============================================="
