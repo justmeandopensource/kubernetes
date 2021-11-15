@@ -1,5 +1,6 @@
 #!/bin/bash
 CGROUP_SUFFIX=$1
+NameServer=$2
 
 echo ''
 echo "=============================================="
@@ -29,11 +30,11 @@ do
 	eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8/amd64 $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
 	
 	function GetHwaddr {
-		lxc config show $i | grep hwaddr | cut -f2-100 -d':' | sed 's/^[ \t]*//;s/[ \t]*$//'
+		eval echo "'/var/lib/snapd/snap/bin/lxc config show $i | grep hwaddr | rev | cut -c1-17 | rev' | sg lxd $CGROUP_SUFFIX"
 	}
 	Hwaddr=$(GetHwaddr)
 
-	sudo lxc-attach -n $NameServer -- sudo sh -c "echo 'subclass \"black-hole\" $HWaddr;' >> /etc/dhcp/dhcpd.conf"
+	sudo lxc-attach -n $NameServer -- sudo sh -c "echo 'subclass \"black-hole\" $Hwaddr;' >> /etc/dhcp/dhcpd.conf"
 	sudo lxc-attach -n $NameServer -- sudo service isc-dhcp-server restart
 
 	eval echo "'/var/lib/snapd/snap/bin/lxc start $i' | sg lxd $CGROUP_SUFFIX"
