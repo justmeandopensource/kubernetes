@@ -6,8 +6,21 @@ echo "Install packages...                           "
 echo "=============================================="
 echo ''
 
-dnf install -y yum-utils device-mapper-persistent-data lvm2 
+dnf install -y yum-utils device-mapper-persistent-data lvm2 epel-release
 dnf install -y iproute-tc net-tools openssh-server perl bind-utils
+
+n=1
+Cmd0=1
+while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
+do
+        dnf upgrade -y --refresh
+        Cmd0=`echo $?`
+        n=$((n+1))
+        sleep 5
+done
+
+dnf -y install epel-release
+dnf -y install sshpass
 
 echo ''
 echo "==============================================" 
