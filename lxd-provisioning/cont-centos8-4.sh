@@ -29,3 +29,21 @@ sleep 5
 
 clear
 
+echo ''
+echo "=============================================="
+echo "Enable kubelet service...                     "
+echo "=============================================="
+echo ''
+
+systemctl enable kubelet
+
+echo ''
+echo "=============================================="
+echo "Done: Enable kubelet service.                 "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
