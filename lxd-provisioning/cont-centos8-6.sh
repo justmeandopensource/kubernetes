@@ -48,6 +48,7 @@ Status1=$(GetStatus1)
 while [ $Status1 -lt 4 ]
 do
 	Status1=$(GetStatus1)
+	echo 'Waiting for metallb-system STATUS Running all containers...'
 	sleep 5
 done
 
