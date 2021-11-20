@@ -60,7 +60,6 @@ echo "Install metallb-system manifest...            "
 echo "=============================================="
 echo ''
 
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/metallb.yaml
 
 echo ''
@@ -89,7 +88,7 @@ do
 	Status1=$(GetStatus1)
 	echo 'Waiting for metallb-system STATUS Running all containers...'
 	echo ''
-	kubectl get all -n metallb-system | egrep 'STATUS|pod'
+	kubectl get all -n metallb-system | egrep 'STATUS|Running'
 	echo ''
 	sleep 10
 done
@@ -104,17 +103,6 @@ sleep 5
 
 clear
 
-echo ''
-echo "=============================================="
-echo "Done: Install metallb-system manifest.        "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
 echo "=============================================="
 echo "Test metallb-system using nginx deploy...     "
 echo "=============================================="

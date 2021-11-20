@@ -66,7 +66,7 @@ echo "=============================================="
 echo "Download and Install helm...                  "
 echo "=============================================="
 echo ''
-echo '(Patience...this takes a minute or two...)'
+echo '(Patience...this can take a minute or two...)'
 echo ''
 
 ./get_helm.sh
@@ -128,7 +128,7 @@ echo "=============================================="
 echo "Helm install ingress-nginx...                 "
 echo "=============================================="
 echo ''
-echo '(Patience...this takes a minute or two...)'
+echo '(Patience...this can take a minute or two...)'
 echo ''
 
 helm install orabuntu-lxd ingress-nginx/ingress-nginx -n ingress-nginx --values /root/ingress-nginx.yaml
@@ -157,11 +157,11 @@ Status2=$(GetStatus2)
 while [ $Status2 -lt 2 ]
 do
 	Status2=$(GetStatus2)
-	echo 'Check every 10 seconds STATUS Running all ingress-nginx containers...'
+	echo 'Check every 15 seconds STATUS Running all ingress-nginx containers...'
 	echo ''
 	kubectl -n ingress-nginx get all | egrep 'STATUS|pod'
 	echo ''
-	sleep 10
+	sleep 15 
 done
 
 echo ''
