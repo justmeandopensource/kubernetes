@@ -37,6 +37,25 @@ clear
 
 echo ''
 echo "=============================================="
+echo "Install metallb-system configmap...           "
+echo "=============================================="
+echo ''
+
+kubectl apply -f metallb-configmap.yaml
+kubectl describe configmap config -n metallb-system
+
+echo ''
+echo "=============================================="
+echo "Done: Install metallb-system configmap.       "
+echo "=============================================="
+echo ''
+
+sleep 
+
+clear
+
+echo ''
+echo "=============================================="
 echo "Install metallb-system manifest...            "
 echo "=============================================="
 echo ''
@@ -91,25 +110,6 @@ echo "=============================================="
 echo ''
 
 sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Install metallb-system configmap...           "
-echo "=============================================="
-echo ''
-
-kubectl apply -f metallb-configmap.yaml
-kubectl describe configmap config -n metallb-system
-
-echo ''
-echo "=============================================="
-echo "Done: Install metallb-system configmap.       "
-echo "=============================================="
-echo ''
-
-sleep 
 
 clear
 
