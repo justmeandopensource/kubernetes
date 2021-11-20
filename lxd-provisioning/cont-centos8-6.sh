@@ -83,14 +83,12 @@ function GetStatus1 {
 }
 Status1=$(GetStatus1)
 
+echo 'Wait for metallb-system STATUS Running all (may take a minute or so)'
 while [ $Status1 -lt 4 ]
 do
 	Status1=$(GetStatus1)
-	echo 'Waiting for metallb-system STATUS Running all containers...'
-	echo ''
-	kubectl get all -n metallb-system | egrep 'STATUS|Running'
-	echo ''
-	sleep 10
+	kubectl get all -n metallb-system | egrep 'AGE|Running'
+	sleep 15
 done
 
 echo ''

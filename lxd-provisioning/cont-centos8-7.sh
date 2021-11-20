@@ -222,6 +222,34 @@ clear
 
 echo ''
 echo "=============================================="
+echo "Test ingress-nginx/metallb examples...        "
+echo "=============================================="
+echo ''
+
+kubectl create -f nginx-deploy-main.yaml -f nginx-deploy-green.yaml -f nginx-deploy-blue.yaml 
+kubectl expose deploy nginx-deploy-main  --port 80
+kubectl expose deploy nginx-deploy-blue  --port 80
+kubectl expose deploy nginx-deploy-green --port 80
+kubectl create -f ingress-resource-3.yaml 
+echo ''
+curl nginx.example.com
+echo ''
+curl nginx.example.com/blue
+echo ''
+curl nginx.example.com/green
+
+echo ''
+echo "=============================================="
+echo "Done: Test ingress-nginx/metallb examples.    "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
 echo "Done: Deploy ingress-nginx.                   "
 echo "=============================================="
 echo ''
