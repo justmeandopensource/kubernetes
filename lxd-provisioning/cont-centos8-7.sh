@@ -29,6 +29,24 @@ echo ''
 
 sleep 5
 
+echo ''
+echo "=============================================="
+echo "Download helm...                              "
+echo "=============================================="
+echo ''
+
+clear
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+
+echo ''
+echo "=============================================="
+echo "Done: Download helm.                          "
+echo "=============================================="
+echo ''
+
+sleep 5
+
 clear
 
 echo ''
@@ -37,15 +55,29 @@ echo "Install helm...                               "
 echo "=============================================="
 echo ''
 
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
 ./get_helm.sh
-echo ''
-helm version --short
 
 echo ''
 echo "=============================================="
 echo "Done: Install helm.                           "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Show helm version...                          "
+echo "=============================================="
+echo ''
+
+helm version --short
+
+echo ''
+echo "=============================================="
+echo "Done: Show helm version.                      "
 echo "=============================================="
 echo ''
 
@@ -85,6 +117,22 @@ echo ''
 
 helm install orabuntu-lxd ingress-nginx/ingress-nginx -n ingress-nginx --values /root/ingress-nginx.yaml
 
+echo ''
+echo "=============================================="
+echo "Helm install ingress-nginx...                 "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Wait for ingress-nginx STATUS running...      "
+echo "=============================================="
+echo ''
+
 function GetStatus2 {
 	kubectl -n ingress-nginx get all | grep -c Running
 }
@@ -96,6 +144,16 @@ do
 	echo 'Waiting for ingress-nginx STATUS Running all containers...'
 	sleep 5
 done
+
+echo ''
+echo "=============================================="
+echo "Done: Wait for ingress-nginx STATUS running.  "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
 
 echo ''
 echo "=============================================="
