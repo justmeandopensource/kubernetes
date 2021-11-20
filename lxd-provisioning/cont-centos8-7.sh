@@ -29,6 +29,8 @@ echo ''
 
 sleep 5
 
+clear
+
 echo ''
 echo "=============================================="
 echo "Download helm...                              "
@@ -45,6 +47,7 @@ do
 done
 
 chmod 700 get_helm.sh
+ls -l get_helm.sh
 
 echo ''
 echo "=============================================="
@@ -58,15 +61,17 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Install helm...                               "
+echo "Download and Install helm...                  "
 echo "=============================================="
+echo ''
+echo '(Patience...this takes a minute or two...)'
 echo ''
 
 ./get_helm.sh
 
 echo ''
 echo "=============================================="
-echo "Done: Install helm.                           "
+echo "Done: Download and Install helm.              "
 echo "=============================================="
 echo ''
 
@@ -120,6 +125,8 @@ echo ''
 echo "=============================================="
 echo "Helm install ingress-nginx...                 "
 echo "=============================================="
+echo ''
+echo '(Patience...this takes a minute or two...)'
 echo ''
 
 helm install orabuntu-lxd ingress-nginx/ingress-nginx -n ingress-nginx --values /root/ingress-nginx.yaml
