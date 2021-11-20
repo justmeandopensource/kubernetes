@@ -3,6 +3,8 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # Deploy metallb load balancer
 
+clear
+
 echo ''
 echo "=============================================="
 echo "Install Metallb k8s load balancer...          "
@@ -20,6 +22,7 @@ echo "=============================================="
 echo ''
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/namespace.yaml
+echo ''
 kubectl get ns metallb-system
 
 echo ''
@@ -40,6 +43,22 @@ echo ''
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/metallb.yaml
 
+echo ''
+echo "=============================================="
+echo "Done: Install metallb-system manifest.        "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Wait for metallb-system STATUS Running...    "
+echo "=============================================="
+echo ''
+
 function GetStatus1 {
 	kubectl get all -n metallb-system | grep -c Running
 }
@@ -49,8 +68,21 @@ while [ $Status1 -lt 4 ]
 do
 	Status1=$(GetStatus1)
 	echo 'Waiting for metallb-system STATUS Running all containers...'
+	echo ''
+	kubectl get all -n metallb-system | egrep 'STATUS|pod'
+	echo ''
 	sleep 5
 done
+
+echo ''
+echo "=============================================="
+echo "Done: Wait for metallb-system STATUS Running. "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
 
 echo ''
 echo "=============================================="
