@@ -1,6 +1,8 @@
 #!/bin/bash
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
+clear
+
 echo ''
 echo "=============================================="
 echo "Deploy ingress-nginx...                       "
@@ -33,7 +35,7 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Download helm...                              "
+echo "Download get_helm.sh ...                      "
 echo "=============================================="
 echo ''
 
@@ -51,7 +53,7 @@ ls -l get_helm.sh
 
 echo ''
 echo "=============================================="
-echo "Done: Download helm.                          "
+echo "Done: Download get_helm.sh                    "
 echo "=============================================="
 echo ''
 
@@ -155,8 +157,11 @@ Status2=$(GetStatus2)
 while [ $Status2 -lt 2 ]
 do
 	Status2=$(GetStatus2)
-	echo 'Waiting for ingress-nginx STATUS Running all containers...'
-	sleep 5
+	echo 'Check every 10 seconds STATUS Running all ingress-nginx containers...'
+	echo ''
+	kubectl -n ingress-nginx get all | egrep 'STATUS|pod'
+	echo ''
+	sleep 10
 done
 
 echo ''

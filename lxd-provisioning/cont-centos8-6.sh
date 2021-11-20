@@ -71,7 +71,7 @@ do
 	echo ''
 	kubectl get all -n metallb-system | egrep 'STATUS|pod'
 	echo ''
-	sleep 5
+	sleep 10
 done
 
 echo ''
