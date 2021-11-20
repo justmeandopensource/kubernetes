@@ -39,5 +39,16 @@ echo ''
 kubectl -n ingress-nginx get all
 echo ''
 
+function CheckStatus1 {
+	kubectl -n ingress-nginx get all | grep -c Running
+}
+Status1=$(CheckStatus1)
+
+while [ $Status1 -lt 2 ]
+do
+	Status1=$(CheckStatus)
+	sleep 5
+done
+
 # sudo iptables -t nat -A PREROUTING -p tcp -i enp0s17 --dport 80 -j DNAT --to-destination 10.209.53.240:80
 
