@@ -35,8 +35,15 @@ echo "Download helm...                              "
 echo "=============================================="
 echo ''
 
-clear
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+n=1
+Cmd0=1
+while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
+do
+	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+	Cmd0=`echo $?`
+	sleep 5
+done
+
 chmod 700 get_helm.sh
 
 echo ''
@@ -194,6 +201,16 @@ helm list -n ingress-nginx
 echo ''
 echo "=============================================="
 echo "Done: Helm confirm install ingress-nginx.     "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Done: Deploy ingress-nginx.                   "
 echo "=============================================="
 echo ''
 
