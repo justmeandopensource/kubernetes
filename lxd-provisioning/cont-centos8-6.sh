@@ -86,7 +86,8 @@ echo "Test metallb-system using nginx deploy...     "
 echo "=============================================="
 echo ''
 
-kubectl expose deploy nginx --port 80 --type LoadBalancer
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --type LoadBalancer --port 80
 kubectl get all | egrep 'EXTERNAL-IP|LoadBalancer'
 kubectl delete service nginx
 
