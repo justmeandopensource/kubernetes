@@ -227,10 +227,30 @@ echo "=============================================="
 echo ''
 
 kubectl create -f nginx-deploy-main.yaml -f nginx-deploy-green.yaml -f nginx-deploy-blue.yaml 
+
+function GetStatus3 {
+	kubectl get pods | grep -c Running
+}
+Status3=$(GetStatus3)
+
+n=1
+while [ $Status3 -lt 4 ] && [ $n -lt 5 ]
+do
+	kubectl get pods 
+	Status3=$(GetStatus3)
+	n=$((n+1))
+	sleep 5
+done
+	
 kubectl expose deploy nginx-deploy-main  --port 80
 kubectl expose deploy nginx-deploy-blue  --port 80
 kubectl expose deploy nginx-deploy-green --port 80
+echo ''
+kubectl get all
+echo ''
 kubectl create -f ingress-resource-3.yaml 
+echo ''
+kubectl describe ing ingress-resource-3
 echo ''
 curl nginx.example.com
 echo ''

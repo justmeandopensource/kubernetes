@@ -84,10 +84,12 @@ function GetStatus1 {
 Status1=$(GetStatus1)
 
 echo 'Wait for metallb-system STATUS Running all (may take a minute or so)'
+echo ''
 while [ $Status1 -lt 4 ]
 do
 	Status1=$(GetStatus1)
-	kubectl get all -n metallb-system | egrep 'AGE|Running'
+	kubectl get all -n metallb-system | egrep 'STATUS|pod'
+	echo ''
 	sleep 15
 done
 
@@ -109,7 +111,6 @@ echo ''
 kubectl create deployment nginx --image=nginx
 kubectl expose deployment nginx --type LoadBalancer --port 80
 kubectl get all | egrep 'EXTERNAL-IP|LoadBalancer'
-kubectl delete service nginx
 
 echo ''
 echo "=============================================="
