@@ -104,6 +104,7 @@ sleep 5
 
 clear
 
+echo ''
 echo "=============================================="
 echo "Test metallb-system using nginx deploy...     "
 echo "=============================================="

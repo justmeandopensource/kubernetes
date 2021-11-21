@@ -226,6 +226,12 @@ echo "Test ingress-nginx/metallb examples...        "
 echo "=============================================="
 echo ''
 
+function UpdateHostsFile {
+        kubectl -n ingress-nginx get all | grep LoadBalancer | sed 's/  */ /g' | cut -f4 -d' '
+}
+HostsFile=$(UpdateHostsFile)
+sh -c "echo '$HostsFile nginx.example.com' >> /etc/hosts"
+
 kubectl create -f nginx-deploy-main.yaml -f nginx-deploy-green.yaml -f nginx-deploy-blue.yaml 
 
 function GetStatus3 {
