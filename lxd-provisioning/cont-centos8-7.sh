@@ -256,10 +256,10 @@ kubectl get all
 echo ''
 kubectl create -f ingress-resource-3.yaml 
 echo ''
-sleep 10
+echo 'Wait 20 seconds...'
+sleep 20
 kubectl describe ing ingress-resource-3
 echo ''
-sleep 10
 curl nginx.example.com
 echo ''
 curl nginx.example.com/blue
