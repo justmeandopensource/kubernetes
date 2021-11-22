@@ -43,16 +43,23 @@ echo ''
 
 echo ''
 echo "==============================================" 
-echo "Enable sshd...                                "
+echo "Enable and tune sshd...                       "
 echo "=============================================="
 echo ''
 
 systemctl enable sshd
 service sshd start
+sed -i '/GSSAPIAuthentication no/s/^#//g' 			/etc/ssh/sshd_config
+sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/' 	/etc/ssh/sshd_config
+sed -i '/UseDNS/s/^#//g' 					/etc/ssh/sshd_config
+sed -i 's/UseDNS yes/UseDNS no/' 				/etc/ssh/sshd_config
+service sshd stop
+service sshd start
+service sshd status
 
 echo ''
 echo "==============================================" 
-echo "Done: Enable sshd.                            "
+echo "Done: Enable and tune sshd.                   "
 echo "=============================================="
 echo ''
 
