@@ -69,7 +69,14 @@ echo ''
 echo '(Patience...this can take a minute or two...)'
 echo ''
 
-./get_helm.sh
+n=1
+Cmd0=1
+while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
+do
+	./get_helm.sh
+	Cmd0=`echo $?`
+	sleep 5
+done
 
 echo ''
 echo "=============================================="
