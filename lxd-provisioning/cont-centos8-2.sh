@@ -1,6 +1,51 @@
 #!/bin/bash
 
 echo ''
+echo "=============================================="
+echo "Curl mirrorlist.centos.org...        "
+echo "=============================================="
+echo ''
+
+Status=1
+n=1
+while [ $Status -ne 0 ] || [ $n -le 5 ]
+do
+        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl mirrrorlist.centos.org | sg lxd $CGROUP_SUFFIX"
+        Status=`echo $?`
+        echo "Status = "$Status
+        n=$((n+1))
+        sleep 5
+done
+
+echo ''
+echo "=============================================="
+echo "Done: Curl mirrorlist.centos.org.             "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Ping mirrorlist.centos.org...                 "
+echo "=============================================="
+echo ''
+
+ping -4 -c 10 mirrorlist.centos.org
+
+echo ''
+echo "=============================================="
+echo "Done: Ping mirrorlist.centos.org.             "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
 echo "==============================================" 
 echo "Install packages...                           "
 echo "=============================================="
@@ -16,9 +61,6 @@ do
         sleep 5
 done
 
-dnf install -y yum-utils device-mapper-persistent-data lvm2 epel-release
-dnf install -y iproute-tc net-tools openssh-server perl bind-utils
-
 n=1
 Cmd0=1
 while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
@@ -29,6 +71,8 @@ do
         sleep 5
 done
 
+dnf -y install yum-utils device-mapper-persistent-data lvm2 epel-release
+dnf -y install iproute-tc net-tools openssh-server perl bind-utils
 dnf -y install epel-release
 dnf -y install sshpass
 
