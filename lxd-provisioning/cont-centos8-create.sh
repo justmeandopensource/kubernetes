@@ -27,13 +27,11 @@ echo "Curl mirrorlist.centos.org...                 "
 echo "=============================================="
 echo ''
 
-Status=1
 n=1
-while [ $Status -ne 0 ] || [ $n -le 5 ]
+while [ $n -le 10 ]
 do
-        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl mirrrorlist.centos.org' | sg lxd $CGROUP_SUFFIX"
+        curl mirrorlist.centos.org
         Status=`echo $?`
-        echo "Status = "$Status
         n=$((n+1))
         sleep 5
 done
