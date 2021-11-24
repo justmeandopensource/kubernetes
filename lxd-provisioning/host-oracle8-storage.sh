@@ -37,6 +37,10 @@ else
         CGROUP_SUFFIX=''
 fi
 
+sleep 5
+
+clear
+
 echo ''
 echo "=============================================="
 echo "Done: Configure CGROUP_SUFFIX.                "

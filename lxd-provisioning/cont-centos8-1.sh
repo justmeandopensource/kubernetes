@@ -21,6 +21,10 @@ cat > /etc/docker/daemon.json <<EOF
 }
 EOF
 
+sleep 5
+
+clear
+
 echo ''
 echo "==============================================" 
 echo "Done: Install Docker daemon.json.             "

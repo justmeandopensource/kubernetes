@@ -23,6 +23,51 @@ clear
 
 echo ''
 echo "=============================================="
+echo "Curl mirrorlist.centos.org...                 "
+echo "=============================================="
+echo ''
+
+Status=1
+n=1
+while [ $Status -ne 0 ] || [ $n -le 5 ]
+do
+        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl mirrrorlist.centos.org' | sg lxd $CGROUP_SUFFIX"
+        Status=`echo $?`
+        echo "Status = "$Status
+        n=$((n+1))
+        sleep 5
+done
+
+echo ''
+echo "=============================================="
+echo "Done: Curl mirrorlist.centos.org.             "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Ping mirrorlist.centos.org...                 "
+echo "=============================================="
+echo ''
+
+ping -4 -c 10 mirrorlist.centos.org
+
+echo ''
+echo "=============================================="
+echo "Done: Ping mirrorlist.centos.org.             "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
 echo "Configure Kubernetes containers...            "
 echo "=============================================="
 echo ''
