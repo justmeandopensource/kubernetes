@@ -9,7 +9,7 @@ echo ''
 n=1
 while [ $n -le 5 ]
 do
-        curl mirrrorlist.centos.org
+        curl mirrorlist.centos.org
         n=$((n+1))
         sleep 5
 done
