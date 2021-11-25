@@ -30,11 +30,21 @@
 #    There are two domains and two networks because the "seed" LXC containers are on a separate network from the production LXC containers.
 #    If the domain is an actual domain, you will need to change the subnet using the subnets feature of Orabuntu-LXC
 
+
 #!/bin/bash
+n=1
+Cmd0=1
+while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
+do
+        dnf upgrade -y --refresh
+        Cmd0=`echo $?`
+        n=$((n+1))
+        sleep 5
+done
 dnf install -y epel-release
 dnf install -y sshpass
 systemctl enable kubelet.service
-kubeadm init --pod-network-cidr=10.244.0.0/16 --kubernetes-version=v1.23.0-alpha.3 | tee kubeadm_init.log
+kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --kubernetes-version=v1.23.0-beta.0 | tee kubeadm_init.log
 echo "Sleeping 30 seconds while kubernetes master starts running ..."
 sleep 30
 cat kubeadm_init.log | grep -A1 join | grep -A1 token > joincluster.sh
