@@ -52,6 +52,19 @@ chmod +x joincluster.sh
 export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+function CheckWeaveNetRunning {
+	kubectl get -A pods -o wide | grep -c weave
+}
+WeaveNetRunning=$(CheckWeaveNetRunning)
+n=1
+while [ $WeaveNetRunning -eq 0 ] && [ $n -le 5 ]
+do
+	sleep 15
+	kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+	WeaveNetRunning=$(CheckWeaveNetRunning)
+	n=$((n+1))
+fi
+
 echo "Sleeping 30 seconds while weavenet starts running ..."
 echo ''
 kubectl get pods --all-namespaces -o wide
@@ -61,7 +74,7 @@ kubectl get pods --all-namespaces -o wide
 sleep 30
 echo ''
 kubectl get pods --all-namespaces -o wide
-sleep 5
+sleep 30
 sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.5:/root/.
 sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.6:/root/.
 echo ''
