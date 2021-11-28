@@ -57,7 +57,7 @@ function CheckWeaveNetRunning {
 }
 WeaveNetRunning=$(CheckWeaveNetRunning)
 n=1
-while [ $WeaveNetRunning -ne 0 ] && [ $n -le 5 ]
+while [ $WeaveNetRunning -eq 0 ] && [ $n -le 5 ]
 do
 	sleep 15
 	kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
