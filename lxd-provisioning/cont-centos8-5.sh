@@ -19,19 +19,6 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-function CheckWeaveNetRunning {
-	kubectl get -A pods -o wide | grep weave | grep -c Running
-}
-
-sleep 30
-
-WeaveNetRunning=$(CheckWeaveNetRunning)
-while [ $WeaveNetRunning -eq 0 ]
-do
-	sleep 15
-	kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-	WeaveNetRunning=$(CheckWeaveNetRunning)
-fi
 
 echo "Sleeping 30 seconds while weavenet starts running ..."
 echo ''
@@ -50,3 +37,32 @@ sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207
 sleep 10
 echo ''
 sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207.39.6 "/root/joincluster.sh"
+
+sleep 30
+
+function CheckWeaveNetRunning {
+	kubectl get -A pods -o wide | grep weave | grep -c Running
+}
+WeaveNetRunning=$(CheckWeaveNetRunning)
+
+n=1
+while [ $WeaveNetRunning -lt 3 ] && [ $n -le 5 ]
+do
+	sleep 15
+	WeaveNetRunning=$(CheckWeaveNetRunning)
+	n=$((n+1))
+done
+
+if [ $WeaveNetRunning -eq 0 ]
+then
+	kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+fi
+
+n=1
+while [ $WeaveNetRunning -lt 3 ] && [ $n -le 5 ]
+do
+	sleep 15
+	WeaveNetRunning=$(CheckWeaveNetRunning)
+	n=$((n+1))
+done
+
