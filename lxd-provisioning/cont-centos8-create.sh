@@ -23,49 +23,6 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Curl mirrorlist.centos.org...                 "
-echo "=============================================="
-echo ''
-
-n=1
-while [ $n -le 10 ]
-do
-        curl -s mirrorlist.centos.org
-        Status=`echo $?`
-        n=$((n+1))
-        sleep 5
-done
-
-echo ''
-echo "=============================================="
-echo "Done: Curl mirrorlist.centos.org.             "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Ping mirrorlist.centos.org...                 "
-echo "=============================================="
-echo ''
-
-ping -4 -c 5 mirrorlist.centos.org
-
-echo ''
-echo "=============================================="
-echo "Done: Ping mirrorlist.centos.org.             "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
 echo "Configure Kubernetes containers...            "
 echo "=============================================="
 echo ''
@@ -112,16 +69,6 @@ do
 	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- service sshd start' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- dnf -y install curl' | sg lxd $CGROUP_SUFFIX"
-	
-	# Band-aid for route-learning sluggishness inside lxd containers to mirrorlist.centos.org for AppStream repo.
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- ping -4 -c 5 mirrorlist.centos.org' | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl -s mirrorlist.centos.org'      | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl -s mirrorlist.centos.org'      | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl -s mirrorlist.centos.org'      | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl -s mirrorlist.centos.org'      | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- curl -s mirrorlist.centos.org'      | sg lxd $CGROUP_SUFFIX"
-
 done
 
 echo ''

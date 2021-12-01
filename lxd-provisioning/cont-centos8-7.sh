@@ -45,6 +45,10 @@ while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
 do
 	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 	Cmd0=`echo $?`
+	n=$((n+1))
+	echo ''
+	echo 'Re-trying...'
+	echo ''
 	sleep 5
 done
 
@@ -75,6 +79,9 @@ while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
 do
 	./get_helm.sh
 	Cmd0=`echo $?`
+	echo ''
+	echo 'Re-trying...'
+	echo ''
 	sleep 5
 done
 
@@ -263,8 +270,8 @@ kubectl get all
 echo ''
 kubectl create -f ingress-resource-3.yaml 
 echo ''
-echo 'Wait 20 seconds...'
-sleep 20
+echo 'Wait 30 seconds...'
+sleep 30
 kubectl describe ing ingress-resource-3
 echo ''
 curl nginx.example.com

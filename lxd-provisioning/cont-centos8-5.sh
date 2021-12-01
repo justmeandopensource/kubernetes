@@ -30,13 +30,15 @@ sleep 30
 echo ''
 kubectl get pods --all-namespaces -o wide
 sleep 30
-sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.207.39.5:/root/.
-sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.207.39.6:/root/.
+sed -i '${s/$/ --ignore-preflight-errors=all/}' joincluster.sh
+sleep 5
+sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.5:/root/.
+sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.6:/root/.
 echo ''
-sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207.39.5 "/root/joincluster.sh"
+sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.5 "/root/joincluster.sh"
 sleep 10
 echo ''
-sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207.39.6 "/root/joincluster.sh"
+sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.6 "/root/joincluster.sh"
 
 sleep 30
 
@@ -65,4 +67,62 @@ do
 	WeaveNetRunning=$(CheckWeaveNetRunning)
 	n=$((n+1))
 done
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "kubectl describe node maestro...              "
+echo "=============================================="
+echo ''
+
+kubectl describe node maestro
+
+echo ''
+echo "=============================================="
+echo "Done: kubectl describe node maestro.          "
+echo "=============================================="
+echo ''
+
+sleep 10
+
+clear
+
+echo ''
+echo "=============================================="
+echo "kubectl describe node violin1...              "
+echo "=============================================="
+echo ''
+
+kubectl describe node violin1
+
+echo ''
+echo "=============================================="
+echo "Done: kubectl describe node violin1.          "
+echo "=============================================="
+echo ''
+
+sleep 10
+
+clear
+
+echo ''
+echo "=============================================="
+echo "kubectl describe node violin2...              "
+echo "=============================================="
+echo ''
+
+kubectl describe node violin2
+
+echo ''
+echo "=============================================="
+echo "Done: kubectl describe node violin2.          "
+echo "=============================================="
+echo ''
+
+sleep 10
+
+clear
 

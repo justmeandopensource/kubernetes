@@ -1,72 +1,10 @@
 #!/bin/bash
 
 echo ''
-echo "=============================================="
-echo "Curl mirrorlist.centos.org...                 "
-echo "=============================================="
-echo ''
-
-n=1
-while [ $n -le 5 ]
-do
-        curl mirrorlist.centos.org
-        n=$((n+1))
-        sleep 5
-done
-
-echo ''
-echo "=============================================="
-echo "Done: Curl mirrorlist.centos.org.             "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Ping mirrorlist.centos.org...                 "
-echo "=============================================="
-echo ''
-
-ping -4 -c 10 mirrorlist.centos.org
-
-echo ''
-echo "=============================================="
-echo "Done: Ping mirrorlist.centos.org.             "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
 echo "==============================================" 
 echo "Install packages...                           "
 echo "=============================================="
 echo ''
-
-n=1
-Cmd0=1
-while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
-do
-	dnf check-update socat
-	Cmd0=`echo $?`
-        n=$((n+1))
-        sleep 5
-done
-
-n=1
-Cmd0=1
-while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
-do
-        dnf upgrade -y --refresh
-        Cmd0=`echo $?`
-        n=$((n+1))
-        sleep 5
-done
 
 dnf -y install yum-utils device-mapper-persistent-data lvm2 epel-release
 dnf -y install iproute-tc net-tools openssh-server perl bind-utils
@@ -161,6 +99,9 @@ do
  	yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 	Cmd0=`echo $?`
 	n=$((n+1))
+	echo ''
+	echo 'Re-trying...'
+	echo ''
 	sleep 5
 done
 
@@ -189,6 +130,9 @@ do
  	dnf install containerd.io docker-ce docker-ce-cli -y
 	Cmd1=`echo $?`
 	n=$((n+1))
+	echo ''
+	echo 'Re-trying...'
+	echo ''
 	sleep 5
 done
 
