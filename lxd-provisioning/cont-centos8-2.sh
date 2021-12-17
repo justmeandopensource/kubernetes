@@ -48,7 +48,7 @@ sleep 5
 
 clear
 
-if [ $ContainerRuntine = 'docker' ]
+if [ $ContainerRuntime = 'docker' ]
 then
 	echo ''
 	echo "==============================================" 

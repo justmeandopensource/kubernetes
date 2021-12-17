@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ContainerRuntime=$1
+
 echo ''
 echo "=============================================="
 echo "Install Kubernetes ...                        "

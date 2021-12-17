@@ -296,5 +296,5 @@ echo "Done: Deploy ingress-nginx.                   "
 echo "=============================================="
 echo ''
 
-# sudo iptables -t nat -A PREROUTING -p tcp -i enp0s17 --dport 80 -j DNAT --to-destination 10.209.53.240:80
+# sudo iptables -t nat -A PREROUTING -p tcp -i enp0s17 --dport 80 -j DNAT --to-destination 10.207.39.240:80
 

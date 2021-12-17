@@ -25,7 +25,7 @@ then
 
 	clear
 
-elif [ $ContainerRuntime ='crio' ]
+elif [ $ContainerRuntime = 'crio' ]
 then
 	ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
 	cp -p /root/crio.conf /etc/crio/crio.conf
