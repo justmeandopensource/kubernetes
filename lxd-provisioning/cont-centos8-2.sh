@@ -91,7 +91,7 @@ sleep 5
 
 clear
 
-if   [ $ContainerRuntine = 'docker' ]
+if   [ $ContainerRuntime = 'docker' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -146,6 +146,68 @@ then
 	echo ''
 	echo "==============================================" 
 	echo "Done: Install Docker.                         "
+	echo "=============================================="
+	echo ''
+ 
+	sleep 5
+
+	clear 
+
+elif [ $ContainerRuntime = 'containerd' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Configure Docker repo...                      "
+	echo "=============================================="
+	echo ''
+
+	n=1
+	Cmd0=1
+	while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
+	do
+ 		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+		Cmd0=`echo $?`
+		n=$((n+1))
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+		sleep 5
+	done
+
+	echo ''
+	echo "==============================================" 
+	echo "Configure Docker repo...                      "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+ 
+	mkdir -p /etc/docker
+
+	echo ''
+	echo "==============================================" 
+	echo "Install Containerd ...                        "
+	echo "=============================================="
+	echo ''
+ 
+	n=1
+	Cmd1=1
+	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
+	do
+	 	dnf install containerd.io -y
+		Cmd1=`echo $?`
+		n=$((n+1))
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+		sleep 5
+	done
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Install Containerd ...                  "
 	echo "=============================================="
 	echo ''
  

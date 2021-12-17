@@ -13,7 +13,6 @@ then
 	systemctl daemon-reload
 	systemctl enable docker --now
 	systemctl start  docker
-	service docker start
 
 	echo ''
 	echo "==============================================" 
@@ -24,6 +23,12 @@ then
 	sleep 5
 
 	clear
+
+elif [ $ContainerRuntime = 'containerd' ]
+then
+	systemctl daemon-reload
+	systemctl enable containerd --now
+	systemctl start  contianerd
 
 elif [ $ContainerRuntime = 'crio' ]
 then
