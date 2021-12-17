@@ -196,7 +196,8 @@ then
 	Cmd1=1
 	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
 	do
-	 	dnf install containerd.io -y
+		dnf -y update
+	 	dnf -y install containerd.io
 		Cmd1=`echo $?`
 		n=$((n+1))
 		echo ''
@@ -210,6 +211,9 @@ then
 	echo "Done: Install Containerd ...                  "
 	echo "=============================================="
 	echo ''
+
+	mkdir -p /etc/containerd
+	containerd config default > /etc/containerd/config.toml
  
 	sleep 5
 
