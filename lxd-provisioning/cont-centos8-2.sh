@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ContainerRuntime=$1
+
 echo ''
 echo "==============================================" 
 echo "Install packages...                           "
@@ -46,19 +48,22 @@ sleep 5
 
 clear
 
-echo ''
-echo "==============================================" 
-echo "Remove package runc...                        "
-echo "=============================================="
-echo ''
+if [ $ContainerRuntine = 'docker' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Remove package runc...                        "
+	echo "=============================================="
+	echo ''
 
-dnf remove -y runc
+	dnf remove -y runc
 
-echo ''
-echo "==============================================" 
-echo "Done: Remove package runc.                    "
-echo "=============================================="
-echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Done: Remove package runc.                    "
+	echo "=============================================="
+	echo ''
+fi
 
 sleep 5
 
@@ -86,63 +91,75 @@ sleep 5
 
 clear
 
-echo ''
-echo "==============================================" 
-echo "Configure Docker repo...                      "
-echo "=============================================="
-echo ''
+if   [ $ContainerRuntine = 'docker' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Configure Docker repo...                      "
+	echo "=============================================="
+	echo ''
 
-n=1
-Cmd0=1
-while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
-do
- 	yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-	Cmd0=`echo $?`
-	n=$((n+1))
+	n=1
+	Cmd0=1
+	while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
+	do
+ 		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+		Cmd0=`echo $?`
+		n=$((n+1))
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+		sleep 5
+	done
+
 	echo ''
-	echo 'Re-trying...'
+	echo "==============================================" 
+	echo "Configure Docker repo...                      "
+	echo "=============================================="
 	echo ''
+
 	sleep 5
-done
 
-echo ''
-echo "==============================================" 
-echo "Configure Docker repo...                      "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
+	clear
  
-mkdir -p /etc/docker
+	mkdir -p /etc/docker
 
-echo ''
-echo "==============================================" 
-echo "Install Docker ...                            "
-echo "=============================================="
-echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Install Docker ...                            "
+	echo "=============================================="
+	echo ''
  
-n=1
-Cmd1=1
-while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
-do
- 	dnf install containerd.io docker-ce docker-ce-cli -y
-	Cmd1=`echo $?`
-	n=$((n+1))
+	n=1
+	Cmd1=1
+	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
+	do
+	 	dnf install containerd.io docker-ce docker-ce-cli -y
+		Cmd1=`echo $?`
+		n=$((n+1))
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+		sleep 5
+	done
+
 	echo ''
-	echo 'Re-trying...'
+	echo "==============================================" 
+	echo "Done: Install Docker.                         "
+	echo "=============================================="
 	echo ''
+ 
 	sleep 5
-done
 
-echo ''
-echo "==============================================" 
-echo "Done: Install Docker.                         "
-echo "=============================================="
-echo ''
- 
-sleep 5
+	clear 
 
-clear 
+elif [ $ContainerRuntime = 'crio' ]
+then
+	VERSION=1.22
+	sudo dnf -y install 'dnf-command(copr)'
+	sudo dnf -y copr enable rhcontainerbot/container-selinux
+	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
+	sudo dnf -y install cri-o
+fi

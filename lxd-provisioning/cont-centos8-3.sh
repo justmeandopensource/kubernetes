@@ -1,25 +1,35 @@
 #!/bin/bash
 
-echo ''
-echo "==============================================" 
-echo "Enable and start Docker ...                   "
-echo "=============================================="
-echo ''
+ContainerRuntime=$1
 
-systemctl daemon-reload
-systemctl enable docker --now
-systemctl start  docker
-service docker start
+if   [ $ContainerRuntime = 'docker' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Enable and start Docker ...                   "
+	echo "=============================================="
+	echo ''
 
-echo ''
-echo "==============================================" 
-echo "Done: Enable and start Docker ...             "
-echo "=============================================="
-echo ''
+	systemctl daemon-reload
+	systemctl enable docker --now
+	systemctl start  docker
+	service docker start
 
-sleep 5
+	echo ''
+	echo "==============================================" 
+	echo "Done: Enable and start Docker ...             "
+	echo "=============================================="
+	echo ''
 
-clear
+	sleep 5
+
+	clear
+
+elif [ $ContainerRuntime ='crio' ]
+then
+	ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
+	cp -p /root/crio.conf /etc/crio/crio.conf
+fi
 
 # echo ''
 # echo "=============================================="

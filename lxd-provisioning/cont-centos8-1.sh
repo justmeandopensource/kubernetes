@@ -1,12 +1,17 @@
 #!/bin/bash
 
-echo ''
-echo "==============================================" 
-echo "Install Docker daemon.json ...                "
-echo "=============================================="
-echo ''
+ContainerRuntime=$1
 
-mkdir -p /etc/docker
+if [ $ContainerRuntime = 'docker' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Install Docker daemon.json ...                "
+	echo "=============================================="
+	echo ''
+
+	mkdir -p /etc/docker
+
 cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
@@ -20,16 +25,16 @@ cat > /etc/docker/daemon.json <<EOF
   ]
 }
 EOF
+	echo ''
+	echo "==============================================" 
+	echo "Done: Install Docker daemon.json.             "
+	echo "=============================================="
+	echo ''
 
-sleep 5
-
-clear
-
-echo ''
-echo "==============================================" 
-echo "Done: Install Docker daemon.json.             "
-echo "=============================================="
-echo ''
+elif [ $ContainerRuntime = 'crio' ]
+then
+	dnf -y install fuse-overlayfs
+fi
 
 sleep 5
 

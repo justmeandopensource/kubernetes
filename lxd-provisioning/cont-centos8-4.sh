@@ -29,6 +29,26 @@ sleep 5
 
 clear
 
+if [ $ContainerRuntime = 'crio' ]
+then
+	echo ''
+	echo "=============================================="
+	echo "Enable and start cri-o ...                    "
+	echo "=============================================="
+	echo ''
+
+        systemctl enable crio --now
+        systemctl start  crio
+        service crio start
+	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
+	
+	echo ''
+	echo "=============================================="
+	echo "Enable and start cri-o ...                    "
+	echo "=============================================="
+	echo ''
+fi
+
 echo ''
 echo "=============================================="
 echo "Enable kubelet service...                     "
