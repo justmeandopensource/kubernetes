@@ -31,7 +31,7 @@ sleep 5
 
 clear
 
-if [ $ContainerRuntime = 'crio' ]
+if   [ $ContainerRuntime = 'crio' ]
 then
 	echo ''
 	echo "=============================================="
@@ -39,16 +39,64 @@ then
 	echo "=============================================="
 	echo ''
 
+        ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
+        cp -p /root/crio.conf /etc/crio/crio.conf
+        systemctl daemon-reload
         systemctl enable crio --now
-        systemctl start  crio
-        service crio start
+	sleep 15
+	service crio status
+
 	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
 	
 	echo ''
 	echo "=============================================="
-	echo "Enable and start cri-o ...                    "
+	echo "Done: Enable and start cri-o.                 "
 	echo "=============================================="
 	echo ''
+
+elif [ $ContainerRuntime = 'containerd' ]
+then
+	echo ''
+	echo "=============================================="
+	echo "Enable and start containerd ...               "
+	echo "=============================================="
+	echo ''
+
+        systemctl daemon-reload
+        systemctl enable containerd --now
+	sleep 15
+	service containerd status
+
+	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///run/containerd/containerd.sock\"' > /etc/sysconfig/kubelet"
+	
+	echo ''
+	echo "=============================================="
+	echo "Done: Enable and start containerd.            "
+	echo "=============================================="
+	echo ''
+
+elif [ $ContainerRuntime = 'docker' ]
+then
+        echo ''
+        echo "=============================================="
+        echo "Enable and start Docker ...                   "
+        echo "=============================================="
+        echo ''
+
+        systemctl daemon-reload
+        systemctl enable docker --now
+	sleep 15
+	service docker status
+
+        echo ''
+        echo "=============================================="
+        echo "Done: Enable and start Docker ...             "
+        echo "=============================================="
+        echo ''
+
+        sleep 5
+
+        clear
 fi
 
 echo ''

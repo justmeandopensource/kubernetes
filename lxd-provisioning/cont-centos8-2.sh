@@ -114,7 +114,7 @@ then
 
 	echo ''
 	echo "==============================================" 
-	echo "Configure Docker repo...                      "
+	echo "Done: Configure Docker repo.                  "
 	echo "=============================================="
 	echo ''
 
@@ -176,7 +176,7 @@ then
 
 	echo ''
 	echo "==============================================" 
-	echo "Configure Docker repo...                      "
+	echo "Done: Configure Docker repo.                  "
 	echo "=============================================="
 	echo ''
 
@@ -196,8 +196,7 @@ then
 	Cmd1=1
 	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
 	do
-		dnf -y update
-	 	dnf -y install containerd.io
+	 	dnf install containerd.io -y
 		Cmd1=`echo $?`
 		n=$((n+1))
 		echo ''
@@ -211,9 +210,6 @@ then
 	echo "Done: Install Containerd ...                  "
 	echo "=============================================="
 	echo ''
-
-	mkdir -p /etc/containerd
-	containerd config default > /etc/containerd/config.toml
  
 	sleep 5
 
@@ -221,6 +217,12 @@ then
 
 elif [ $ContainerRuntime = 'crio' ]
 then
+	echo ''
+	echo "==============================================" 
+	echo "Install cri-o ...                             "
+	echo "=============================================="
+	echo ''
+ 
 	VERSION=1.22
 	sudo dnf -y install 'dnf-command(copr)'
 	sudo dnf -y copr enable rhcontainerbot/container-selinux
@@ -228,4 +230,10 @@ then
 	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
 	sudo dnf -y install cri-o
+	
+	echo ''
+	echo "==============================================" 
+	echo "Done: Install cri-o.                          "
+	echo "=============================================="
+	echo ''
 fi

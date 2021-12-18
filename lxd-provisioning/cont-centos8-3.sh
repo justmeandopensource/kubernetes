@@ -2,53 +2,13 @@
 
 ContainerRuntime=$1
 
-if   [ $ContainerRuntime = 'docker' ]
-then
-	echo ''
-	echo "==============================================" 
-	echo "Enable and start Docker ...                   "
-	echo "=============================================="
-	echo ''
+echo ''
+echo "=============================================="
+echo "Build kubernetes v1.23 from source...         "
+echo "=============================================="
+echo ''
 
-	systemctl daemon-reload
-	systemctl enable docker --now
-	systemctl start  docker
-
-	echo ''
-	echo "==============================================" 
-	echo "Done: Enable and start Docker ...             "
-	echo "=============================================="
-	echo ''
-
-	sleep 5
-
-	clear
-
-elif [ $ContainerRuntime = 'containerd' ]
-then
-
-cat > /etc/sysctl.d/99-kubernetes-cri.conf <<EOF
-net.bridge.bridge-nf-call-iptables  = 1
-net.ipv4.ip_forward                 = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF
-	sysctl --system
-	systemctl daemon-reload
-	systemctl enable containerd --now
-	systemctl start  containerd
-
-elif [ $ContainerRuntime = 'crio' ]
-then
-	ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
-	cp -p /root/crio.conf /etc/crio/crio.conf
-fi
-
-# echo ''
-# echo "=============================================="
-# echo "Build kubernetes v1.23 from source...         "
-# echo "Takes quite awhile ... patience ... wait ...  "
-# echo "=============================================="
-# echo ''
+echo 'This script not currently needed and not in use."
 
 # sleep 5
 
@@ -113,10 +73,10 @@ fi
 
 # clear
 
-# echo ''
-# echo "=============================================="
-# echo "Done: Build kubernetes v1.23 from source.     "
-# echo "=============================================="
-# echo ''
+echo ''
+echo "=============================================="
+echo "Done: Build kubernetes v1.23 from source.     "
+echo "=============================================="
+echo ''
 
-# sleep 5
+sleep 5

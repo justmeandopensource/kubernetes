@@ -2,7 +2,7 @@
 
 ContainerRuntime=$1
 
-if [ $ContainerRuntime = 'docker' ]
+if   [ $ContainerRuntime = 'docker' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -25,6 +25,8 @@ cat > /etc/docker/daemon.json <<EOF
   ]
 }
 EOF
+	cat /etc/docker/daemon.json
+
 	echo ''
 	echo "==============================================" 
 	echo "Done: Install Docker daemon.json.             "
