@@ -65,6 +65,8 @@ then
 
 	dnf -y install podman skopeo buildah
 	sed -i "/fuse-overlayfs/s/#mount_program/mount_program/g" /etc/containers/storage.conf
+	podman run hello-world
+	podman ps -a
 
 	echo ''
 	echo "=============================================="
