@@ -45,13 +45,36 @@ then
         systemctl enable crio --now
 	service crio start
 
-	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
+	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
 	
 	echo ''
 	echo "=============================================="
 	echo "Done: Enable and start cri-o.                 "
 	echo "=============================================="
 	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "=============================================="
+	echo "Install podman, skopeo, buildah...            "
+	echo "=============================================="
+	echo ''
+
+	dnf -y install podman skopeo buildah
+	sed -i "/fuse-overlayfs/s/#mount_program/mount_program/g" /etc/containers/storage.conf
+
+	echo ''
+	echo "=============================================="
+	echo "Done: Install podman, skopeo, buildah.        "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
 
 elif [ $ContainerRuntime = 'containerd' ]
 then
@@ -65,7 +88,7 @@ then
         systemctl enable containerd --now
 	service containerd start
 
-	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///run/containerd/containerd.sock\"' > /etc/sysconfig/kubelet"
+	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///run/containerd/containerd.sock\"' > /etc/sysconfig/kubelet"
 	
 	echo ''
 	echo "=============================================="
