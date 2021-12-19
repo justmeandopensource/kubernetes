@@ -43,8 +43,7 @@ then
         cp -p /root/crio.conf /etc/crio/crio.conf
         systemctl daemon-reload
         systemctl enable crio --now
-	sleep 15
-	service crio status
+	service crio start
 
 	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
 	
@@ -64,8 +63,7 @@ then
 
         systemctl daemon-reload
         systemctl enable containerd --now
-	sleep 15
-	service containerd status
+	service containerd start
 
 	sudo sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///run/containerd/containerd.sock\"' > /etc/sysconfig/kubelet"
 	
@@ -85,8 +83,7 @@ then
 
         systemctl daemon-reload
         systemctl enable docker --now
-	sleep 15
-	service docker status
+	service docker start
 
         echo ''
         echo "=============================================="

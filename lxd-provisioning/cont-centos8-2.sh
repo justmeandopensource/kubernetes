@@ -12,6 +12,7 @@ dnf -y install yum-utils device-mapper-persistent-data lvm2 epel-release
 dnf -y install iproute-tc net-tools openssh-server perl bind-utils
 dnf -y install epel-release
 dnf -y install sshpass
+dnf -y install wget
 
 echo ''
 echo "==============================================" 
@@ -48,7 +49,7 @@ sleep 5
 
 clear
 
-if [ $ContainerRuntime = 'docker' ]
+if   [ $ContainerRuntime = 'docker' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -63,6 +64,10 @@ then
 	echo "Done: Remove package runc.                    "
 	echo "=============================================="
 	echo ''
+
+elif [ $ContainerRuntime = 'containerd' ]
+then
+	ln -s /usr/bin/runc /usr/local/bin/runc
 fi
 
 sleep 5
@@ -157,7 +162,7 @@ elif [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
-	echo "Configure Docker repo...                      "
+	echo "Download containerd ...                       "
 	echo "=============================================="
 	echo ''
 
@@ -165,7 +170,7 @@ then
 	Cmd0=1
 	while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
 	do
- 		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+ 		wget -q --show-progress --https-only --timestamping https://github.com/containerd/containerd/releases/download/v1.5.8/containerd-1.5.8-linux-amd64.tar.gz
 		Cmd0=`echo $?`
 		n=$((n+1))
 		echo ''
@@ -176,7 +181,25 @@ then
 
 	echo ''
 	echo "==============================================" 
-	echo "Done: Configure Docker repo.                  "
+	echo "Done: Download containerd.                    "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Install ipset...                              "
+	echo "=============================================="
+	echo ''
+
+	dnf install ipset
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Install ipset...                        "
 	echo "=============================================="
 	echo ''
 
@@ -184,36 +207,57 @@ then
 
 	clear
  
-	mkdir -p /etc/docker
-
-	echo ''
-	echo "==============================================" 
-	echo "Install Containerd ...                        "
-	echo "=============================================="
-	echo ''
+ 	echo ''
+ 	echo "==============================================" 
+ 	echo "Install and start Containerd ...              "
+ 	echo "=============================================="
+ 	echo ''
  
-	n=1
-	Cmd1=1
-	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
-	do
-	 	dnf install containerd.io -y
-		Cmd1=`echo $?`
-		n=$((n+1))
-		echo ''
-		echo 'Re-trying...'
-		echo ''
-		sleep 5
-	done
+	mkdir -p /root/containerd
+	mkdir -p /etc/containerd
+	tar -xvf containerd-1.5.8-linux-amd64.tar.gz -C containerd
+	cp -p containerd.service /etc/systemd/system/containerd.service
+	cp -p containerd/bin/* /bin/.
+	cp -p config.toml /etc/containerd/config.toml
 
-	echo ''
-	echo "==============================================" 
-	echo "Done: Install Containerd ...                  "
-	echo "=============================================="
-	echo ''
- 
+ 	echo ''
+ 	echo "==============================================" 
+ 	echo "Done: Install and start Containerd.           "
+ 	echo "=============================================="
+ 	echo ''
+
 	sleep 5
 
-	clear 
+	clear
+
+#	echo ''
+#	echo "==============================================" 
+#	echo "Install Containerd ...                        "
+#	echo "=============================================="
+#	echo ''
+ 
+#	n=1
+#	Cmd1=1
+#	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
+#	do
+#	 	dnf install containerd.io -y
+#		Cmd1=`echo $?`
+#		n=$((n+1))
+#		echo ''
+#		echo 'Re-trying...'
+#		echo ''
+#		sleep 5
+#	done
+
+#	echo ''
+#	echo "==============================================" 
+#	echo "Done: Install Containerd ...                  "
+#	echo "=============================================="
+#	echo ''
+  
+#	sleep 5
+
+#	clear 
 
 elif [ $ContainerRuntime = 'crio' ]
 then
