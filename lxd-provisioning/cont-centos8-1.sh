@@ -2,7 +2,7 @@
 
 ContainerRuntime=$1
 
-if   [ $ContainerRuntime = 'docker' ]
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
