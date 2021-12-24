@@ -11,13 +11,14 @@ NODES="maestro violin1 violin2"
 kubeprovision()
 {
   # check if we have k8s profile or create one
-  lxc profile list | grep -qo k8s || (lxc profile create k8s && cat k8s-profile-config | lxc profile edit k8s)
+  lxc profile list | grep -qo k8s-flannel || (lxc profile create k8s-flannel && cat k8s-profile-config-flannel | lxc profile edit k8s-flannel)
   echo
   for node in $NODES
   do
     echo "==> Bringing up $node"
-    lxc launch ubuntu:20.04 $node --profile k8s
+    lxc launch ubuntu:20.04 $node --profile k8s-flannel
     sleep 10
+    lxc config device add "$node" "kmsg" unix-char source="/dev/kmsg" path="/dev/kmsg"
     echo "==> Running provisioner script"
     cat bootstrap-kube.sh | lxc exec $node bash
     echo

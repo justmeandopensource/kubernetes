@@ -18,7 +18,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - >/
 apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" >/dev/null 2>&1
 
 echo "[TASK 3] Install Kubernetes components (kubeadm, kubelet and kubectl)"
-apt install -qq -y kubeadm=1.22.0-00 kubelet=1.22.0-00 kubectl=1.22.0-00 >/dev/null 2>&1
+apt install -qq -y kubeadm kubelet kubectl >/dev/null 2>&1
 echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/default/kubelet
 systemctl restart kubelet
 
@@ -35,10 +35,10 @@ echo "[TASK 6] Install additional packages"
 apt install -qq -y net-tools >/dev/null 2>&1
 
 #######################################
-# To be executed only on master nodes #
+# To be executed only on maestro nodes #
 #######################################
 
-if [[ $(hostname) =~ .*master.* ]]
+if [[ $(hostname) =~ .*maestro.* ]]
 then
 
   echo "[TASK 7] Pull required containers"
@@ -51,11 +51,11 @@ then
   mkdir /root/.kube
   cp /etc/kubernetes/admin.conf /root/.kube/config  
 
-# echo "[TASK 10] Deploy Flannel network"
-# kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /dev/null 2>&1
+echo "[TASK 10] Deploy Flannel network"
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 # echo "[TASK 10] Deploy WeaveNet network"
-  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 
   echo "[TASK 11] Generate and save cluster join command to /joincluster.sh"
   joinCommand=$(kubeadm token create --print-join-command 2>/dev/null) 
@@ -64,10 +64,10 @@ then
 fi
 
 #######################################
-# To be executed only on worker nodes #
+# To be executed only on violin nodes #
 #######################################
 
-if [[ $(hostname) =~ .*worker.* ]]
+if [[ $(hostname) =~ .*violin.* ]]
 then
   echo "[TASK 7] Join node to Kubernetes Cluster"
   apt install -qq -y sshpass >/dev/null 2>&1
