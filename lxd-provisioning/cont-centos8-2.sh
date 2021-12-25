@@ -84,12 +84,17 @@ then
 	Cmd0=1
 	while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
 	do
+		if [ $n -gt 1 ]
+		then
+			echo ''
+			echo 'Re-trying...'
+			echo ''
+		fi
+
  		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
 		Cmd0=`echo $?`
 		n=$((n+1))
-		echo ''
-		echo 'Re-trying...'
-		echo ''
 		sleep 5
 	done
 
@@ -115,12 +120,17 @@ then
 	Cmd1=1
 	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
 	do
+                if [ $n -gt 1 ]
+                then
+                        echo ''
+                        echo 'Re-trying...'
+                        echo ''
+                fi
+
 	 	dnf install containerd.io docker-ce docker-ce-cli -y
+
 		Cmd1=`echo $?`
 		n=$((n+1))
-		echo ''
-		echo 'Re-trying...'
-		echo ''
 		sleep 5
 	done
 

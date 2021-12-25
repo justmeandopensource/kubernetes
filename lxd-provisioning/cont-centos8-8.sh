@@ -43,12 +43,17 @@ n=1
 Cmd0=1
 while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
 do
+	if [ $n -gt 1 ]
+	then
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+	fi
+
 	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
 	Cmd0=`echo $?`
 	n=$((n+1))
-	echo ''
-	echo 'Re-trying...'
-	echo ''
 	sleep 5
 done
 
@@ -77,11 +82,16 @@ n=1
 Cmd0=1
 while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
 do
+	if [ $n -gt 1 ]
+	then
+		echo ''
+		echo 'Re-trying...'
+		echo ''
+	fi
+
 	./get_helm.sh
+
 	Cmd0=`echo $?`
-	echo ''
-	echo 'Re-trying...'
-	echo ''
 	sleep 5
 done
 

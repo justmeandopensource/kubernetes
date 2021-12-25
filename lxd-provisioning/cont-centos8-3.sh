@@ -4,11 +4,11 @@ ContainerRuntime=$1
 
 echo ''
 echo "=============================================="
-echo "Build kubernetes v1.23 from source...         "
+echo "Source build (if needed) ...                  "
 echo "=============================================="
 echo ''
 
-echo 'Source builds go her if needed.'
+echo 'Source builds go here if needed.'
 
 sleep 5
 
@@ -77,7 +77,7 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Done: Build kubernetes v1.23 from source.     "
+echo "Done: Source builds (if needed).              "
 echo "=============================================="
 echo ''
 

@@ -7,7 +7,7 @@ if [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
-	echo "Run containerd conversion steps ...           "
+	echo "Run containerd conversion steps on $Node...   "
 	echo "=============================================="
 	echo ''
 
@@ -47,6 +47,7 @@ sudo sysctl --system
 
 	sed -i 's/disabled_plugins/# disabled_plugins/g'                                /etc/containerd/config.toml
 	sed -i '/containerd.runtimes.runc.options/a \            \SystemdCgroup = true' /etc/containerd/config.toml
+	cat /etc/containerd/config.toml | egrep 'disabled_plugins|SystemdCgroup'
 
 	echo ''
 	echo "==============================================" 
@@ -64,7 +65,8 @@ sudo sysctl --system
 	echo "=============================================="
 	echo ''
 	
-	sed -i 's/\"/ --container-runtime=remote --container-runtime-endpoint=\/run\/containerd\/containerd.sock/2' /var/lib/kubelet/kubeadm-flags.env 
+	sed -i 's/\"/ --container-runtime=remote --container-runtime-endpoint=\/run\/containerd\/containerd.sock/2' /var/lib/kubelet/kubeadm-flags.env
+	cat /var/lib/kubelet/kubeadm-flags.env
 
 	echo ''
 	echo "==============================================" 
