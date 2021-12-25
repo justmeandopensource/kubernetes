@@ -12,7 +12,7 @@ dnf -y install yum-utils device-mapper-persistent-data lvm2 epel-release
 dnf -y install iproute-tc net-tools openssh-server perl bind-utils
 dnf -y install epel-release
 dnf -y install sshpass
-dnf -y install wget
+dnf -y install wget tar 
 
 echo ''
 echo "==============================================" 

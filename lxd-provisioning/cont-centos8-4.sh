@@ -42,6 +42,8 @@ then
         systemctl daemon-reload
         systemctl enable docker --now
 	service docker start
+	containerd config default > /etc/containerd/config.toml
+	service containerd restart
 
         echo ''
         echo "=============================================="

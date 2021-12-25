@@ -44,6 +44,8 @@ dnf install -y sshpass
 systemctl enable kubelet.service
 # kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --kubernetes-version=v1.23.0-beta.0 | tee kubeadm_init.log
 kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
+# kubeadm reset -f
+# kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
 echo "Sleeping 30 seconds while kubernetes master starts running ..."
 sleep 30
 cat kubeadm_init.log | grep -A1 join | grep -A1 token > joincluster.sh

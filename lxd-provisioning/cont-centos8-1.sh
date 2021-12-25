@@ -32,6 +32,7 @@ EOF
 	echo "Done: Install Docker daemon.json.             "
 	echo "=============================================="
 	echo ''
+fi
 
 sleep 5
 

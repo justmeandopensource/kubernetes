@@ -8,7 +8,7 @@ echo "Build kubernetes v1.23 from source...         "
 echo "=============================================="
 echo ''
 
-echo 'Source builds go her if needed."
+echo 'Source builds go her if needed.'
 
 sleep 5
 
