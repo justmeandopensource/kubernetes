@@ -12,7 +12,7 @@ eval echo "'/var/lib/snapd/snap/bin/lxc stop violin2 -f' | sg lxd $CGROUP_SUFFIX
 
 echo ''
 echo "==============================================" 
-echo "Done: Stop k8s containers...                        "
+echo "Done: Stop k8s containers...                  "
 echo "=============================================="
 echo ''
 
@@ -42,7 +42,7 @@ clear
 
 echo ''
 echo "==============================================" 
-echo "Stop k8s containers...                        "
+echo "Start k8s containers...                       "
 echo "=============================================="
 echo ''
 
@@ -52,7 +52,7 @@ eval echo "'/var/lib/snapd/snap/bin/lxc start violin2' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "==============================================" 
-echo "Done: Stop k8s containers...                        "
+echo "Done: Start k8s containers...                 "
 echo "=============================================="
 echo ''
 
