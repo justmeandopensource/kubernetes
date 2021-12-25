@@ -30,8 +30,30 @@ echo ''
 sleep 5
 
 clear
+       
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
+then
+        echo ''
+        echo "=============================================="
+        echo "Enable and start Docker ...                   "
+        echo "=============================================="
+        echo ''
 
-if   [ $ContainerRuntime = 'crio' ]
+        systemctl daemon-reload
+        systemctl enable docker --now
+	service docker start
+
+        echo ''
+        echo "=============================================="
+        echo "Done: Enable and start Docker ...             "
+        echo "=============================================="
+        echo ''
+
+        sleep 5
+
+        clear
+
+elif [ $ContainerRuntime = 'crio' ]
 then
 	echo ''
 	echo "=============================================="
@@ -77,48 +99,6 @@ then
 	sleep 5
 
 	clear
-
-elif [ $ContainerRuntime = 'containerd' ]
-then
-	echo ''
-	echo "=============================================="
-	echo "Enable and start containerd ...               "
-	echo "=============================================="
-	echo ''
-
-        systemctl daemon-reload
-        systemctl enable containerd --now
-	service containerd start
-
-	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///run/containerd/containerd.sock\"' > /etc/sysconfig/kubelet"
-	
-	echo ''
-	echo "=============================================="
-	echo "Done: Enable and start containerd.            "
-	echo "=============================================="
-	echo ''
-
-elif [ $ContainerRuntime = 'docker' ]
-then
-        echo ''
-        echo "=============================================="
-        echo "Enable and start Docker ...                   "
-        echo "=============================================="
-        echo ''
-
-        systemctl daemon-reload
-        systemctl enable docker --now
-	service docker start
-
-        echo ''
-        echo "=============================================="
-        echo "Done: Enable and start Docker ...             "
-        echo "=============================================="
-        echo ''
-
-        sleep 5
-
-        clear
 fi
 
 echo ''
@@ -127,7 +107,11 @@ echo "Enable kubelet service...                     "
 echo "=============================================="
 echo ''
 
-systemctl enable kubelet
+systemctl enable kubelet --now
+
+sleep 5
+
+clear
 
 echo ''
 echo "=============================================="

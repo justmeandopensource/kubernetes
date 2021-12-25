@@ -33,11 +33,6 @@ EOF
 	echo "=============================================="
 	echo ''
 
-elif [ $ContainerRuntime = 'crio' ]
-then
-	dnf -y install fuse-overlayfs
-fi
-
 sleep 5
 
 clear

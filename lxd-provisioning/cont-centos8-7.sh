@@ -1,11 +1,13 @@
 #!/bin/bash
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
+# Deploy metallb load balancer
+
 clear
 
 echo ''
 echo "=============================================="
-echo "Deploy ingress-nginx...                       "
+echo "Install Metallb k8s load balancer...          "
 echo "=============================================="
 echo ''
 
@@ -15,49 +17,17 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Create ingress-nginx namespace...             "
+echo "Create metallb-system namespace...            "
 echo "=============================================="
 echo ''
 
-kubectl create ns ingress-nginx
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/namespace.yaml
 echo ''
-kubectl get ns ingress-nginx
-
-echo ''
-echo "=============================================="
-echo "Create ingress-nginx namespace...             "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
+kubectl get ns metallb-system
 
 echo ''
 echo "=============================================="
-echo "Download get_helm.sh ...                      "
-echo "=============================================="
-echo ''
-
-n=1
-Cmd0=1
-while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
-do
-	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-	Cmd0=`echo $?`
-	n=$((n+1))
-	echo ''
-	echo 'Re-trying...'
-	echo ''
-	sleep 5
-done
-
-chmod 700 get_helm.sh
-ls -l get_helm.sh
-
-echo ''
-echo "=============================================="
-echo "Done: Download get_helm.sh                    "
+echo "Done: Create metallb-system namespace.        "
 echo "=============================================="
 echo ''
 
@@ -67,27 +37,35 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Download and Install helm...                  "
+echo "Install metallb-system configmap...           "
 echo "=============================================="
 echo ''
-echo '(Patience...this can take a minute or two...)'
-echo ''
 
-n=1
-Cmd0=1
-while [ $Cmd0 -eq 1 ] && [ $n -le 5 ]
-do
-	./get_helm.sh
-	Cmd0=`echo $?`
-	echo ''
-	echo 'Re-trying...'
-	echo ''
-	sleep 5
-done
+kubectl apply -f metallb-configmap.yaml
+kubectl describe configmap config -n metallb-system
 
 echo ''
 echo "=============================================="
-echo "Done: Download and Install helm.              "
+echo "Done: Install metallb-system configmap.       "
+echo "=============================================="
+echo ''
+
+sleep  5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Install metallb-system manifest...            "
+echo "=============================================="
+echo ''
+
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manifests/metallb.yaml
+
+echo ''
+echo "=============================================="
+echo "Done: Install metallb-system manifest.        "
 echo "=============================================="
 echo ''
 
@@ -97,90 +75,28 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Show helm version...                          "
+echo "Wait for metallb-system STATUS Running...    "
 echo "=============================================="
 echo ''
 
-helm version --short
-
-echo ''
-echo "=============================================="
-echo "Done: Show helm version.                      "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Prepare helm repo ingress-nginx...            "
-echo "=============================================="
-echo ''
-
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-echo ''
-helm repo update
-echo ''
-helm repo list
-echo ''
-helm search repo ingress
-
-echo ''
-echo "=============================================="
-echo "Prepare helm repo ingress-nginx...            "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Helm install ingress-nginx...                 "
-echo "=============================================="
-echo ''
-echo '(Patience...this can take a minute or two...)'
-echo ''
-
-helm install orabuntu-lxd ingress-nginx/ingress-nginx -n ingress-nginx --values /root/ingress-nginx.yaml
-
-echo ''
-echo "=============================================="
-echo "Helm install ingress-nginx...                 "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Wait for ingress-nginx STATUS running...      "
-echo "=============================================="
-echo ''
-
-function GetStatus2 {
-	kubectl -n ingress-nginx get all | grep -c Running
+function GetStatus1 {
+	kubectl get all -n metallb-system | grep -c Running
 }
-Status2=$(GetStatus2)
+Status1=$(GetStatus1)
 
-while [ $Status2 -lt 2 ]
+echo 'Wait for metallb-system STATUS Running all (may take a minute or so)'
+echo ''
+while [ $Status1 -lt 4 ]
 do
-	Status2=$(GetStatus2)
-	echo 'Check every 30 seconds STATUS Running all ingress-nginx containers...'
+	Status1=$(GetStatus1)
+	kubectl get all -n metallb-system | egrep 'STATUS|pod'
 	echo ''
-	kubectl -n ingress-nginx get all | egrep 'STATUS|pod'
-	echo ''
-	sleep 30
+	sleep 15
 done
 
 echo ''
 echo "=============================================="
-echo "Done: Wait for ingress-nginx STATUS running.  "
+echo "Done: Wait for metallb-system STATUS Running. "
 echo "=============================================="
 echo ''
 
@@ -190,7 +106,17 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Done: Helm install ingress-nginx.             "
+echo "Test metallb-system using nginx deploy...     "
+echo "=============================================="
+echo ''
+
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --type LoadBalancer --port 80
+kubectl get all | egrep 'EXTERNAL-IP|LoadBalancer'
+
+echo ''
+echo "=============================================="
+echo "Done: Test metallb-system using nginx deploy. "
 echo "=============================================="
 echo ''
 
@@ -200,101 +126,10 @@ clear
 
 echo ''
 echo "=============================================="
-echo "Confirm install ingress-nginx...              "
-echo "=============================================="
-echo ''
-
-kubectl -n ingress-nginx get all
-
-echo ''
-echo "=============================================="
-echo "Done: Confirm install ingress-nginx.          "
+echo "Done: Install Metallb k8s load balancer.      "
 echo "=============================================="
 echo ''
 
 sleep 5
 
 clear
-
-echo ''
-echo "=============================================="
-echo "Helm confirm install ingress-nginx...         "
-echo "=============================================="
-echo ''
-
-helm list -n ingress-nginx
-
-echo ''
-echo "=============================================="
-echo "Done: Helm confirm install ingress-nginx.     "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Test ingress-nginx/metallb examples...        "
-echo "=============================================="
-echo ''
-
-function UpdateHostsFile {
-        kubectl -n ingress-nginx get all | grep LoadBalancer | sed 's/  */ /g' | cut -f4 -d' '
-}
-HostsFile=$(UpdateHostsFile)
-sh -c "echo '$HostsFile nginx.example.com' >> /etc/hosts"
-
-kubectl create -f nginx-deploy-main.yaml -f nginx-deploy-green.yaml -f nginx-deploy-blue.yaml 
-
-function GetStatus3 {
-	kubectl get pods | grep -c Running
-}
-Status3=$(GetStatus3)
-
-n=1
-while [ $Status3 -lt 4 ] && [ $n -lt 5 ]
-do
-	kubectl get pods 
-	Status3=$(GetStatus3)
-	n=$((n+1))
-	sleep 5
-done
-	
-kubectl expose deploy nginx-deploy-main  --port 80
-kubectl expose deploy nginx-deploy-blue  --port 80
-kubectl expose deploy nginx-deploy-green --port 80
-echo ''
-kubectl get all
-echo ''
-kubectl create -f ingress-resource-3.yaml 
-echo ''
-echo 'Wait 30 seconds...'
-sleep 30
-kubectl describe ing ingress-resource-3
-echo ''
-curl nginx.example.com
-echo ''
-curl nginx.example.com/blue
-echo ''
-curl nginx.example.com/green
-
-echo ''
-echo "=============================================="
-echo "Done: Test ingress-nginx/metallb examples.    "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Done: Deploy ingress-nginx.                   "
-echo "=============================================="
-echo ''
-
-# sudo iptables -t nat -A PREROUTING -p tcp -i enp0s17 --dport 80 -j DNAT --to-destination 10.207.39.240:80
-

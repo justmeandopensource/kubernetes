@@ -30,8 +30,6 @@
 #    There are two domains and two networks because the "seed" LXC containers are on a separate network from the production LXC containers.
 #    If the domain is an actual domain, you will need to change the subnet using the subnets feature of Orabuntu-LXC
 
-ContainerRuntime=$1
-
 n=1
 Cmd0=1
 while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
@@ -44,18 +42,8 @@ done
 dnf install -y epel-release
 dnf install -y sshpass
 systemctl enable kubelet.service
-
 # kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --kubernetes-version=v1.23.0-beta.0 | tee kubeadm_init.log
-
-if   [ $ContainerRuntime = 'crio' ]
-then
-	kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --cri-socket=/var/run/crio/crio.sock | tee kubeadm_init.log
-
-elif [ $ContainerRuntime = 'docker' ]
-then
-	kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
-fi
-
+kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
 echo "Sleeping 30 seconds while kubernetes master starts running ..."
 sleep 30
 cat kubeadm_init.log | grep -A1 join | grep -A1 token > joincluster.sh
@@ -83,13 +71,13 @@ kubectl get pods --all-namespaces -o wide
 sleep 30
 sed -i '${s/$/ --ignore-preflight-errors=all/}' joincluster.sh
 sleep 5
-sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.207.39.5:/root/.
-sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.207.39.6:/root/.
+sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.5:/root/.
+sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.6:/root/.
 echo ''
-sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207.39.5 "/root/joincluster.sh"
+sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.5 "/root/joincluster.sh"
 sleep 10
 echo ''
-sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.207.39.6 "/root/joincluster.sh"
+sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.6 "/root/joincluster.sh"
 
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 sleep 30

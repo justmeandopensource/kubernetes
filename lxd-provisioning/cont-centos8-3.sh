@@ -8,9 +8,11 @@ echo "Build kubernetes v1.23 from source...         "
 echo "=============================================="
 echo ''
 
-echo 'This script not currently needed and not in use."
+echo 'Source builds go her if needed."
 
-# sleep 5
+sleep 5
+
+clear
 
 # echo ''
 # echo "=============================================="
@@ -80,3 +82,5 @@ echo "=============================================="
 echo ''
 
 sleep 5
+
+clear

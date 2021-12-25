@@ -20,8 +20,9 @@ echo "Done: Install packages.                       "
 echo "=============================================="
 echo ''
 
-# if LXD container will be running on XFS file system
-# dnf install -y xfsprogs xfsprogs-devel xfsdump 
+sleep 5
+
+clear
 
 echo ''
 echo "==============================================" 
@@ -49,31 +50,6 @@ sleep 5
 
 clear
 
-if   [ $ContainerRuntime = 'docker' ]
-then
-	echo ''
-	echo "==============================================" 
-	echo "Remove package runc...                        "
-	echo "=============================================="
-	echo ''
-
-	dnf remove -y runc
-
-	echo ''
-	echo "==============================================" 
-	echo "Done: Remove package runc.                    "
-	echo "=============================================="
-	echo ''
-
-elif [ $ContainerRuntime = 'containerd' ]
-then
-	ln -s /usr/bin/runc /usr/local/bin/runc
-fi
-
-sleep 5
-
-clear
-
 echo ''
 echo "==============================================" 
 echo "Set root user password ...                    "
@@ -96,7 +72,7 @@ sleep 5
 
 clear
 
-if   [ $ContainerRuntime = 'docker' ]
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -157,107 +133,6 @@ then
 	sleep 5
 
 	clear 
-
-elif [ $ContainerRuntime = 'containerd' ]
-then
-	echo ''
-	echo "==============================================" 
-	echo "Download containerd ...                       "
-	echo "=============================================="
-	echo ''
-
-	n=1
-	Cmd0=1
-	while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
-	do
- 		wget -q --show-progress --https-only --timestamping https://github.com/containerd/containerd/releases/download/v1.5.8/containerd-1.5.8-linux-amd64.tar.gz
-		Cmd0=`echo $?`
-		n=$((n+1))
-		echo ''
-		echo 'Re-trying...'
-		echo ''
-		sleep 5
-	done
-
-	echo ''
-	echo "==============================================" 
-	echo "Done: Download containerd.                    "
-	echo "=============================================="
-	echo ''
-
-	sleep 5
-
-	clear
-
-	echo ''
-	echo "==============================================" 
-	echo "Install ipset...                              "
-	echo "=============================================="
-	echo ''
-
-	dnf install ipset
-
-	echo ''
-	echo "==============================================" 
-	echo "Done: Install ipset...                        "
-	echo "=============================================="
-	echo ''
-
-	sleep 5
-
-	clear
- 
- 	echo ''
- 	echo "==============================================" 
- 	echo "Install and start Containerd ...              "
- 	echo "=============================================="
- 	echo ''
- 
-	mkdir -p /root/containerd
-	mkdir -p /etc/containerd
-	tar -xvf containerd-1.5.8-linux-amd64.tar.gz -C containerd
-	cp -p containerd.service /etc/systemd/system/containerd.service
-	cp -p containerd/bin/* /bin/.
-	cp -p config.toml /etc/containerd/config.toml
-
- 	echo ''
- 	echo "==============================================" 
- 	echo "Done: Install and start Containerd.           "
- 	echo "=============================================="
- 	echo ''
-
-	sleep 5
-
-	clear
-
-#	echo ''
-#	echo "==============================================" 
-#	echo "Install Containerd ...                        "
-#	echo "=============================================="
-#	echo ''
- 
-#	n=1
-#	Cmd1=1
-#	while [ $Cmd1 -ne 0 ] && [ $n -le 5 ]
-#	do
-#	 	dnf install containerd.io -y
-#		Cmd1=`echo $?`
-#		n=$((n+1))
-#		echo ''
-#		echo 'Re-trying...'
-#		echo ''
-#		sleep 5
-#	done
-
-#	echo ''
-#	echo "==============================================" 
-#	echo "Done: Install Containerd ...                  "
-#	echo "=============================================="
-#	echo ''
-  
-#	sleep 5
-
-#	clear 
 
 elif [ $ContainerRuntime = 'crio' ]
 then
