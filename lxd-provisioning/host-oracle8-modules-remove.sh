@@ -10,6 +10,8 @@ eval echo "'/var/lib/snapd/snap/bin/lxc stop maestro -f' | sg lxd $CGROUP_SUFFIX
 eval echo "'/var/lib/snapd/snap/bin/lxc stop violin1 -f' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc stop violin2 -f' | sg lxd $CGROUP_SUFFIX"
 
+eval echo "'/var/lib/snapd/snap/bin/lxc list' | sg lxd $CGROUP_SUFFIX"
+
 echo ''
 echo "==============================================" 
 echo "Done: Stop k8s containers...                  "
@@ -49,6 +51,8 @@ echo ''
 eval echo "'/var/lib/snapd/snap/bin/lxc start maestro' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc start violin1' | sg lxd $CGROUP_SUFFIX"
 eval echo "'/var/lib/snapd/snap/bin/lxc start violin2' | sg lxd $CGROUP_SUFFIX"
+
+eval echo "'/var/lib/snapd/snap/bin/lxc list' | sg lxd $CGROUP_SUFFIX"
 
 echo ''
 echo "==============================================" 
