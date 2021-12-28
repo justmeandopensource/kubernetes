@@ -69,7 +69,7 @@ then
         systemctl enable crio --now
 	service crio start
 
-	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\" --feature-gates=\"AllAlpha=false\" --runtime-request-timeout=5m' > /etc/sysconfig/kubelet"
+	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
 	
 	echo ''
 	echo "=============================================="

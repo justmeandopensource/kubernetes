@@ -3,7 +3,7 @@
 ContainerRuntime=$1
 Node=$2
 
-if [ $ContainerRuntime = 'containerd' ] || [ $ContainerRuntime = 'crio' ]
+if [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -11,7 +11,7 @@ then
 	echo "=============================================="
 	echo ''
 
-cat <<EOF | sudo tee /etc/modules-load.d/containerd-crio.conf
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
 EOF
@@ -29,10 +29,6 @@ EOF
 # Apply sysctl params without reboot
 sudo sysctl --system
 
-fi
-
-if [ $ContainerRuntime = 'containerd' ]
-then
 	echo ''
 	echo "==============================================" 
 	echo "Done: Run containerd conversion steps.        "

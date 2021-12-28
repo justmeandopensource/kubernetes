@@ -153,13 +153,12 @@ then
 	echo ''
  
 	VERSION=1.23
-	dnf -y install 'dnf-command(copr)'
-	dnf -y copr enable rhcontainerbot/container-selinux
-	curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
-	curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
+	sudo dnf -y install 'dnf-command(copr)'
+	sudo dnf -y copr enable rhcontainerbot/container-selinux
+	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
-	dnf -y install cri-o
-	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/' /etc/crio/crio.conf
+	sudo dnf -y install cri-o
 	
 	echo ''
 	echo "==============================================" 
