@@ -144,7 +144,7 @@ sudo sysctl --system
 	echo "=============================================="
 	echo ''
 
-	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/	/etc/crio/crio.conf
+	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/'	/etc/crio/crio.conf
 
 	echo ''
 	echo "==============================================" 
@@ -162,7 +162,7 @@ sudo sysctl --system
 	echo "=============================================="
 	echo ''
 	
-	sed -i 's/\"/ --feature-gates="AllAlpha=false" --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint="unix:///var/run/crio/crio.sock" --runtime-request-timeout=5m/2' /var/lib/kubelet/kubeadm-flags.env
+	sed -i 's/\"/ --feature-gates=AllAlpha=false --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=unix\:\/\/\/var\/run\/crio\/crio.sock --runtime-request-timeout=5m/4' /var/lib/kubelet/kubeadm-flags.env
 	cat /var/lib/kubelet/kubeadm-flags.env
 
 	echo ''
