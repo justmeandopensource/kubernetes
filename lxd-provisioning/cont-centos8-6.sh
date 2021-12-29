@@ -123,9 +123,9 @@ sudo sysctl --system
         VERSION=1.23
         sudo dnf -y install 'dnf-command(copr)'
         sudo dnf -y copr enable rhcontainerbot/container-selinux
-        sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
-        sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
-
+        sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+        sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
+	sudo dnf -y remove containerd
         sudo dnf -y install cri-o
 
 	echo ''
@@ -162,7 +162,7 @@ sudo sysctl --system
 	echo "=============================================="
 	echo ''
 	
-	sed -i 's/\"/ --feature-gates=AllAlpha=false --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=unix\:\/\/\/var\/run\/crio\/crio.sock --runtime-request-timeout=5m/4' /var/lib/kubelet/kubeadm-flags.env
+	sed -i 's/\"/ --feature-gates=AllAlpha=false --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=unix\:\/\/\/var\/run\/crio\/crio.sock --runtime-request-timeout=5m\"/2' /var/lib/kubelet/kubeadm-flags.env
 	cat /var/lib/kubelet/kubeadm-flags.env
 
 	echo ''
