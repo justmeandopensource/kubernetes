@@ -72,7 +72,7 @@ sleep 5
 
 clear
 
-if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ] || [ $ContainerRuntime = 'crio' ]
 then
 	echo ''
 	echo "==============================================" 
@@ -143,26 +143,4 @@ then
 	sleep 5
 
 	clear 
-
-elif [ $ContainerRuntime = 'crio' ]
-then
-	echo ''
-	echo "==============================================" 
-	echo "Install cri-o ...                             "
-	echo "=============================================="
-	echo ''
- 
-	VERSION=1.23
-	sudo dnf -y install 'dnf-command(copr)'
-	sudo dnf -y copr enable rhcontainerbot/container-selinux
-	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
-	sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
-
-	sudo dnf -y install cri-o
-	
-	echo ''
-	echo "==============================================" 
-	echo "Done: Install cri-o.                          "
-	echo "=============================================="
-	echo ''
 fi

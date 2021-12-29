@@ -31,7 +31,7 @@ sleep 5
 
 clear
        
-if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ] || [ $ContainerRuntime = 'crio' ]
 then
         echo ''
         echo "=============================================="
@@ -54,53 +54,6 @@ then
         sleep 5
 
         clear
-
-elif [ $ContainerRuntime = 'crio' ]
-then
-	echo ''
-	echo "=============================================="
-	echo "Enable and start cri-o ...                    "
-	echo "=============================================="
-	echo ''
-
-        ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
-        cp -p /root/crio.conf /etc/crio/crio.conf
-        systemctl daemon-reload
-        systemctl enable crio --now
-	service crio start
-
-	sh -c "echo 'KUBELET_EXTRA_ARGS=--container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=\"unix:///var/run/crio/crio.sock\"' > /etc/sysconfig/kubelet"
-	
-	echo ''
-	echo "=============================================="
-	echo "Done: Enable and start cri-o.                 "
-	echo "=============================================="
-	echo ''
-
-	sleep 5
-
-	clear
-
-	echo ''
-	echo "=============================================="
-	echo "Install podman, skopeo, buildah...            "
-	echo "=============================================="
-	echo ''
-
-	dnf -y install podman skopeo buildah
-	sed -i "/fuse-overlayfs/s/#mount_program/mount_program/g" /etc/containers/storage.conf
-	podman run hello-world
-	podman ps -a
-
-	echo ''
-	echo "=============================================="
-	echo "Done: Install podman, skopeo, buildah.        "
-	echo "=============================================="
-	echo ''
-
-	sleep 5
-
-	clear
 fi
 
 echo ''
