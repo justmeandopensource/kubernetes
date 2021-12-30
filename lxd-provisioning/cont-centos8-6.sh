@@ -247,7 +247,8 @@ sudo sysctl --system
 	echo ''
 
         ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
-#	cp -p /root/crio.conf /etc/crio/crio.conf
+	cp -p /root/crio.conf /etc/crio/crio.conf
+	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/'	/etc/crio/crio.conf
         systemctl daemon-reload
 	systemctl enable crio --now
 	crictl ps
