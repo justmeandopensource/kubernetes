@@ -228,7 +228,7 @@ sudo sysctl --system
 	cat /var/lib/kubelet/kubeadm-flags.env
 	echo ''
 	echo "==============================================" 
-	sleep 300
+	sleep 120
 
 	echo ''
 	echo "==============================================" 
