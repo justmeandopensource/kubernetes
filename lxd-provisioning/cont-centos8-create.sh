@@ -2,6 +2,14 @@
 CGROUP_SUFFIX=$2
 NameServer=$1
 
+eval echo "'/var/lib/snapd/snap/bin/lxc profile show k8s-weavenet' | sg lxd $CGROUP_SUFFIX" > /dev/null
+Cmd0=`echo $?`
+
+if [ $Cmd0 -eq 0 ]
+then
+	eval echo "'/var/lib/snapd/snap/bin/lxc profile delete k8s-weavenet' | sg lxd $CGROUP_SUFFIX" > /dev/null
+fi
+	
 echo ''
 echo "=============================================="
 echo "Create k8s-weavenet profile...                "
