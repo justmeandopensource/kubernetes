@@ -29,6 +29,8 @@ echo ''
 
 for i in maestro violin1 violin2
 do
+	eval echo "'/var/lib/snapd/snap/bin/lxc stop -f $i ' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc delete $i '  | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8/amd64 $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
 	
 	function GetHwaddr {
