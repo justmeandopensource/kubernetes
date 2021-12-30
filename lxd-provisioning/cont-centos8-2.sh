@@ -72,7 +72,7 @@ sleep 5
 
 clear
 
-if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ] || [ $ContainerRuntime = 'crio' ]
+if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
 then
 	echo ''
 	echo "==============================================" 
