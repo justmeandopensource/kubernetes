@@ -2,7 +2,6 @@
 
 ContainerRuntime=$1
 
-
 echo ''
 echo "=============================================="
 echo "Install Kubernetes ...                        "
@@ -55,28 +54,28 @@ then
         sleep 5
 
         clear
+
+	echo ''
+	echo "=============================================="
+	echo "Enable kubelet service...                     "
+	echo "=============================================="
+	echo ''
+
+	systemctl enable kubelet --now
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "=============================================="
+	echo "Done: Enable kubelet service.                 "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
 fi
-
-echo ''
-echo "=============================================="
-echo "Enable kubelet service...                     "
-echo "=============================================="
-echo ''
-
-systemctl enable kubelet --now
-
-sleep 5
-
-clear
-
-echo ''
-echo "=============================================="
-echo "Done: Enable kubelet service.                 "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
 
 
