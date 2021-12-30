@@ -1,86 +1,160 @@
 #!/bin/bash
 
 ContainerRuntime=$1
+Node=$2
 
-echo ''
-echo "=============================================="
-echo "Source build (if needed) ...                  "
-echo "=============================================="
-echo ''
+if   [ $ContainerRuntime = 'crio' ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "Run crio conversion steps on $Node...         "
+	echo "=============================================="
+	echo ''
 
-echo 'Source builds go here if needed.'
+cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
 
-sleep 5
+sudo modprobe overlay
+sudo modprobe br_netfilter
 
-clear
+# Setup required sysctl params, these persist across reboots.
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
 
-# echo ''
-# echo "=============================================="
-# echo "Clone kubernetes github...                    "
-# echo "=============================================="
-# echo ''
+# Apply sysctl params without reboot
+sudo sysctl --system
 
-# git clone https://github.com/kubernetes/kubernetes
+	echo ''
+	echo "==============================================" 
+	echo "Done: Run crio conversion steps.              "
+	echo "=============================================="
+	echo ''
 
-# echo ''
-# echo "=============================================="
-# echo "Done: Clone kubernetes github.                "
-# echo "=============================================="
-# echo ''
+	sleep 5
 
-# sleep 5
+	clear
 
-# echo ''
-# echo "=============================================="
-# echo "Make kubernetes quick-release...              "
-# echo "=============================================="
-# echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Configure cri-o repo  ...                     "
+	echo "=============================================="
+	echo ''
 
-# cd kubernetes
-# make -d quick-release
-# Cmd0=`echo $?`
+        VERSION=1.23
+        sudo dnf -y install 'dnf-command(copr)'
+        sudo dnf -y copr enable rhcontainerbot/container-selinux
 
-# if [ $Cmd0 -ne 0 ]
-# then
-# 	make quick-release
-# 	Cmd0=`echo $?`
-# fi
+	echo ''
+	echo "==============================================" 
+	echo "Done: Configure cri-o repo.                   "
+	echo "=============================================="
+	echo ''
 
-# echo ''
-# echo "=============================================="
-# echo "Make kubernetes quick-release...              "
-# echo "=============================================="
-# echo ''
+	sleep 5
 
-# sleep 5
+	clear
 
-# echo ''
-# echo "=============================================="
-# echo "Copy k8s binaries to /usr/bin...              "
-# echo "=============================================="
-# echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Download cri-o ...                            "
+	echo "=============================================="
+	echo ''
 
-# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubeadm /usr/bin/.
-# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubectl /usr/bin/.
-# cp -p /root/kubernetes/_output/dockerized/bin/linux/amd64/kubelet /usr/bin/.
-# ls -l /usr/bin/kube*
+        sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+        sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
-# echo ''
-# echo "=============================================="
-# echo "Copy k8s binaries to /usr/bin...              "
-# echo "=============================================="
-# echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Done: Download cri-o.                         "
+	echo "=============================================="
+	echo ''
 
-# sleep 5
+	sleep 5
 
-# clear
+	clear
 
-echo ''
-echo "=============================================="
-echo "Done: Source builds (if needed).              "
-echo "=============================================="
-echo ''
+	echo ''
+	echo "==============================================" 
+	echo "Install cri-o ...                             "
+	echo "=============================================="
+	echo ''
 
-sleep 5
+        sudo dnf -y install cri-o
 
-clear
+	echo ''
+	echo "==============================================" 
+	echo "Done: Install crio.                           "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Edit crio.conf ...                            "
+	echo "=============================================="
+	echo ''
+
+	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/'	/etc/crio/crio.conf
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Edit crio.conf.                         "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Enable and start crio ...                     "
+	echo "=============================================="
+	echo ''
+
+        ln -s /usr/bin/fuse-overlayfs /usr/local/bin/fuse-overlayfs
+	cp -p /root/crio.conf /etc/crio/crio.conf
+	sed -i 's/conmon = \"\"/conmon = \"\/usr\/bin\/conmon\"/'	/etc/crio/crio.conf
+        systemctl daemon-reload
+	systemctl enable crio --now
+	crictl ps
+	crictl info
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Enable and start crio.                  "
+	echo "=============================================="
+	echo ''
+        sleep 5
+
+        clear
+
+        echo ''
+        echo "=============================================="
+        echo "Install podman, skopeo, buildah...            "
+        echo "=============================================="
+        echo ''
+
+        dnf -y install podman skopeo buildah
+        sed -i "/fuse-overlayfs/s/#mount_program/mount_program/g" /etc/containers/storage.conf
+        podman run hello-world
+        podman ps -a
+
+        echo ''
+        echo "=============================================="
+        echo "Done: Install podman, skopeo, buildah.        "
+        echo "=============================================="
+        echo ''
+
+        sleep 5
+
+        clear
+fi	
