@@ -116,16 +116,67 @@ sudo sysctl --system
 
 	echo ''
 	echo "==============================================" 
-	echo "Install crio ...                              "
+	echo "Configure cri-o repo  ...                     "
 	echo "=============================================="
 	echo ''
 
         VERSION=1.23
         sudo dnf -y install 'dnf-command(copr)'
         sudo dnf -y copr enable rhcontainerbot/container-selinux
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Configure cri-o repo.                   "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Download cri-o ...                            "
+	echo "=============================================="
+	echo ''
+
         sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
         sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: Download cri-o.                         "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Uninstall containerd ...                      "
+	echo "=============================================="
+	echo ''
+
 	sudo dnf -y remove containerd
+
+	echo ''
+	echo "==============================================" 
+	echo "Uninstall containerd ...                      "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+
+	echo ''
+	echo "==============================================" 
+	echo "Install cri-o ...                             "
+	echo "=============================================="
+	echo ''
+
         sudo dnf -y install cri-o
 
 	echo ''
@@ -162,8 +213,22 @@ sudo sysctl --system
 	echo "=============================================="
 	echo ''
 	
-	sed -i 's/\"/ --feature-gates=AllAlpha=false --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=unix\:\/\/\/var\/run\/crio\/crio.sock --runtime-request-timeout=5m\"/2' /var/lib/kubelet/kubeadm-flags.env
+	echo ''
+	echo "==============================================" 
+	echo 'DISPLAY kubeadm-flags.env BEFORE SED'
+	echo ''
 	cat /var/lib/kubelet/kubeadm-flags.env
+	echo ''
+	echo "==============================================" 
+	sed -i 's/\"/ --feature-gates=AllAlpha=false --container-runtime=remote --cgroup-driver=systemd --container-runtime-endpoint=unix\:\/\/\/var\/run\/crio\/crio.sock --runtime-request-timeout=5m\"/2' /var/lib/kubelet/kubeadm-flags.env
+	echo ''
+	echo "==============================================" 
+	echo 'DISPLAY kubeadm-flags.env AFTER SED'
+	echo ''
+	cat /var/lib/kubelet/kubeadm-flags.env
+	echo ''
+	echo "==============================================" 
+	sleep 300
 
 	echo ''
 	echo "==============================================" 
