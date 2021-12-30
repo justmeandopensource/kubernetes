@@ -31,24 +31,6 @@ sleep 5
 
 clear
 
-echo ''
-echo "=============================================="
-echo "Run kubeadm reset ...                         "
-echo "=============================================="
-echo ''
-
-kubeadm reset -f
-
-echo ''
-echo "=============================================="
-echo "Done: Run kubeadm reset.                      "
-echo "=============================================="
-echo ''
-
-sleep 5
-
-clear
-       
 if   [ $ContainerRuntime = 'docker' ] || [ $ContainerRuntime = 'containerd' ]
 then
         echo ''
