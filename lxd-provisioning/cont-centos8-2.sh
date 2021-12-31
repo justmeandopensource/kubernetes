@@ -43,7 +43,9 @@ sed -i '/UseDNS/s/^#//g' 					/etc/ssh/sshd_config
 sed -i 's/UseDNS yes/UseDNS no/' 				/etc/ssh/sshd_config
 service sshd stop
 service sshd start
-service sshd status
+# service sshd status
+echo ''
+ps -ef | grep ssh
 
 echo ''
 echo "==============================================" 
