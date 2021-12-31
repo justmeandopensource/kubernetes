@@ -164,7 +164,7 @@ then
 	sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
 	sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
-	sudo dnf -y install cri-o cri-tools cri-o-runc
+	sudo dnf -y install cri-o cri-tools
 
 cat >>/etc/crio/crio.conf.d/02-cgroup-manager.conf<<EOF
 [crio.runtime]
