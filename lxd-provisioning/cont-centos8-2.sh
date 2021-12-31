@@ -156,15 +156,21 @@ then
 	echo "Install cri-o ...                             "
 	echo "=============================================="
 	echo ''
- 
+
+	OS=CentOS_8 
 	VERSION=1.23
 	sudo dnf -y install 'dnf-command(copr)'
 	sudo dnf -y copr enable rhcontainerbot/container-selinux
 	sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_8/devel:kubic:libcontainers:stable.repo
 	sudo curl --http1.1 -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:${VERSION}/CentOS_8/devel:kubic:libcontainers:stable:cri-o:${VERSION}.repo
 
-	sudo dnf -y install cri-o cri-tools
-	
+	sudo dnf -y install cri-o cri-tools cri-o-runc
+
+cat >>/etc/crio/crio.conf.d/02-cgroup-manager.conf<<EOF
+[crio.runtime]
+conmon_cgroup = "pod"
+cgroup_manager = "cgroupfs"
+EOF
 	echo ''
 	echo "==============================================" 
 	echo "Done: Install cri-o.                          "
