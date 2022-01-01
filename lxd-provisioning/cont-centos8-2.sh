@@ -168,11 +168,6 @@ then
 
 	sudo dnf -y install cri-o cri-tools
 
-cat >>/etc/crio/crio.conf.d/02-cgroup-manager.conf<<EOF
-[crio.runtime]
-conmon_cgroup = "pod"
-cgroup_manager = "cgroupfs"
-EOF
 	echo ''
 	echo "==============================================" 
 	echo "Done: Install cri-o.                          "
