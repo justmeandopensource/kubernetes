@@ -1,6 +1,8 @@
 #!/bin/bash
-CGROUP_SUFFIX=$2
+
 NameServer=$1
+Domain1=$2
+CGROUP_SUFFIX=$3
 
 eval echo "'/var/lib/snapd/snap/bin/lxc profile show k8s-weavenet' | sg lxd $CGROUP_SUFFIX" > /dev/null
 Cmd0=`echo $?`
@@ -51,6 +53,7 @@ do
 
 	eval echo "'/var/lib/snapd/snap/bin/lxc start $i' | sg lxd $CGROUP_SUFFIX"
 
+	sed -i "s/orabuntu-lxc.com/$Domain1/g" ifcfg-eth0-$i 
 	cp ifcfg-eth0-$i ifcfg-eth0
 
 	Status=1
