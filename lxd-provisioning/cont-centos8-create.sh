@@ -41,7 +41,16 @@ for i in maestro violin1 violin2
 do
 	eval echo "'/var/lib/snapd/snap/bin/lxc stop -f $i ' | sg lxd $CGROUP_SUFFIX" >/dev/null 2>&1
 	eval echo "'/var/lib/snapd/snap/bin/lxc delete $i '  | sg lxd $CGROUP_SUFFIX" >/dev/null 2>&1
-	eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8-Stream $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+
+	Status=1
+	n=1
+	while [ $Status -ne 0 ] && [ $n -le 5 ]
+	do
+		eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8-Stream $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+		Status=`echo $?`
+		n=$((n+1))
+		sleep 5
+	done
 	
 	function GetHwaddr {
 		eval echo "'/var/lib/snapd/snap/bin/lxc config show $i | grep hwaddr | rev | cut -c1-17 | rev' | sg lxd $CGROUP_SUFFIX"
