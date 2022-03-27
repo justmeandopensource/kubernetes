@@ -1,5 +1,7 @@
 #!/bin/bash
 
+GRE=$1
+
 echo ''
 echo "=============================================="
 echo "Configure CGROUP_SUFFIX...                    "
@@ -57,31 +59,63 @@ echo "Configure LXD K8S Storage ...                 "
 echo "=============================================="
 echo ''
 
+if [ $GRE = 'N' ]
+then
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd maestro' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin1' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin2' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  containerd disk pool=containerd source=maestro  path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 containerd disk pool=containerd source=violin1 path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 containerd disk pool=containerd source=violin2 path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
 
-eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd maestro' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin1' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin2' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  containerd disk pool=containerd source=maestro  path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 containerd disk pool=containerd source=violin1 path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 containerd disk pool=containerd source=violin2 path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create kubelet dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet maestro' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin1' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin2' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  kubelet disk pool=kubelet source=maestro  path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 kubelet disk pool=kubelet source=violin1 path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 kubelet disk pool=kubelet source=violin2 path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
 
-eval echo "'/var/lib/snapd/snap/bin/lxc storage create kubelet dir' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet maestro' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin1' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin2' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  kubelet disk pool=kubelet source=maestro  path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 kubelet disk pool=kubelet source=violin1 path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 kubelet disk pool=kubelet source=violin2 path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create docker dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker maestro' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin1' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin2' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  docker disk pool=docker source=maestro  path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 docker disk pool=docker source=violin1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 docker disk pool=docker source=violin2 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
 
-eval echo "'/var/lib/snapd/snap/bin/lxc storage create docker dir' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker maestro' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin1' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin2' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add maestro  docker disk pool=docker source=maestro  path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin1 docker disk pool=docker source=violin1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
-eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin2 docker disk pool=docker source=violin2 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+elif [ $GRE = 'Y' ]
+then
+        ViolinIndex=3
 
+        function CheckDNSLookup {
+                timeout 5 nslookup violin"$ViolinIndex" $NameServer
+        }
+        DNSLookup=$(CheckDNSLookup)
+        DNSLookup=`echo $?`
+
+        while [ $DNSLookup -eq 0 ]
+        do
+                ViolinIndex=$((ViolinIndex+1))
+                DNSLookup=$(CheckDNSLookup)
+                DNSLookup=`echo $?`
+        done
+
+        ViolinIndex=$((ViolinIndex-1))
+	
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex containerd disk pool=containerd source=violin$ViolinIndex path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
+
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create kubelet dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex kubelet disk pool=kubelet source=violin$ViolinIndex path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
+
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage create docker dir' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex docker disk pool=docker source=violin1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+fi
 
 echo ''
 echo "=============================================="

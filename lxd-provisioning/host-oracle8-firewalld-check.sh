@@ -1,19 +1,46 @@
 #!/bin/bash
 
-echo ''
-echo "==============================================" 
-echo "List Firewalld Zone ...                       "
-echo "=============================================="
-echo ''
+LinuxFlavor=$1
 
-sudo firewall-cmd --list-all-zones | grep -A10 public
+if   [ $LinuxFlavor = 'Red' ] || [ $LinuxFlavor = 'CentOS' ] || [ $LinuxFlavor = 'Oracle' ] || [ $LinuxFlavor = 'Fedora' ]
+then
+        function GetFwd1 {
+                sudo rpm -qa | grep -c firewalld
+        }
+	Fwd1=$(GetFwd1)
 
-echo ''
-echo "==============================================" 
-echo "Done: List Firewalld Zone.                    "
-echo "=============================================="
-echo ''
+elif [ $LinuxFlavor = 'Ubuntu' ]
+then
+        function GetFwd1 {
+                sudo dpkg -l | grep -c firewalld
+        }
+	Fwd1=$(GetFwd1)
+fi
 
-sleep 5
+function GetFwd2 {
+        sudo firewall-cmd --state 2>/dev/null | grep -ic 'running'
+}
+Fwd2=$(GetFwd2)
 
-clear
+echo $Fwd1 $Fwd2
+
+if [ $Fwd1 -ge 1 ] && [ $Fwd2 -ge 1 ]
+then
+	echo ''
+	echo "==============================================" 
+	echo "List Firewalld Zone ...                       "
+	echo "=============================================="
+	echo ''
+
+	sudo firewall-cmd --list-all-zones | grep -A10 public
+
+	echo ''
+	echo "==============================================" 
+	echo "Done: List Firewalld Zone.                    "
+	echo "=============================================="
+	echo ''
+
+	sleep 5
+
+	clear
+fi
