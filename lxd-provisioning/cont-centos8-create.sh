@@ -160,7 +160,7 @@ then
         while [ $Status -ne 0 ] && [ $n -le 5 ]
         do
                 echo "Create container $i"
-                eval echo "'/var/lib/snapd/snap/bin/lxc init images:centos/8-Stream $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
+                eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8-Stream $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
                 Status=`echo $?`
                 n=$((n+1))
                 echo $n
