@@ -104,17 +104,17 @@ then
 
         ViolinIndex=$((ViolinIndex-1))
 	
-	eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
+#	eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create containerd violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex containerd disk pool=containerd source=violin$ViolinIndex path=/var/lib/containerd' | sg lxd $CGROUP_SUFFIX"
 
-	eval echo "'/var/lib/snapd/snap/bin/lxc storage create kubelet dir' | sg lxd $CGROUP_SUFFIX"
+#	eval echo "'/var/lib/snapd/snap/bin/lxc storage create kubelet dir' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create kubelet violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex kubelet disk pool=kubelet source=violin$ViolinIndex path=/var/lib/kubelet' | sg lxd $CGROUP_SUFFIX"
 
-	eval echo "'/var/lib/snapd/snap/bin/lxc storage create docker dir' | sg lxd $CGROUP_SUFFIX"
+#	eval echo "'/var/lib/snapd/snap/bin/lxc storage create docker dir' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc storage volume create docker violin$ViolinIndex' | sg lxd $CGROUP_SUFFIX"
-	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex docker disk pool=docker source=violin1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
+#	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex docker disk pool=docker source=violin1 path=/var/lib/docker' | sg lxd $CGROUP_SUFFIX"
 fi
 
 echo ''

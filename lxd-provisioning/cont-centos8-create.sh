@@ -159,11 +159,9 @@ then
         n=1
         while [ $Status -ne 0 ] && [ $n -le 5 ]
         do
-                echo "Create container $i"
                 eval echo "'/var/lib/snapd/snap/bin/lxc launch images:centos/8-Stream $i --profile k8s-weavenet' | sg lxd $CGROUP_SUFFIX"
                 Status=`echo $?`
                 n=$((n+1))
-                echo $n
                 sleep 5
         done
 
@@ -171,11 +169,9 @@ then
         n=1
         while [ $Status -ne 0 ] && [ $n -le 5 ]
         do
-                echo "Install packages in container $i"
                 eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- dnf -y install openssh-server net-tools bind-utils git rsync' | sg lxd $CGROUP_SUFFIX"
                 Status=`echo $?`
                 n=$((n+1))
-                echo $n
                 sleep 5
         done
 

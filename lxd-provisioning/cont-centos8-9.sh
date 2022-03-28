@@ -25,7 +25,7 @@ echo "Join violin$ViolinIndex to k8s cluster...     "
 echo "=============================================="
 echo ''
 
-sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@maestro "/root/cont-centos8-X.sh $GRE $NameServer"
+sshpass -p root scp -p root@maestro:/root/joincluster.sh .
 sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@violin$ViolinIndex "/root/joincluster.sh"
 
 echo ''
