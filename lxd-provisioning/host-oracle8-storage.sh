@@ -102,7 +102,6 @@ then
                 DNSLookup=`echo $?`
         done
 
-        ViolinIndex=$((ViolinIndex-1))
 
 	echo "No storage required."	
 #	eval echo "'/var/lib/snapd/snap/bin/lxc storage create containerd dir' | sg lxd $CGROUP_SUFFIX"

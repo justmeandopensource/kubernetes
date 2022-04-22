@@ -23,7 +23,6 @@ then
                 DNSLookup=`echo $?`
         done
 
-        ViolinIndex=$((ViolinIndex-1))
 
 	eval echo "'/var/lib/snapd/snap/bin/lxc file push crio.conf violin$ViolinIndex/root/'  | sg lxd $CGROUP_SUFFIX"
 fi
