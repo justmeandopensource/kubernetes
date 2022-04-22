@@ -165,6 +165,17 @@ then
                 sleep 5
         done
 
+	Status=1
+	n=1
+	while [ $Status -ne 0 ] && [ $n -le 5 ]
+	do
+		# Make sure k8s LXD container has an IP address.
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- dhclient' | sg lxd $CGROUP_SUFFIX"
+                Status=`echo $?`
+                n=$((n+1))
+                sleep 5
+        done
+
         Status=1
         n=1
         while [ $Status -ne 0 ] && [ $n -le 5 ]
