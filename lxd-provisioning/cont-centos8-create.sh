@@ -165,16 +165,6 @@ then
                 sleep 5
         done
 
-#	function GetViolinMacAddr {
-#		lxc info $i | grep MAC | sed 's/^[ \t]*//;s/[ \t]*$//' | rev | cut -f1 -d' ' | rev
-#	}
-#	ViolinMacAddr=$(GetViolinMacAddr)
-
-#	function GetViolinIpAddr {
-#		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- hostname -I' | sg lxd $CGROUP_SUFFIX"
-#	}
-#	ViolinIpAddr=$(GetViolinIpAddr)
-
         Status=1
         n=1
         while [ $Status -ne 0 ] && [ $n -le 5 ]
