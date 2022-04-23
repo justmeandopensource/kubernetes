@@ -86,6 +86,7 @@ then
                 DNSLookup=`echo $?`
         done
 
+        ViolinIndex=$((ViolinIndex-1))
 
 	eval echo "'/var/lib/snapd/snap/bin/lxc stop violin$ViolinIndex -f' | sg lxd $CGROUP_SUFFIX"
 	eval echo "'/var/lib/snapd/snap/bin/lxc config device remove violin$ViolinIndex libs' | sg lxd $CGROUP_SUFFIX"

@@ -30,6 +30,17 @@
 #    There are two domains and two networks because the "seed" LXC containers are on a separate network from the production LXC containers.
 #    If the domain is an actual domain, you will need to change the subnet using the subnets feature of Orabuntu-LXC
 
+#!/bin/bash
+
+ContainerRuntime=$1
+k8sCNI=$2
+
+echo ''
+echo "=============================================="
+echo "Run dnf upgrade -y --refresh ...              "
+echo "=============================================="
+echo ''
+
 n=1
 Cmd0=1
 while [ $Cmd0 -ne 0 ] && [ $n -le 5 ]
@@ -39,28 +50,190 @@ do
         n=$((n+1))
         sleep 5
 done
-dnf install -y epel-release
-dnf install -y sshpass
-systemctl enable kubelet.service
-# kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --kubernetes-version=v1.23.0-beta.0 | tee kubeadm_init.log
-kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
-# kubeadm reset -f
-# kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
-echo "Sleeping 30 seconds while kubernetes master starts running ..."
-sleep 30
-cat kubeadm_init.log | grep -A1 join | grep -A1 token > joincluster.sh
-chmod +x joincluster.sh
-export KUBECONFIG=/etc/kubernetes/admin.conf
-echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# sleep 30
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# sleep 30
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+echo ''
+echo "=============================================="
+echo "Done: Run dnf upgrade -y --refresh.           "
+echo "=============================================="
+echo ''
 
 sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Install epel-release and sshpass...           "
+echo "=============================================="
+echo ''
+
+dnf install -y epel-release
+dnf install -y sshpass
+
+echo ''
+echo "=============================================="
+echo "Done: Install epel-release and sshpass.       "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Ensure kubelet service is enables...          "
+echo "=============================================="
+echo ''
+
+systemctl enable kubelet.service
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Done: Ensure kubelet service is enables.      "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Run kubeadm reset -f (optional) ...           "
+echo "=============================================="
+echo ''
+
+# kubeadm reset -f
+# kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all --kubernetes-version=v1.23.0-beta.0 | tee kubeadm_init.log
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Done: Run kubeadm reset -f (optional).        "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Run kubeadm init  ...                         "
+echo "=============================================="
+echo ''
+
+kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=all | tee kubeadm_init.log
+
+echo ''
+echo "=============================================="
+echo "Done: Run kubeadm init  ...                   "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Sleep 30 secs while k8s starts...             "
+echo "=============================================="
+echo ''
+
+sleep 30
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Create joincluster.sh ...                     "
+echo "=============================================="
+echo ''
+
+cat kubeadm_init.log | grep -A1 join | grep -A1 token > joincluster.sh
+chmod +x joincluster.sh
+cat joincluster.sh
+
+echo ''
+echo "=============================================="
+echo "Done: Create joincluster.sh.                  "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Configure KUBECONFIG env vars ...             "
+echo "=============================================="
+echo ''
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
+cat /etc/kubernetes/admin.conf 
+
+echo ''
+echo "=============================================="
+echo "Done: Configure KUBECONFIG env vars.          "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Apply Kubernetes CNI provider ...             "
+echo "=============================================="
+echo ''
+
+Cmd0=1
+n=1
+while [ $Cmd0 -ne 0 ] && [ $n -le 3 ]
+do
+	if   [ $k8sCNI = 'weavenet' ]
+	then
+		kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+		Cmd0=`echo $?`
+		n=$((n+1))
+		sleep 5
+
+	elif [ $k8sCNI = 'flannel' ]
+	then
+		kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+		Cmd0=`echo $?`
+		n=$((n+1))
+		sleep 5
+	fi
+done
+
+echo ''
+echo "=============================================="
+echo "Done: Apply Kubernetes CNI provider.          "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Display pod statuses every 30 secs x 3 ...    "
+echo "=============================================="
+echo ''
 
 echo "Sleeping 30 seconds while weavenet starts running ..."
 echo ''
@@ -72,22 +245,71 @@ sleep 30
 echo ''
 kubectl get pods --all-namespaces -o wide
 sleep 30
-sed -i '${s/$/ --ignore-preflight-errors=all/}' joincluster.sh
+
+echo ''
+echo "=============================================="
+echo "Done: Display pod statuses every 30 secs x 3. "
+echo "=============================================="
+echo ''
+
 sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "sed joincluster.sh ...                        "
+echo "=============================================="
+echo ''
+
+sed -i '${s/$/ --ignore-preflight-errors=all/}' joincluster.sh
+cat joincluster.sh
+
+echo ''
+echo "=============================================="
+echo "Done: sed joincluster.sh.                     "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Join violin1 node to k8s cluster...           "
+echo "=============================================="
+echo ''
+
 sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.5:/root/.
-sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.6:/root/.
-echo ''
 sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.5 "/root/joincluster.sh"
-sleep 10
+
 echo ''
+echo "=============================================="
+echo "Done: Join violin1 node to k8s cluster.       "
+echo "=============================================="
+echo ''
+
+sleep 5
+
+clear
+
+echo ''
+echo "=============================================="
+echo "Join violin2 node to k8s cluster...           "
+echo "=============================================="
+echo ''
+
+sshpass -p root scp    -o CheckHostIP=no -o StrictHostKeyChecking=no -p /root/joincluster.sh root@10.209.53.6:/root/.
 sshpass -p root ssh -t -o CheckHostIP=no -o StrictHostKeyChecking=no root@10.209.53.6 "/root/joincluster.sh"
 
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# sleep 30
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# sleep 30
-# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-# sleep 30
+echo ''
+echo "=============================================="
+echo "Done: Join violin2 node to k8s cluster.       "
+echo "=============================================="
+echo ''
+
+sleep 5
 
 clear
 

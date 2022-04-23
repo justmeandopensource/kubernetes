@@ -31,6 +31,7 @@ then
                 DNSLookup=`echo $?`
         done
 
+        ViolinIndex=$((ViolinIndex-1))
 
 	eval echo "'/var/lib/snapd/snap/bin/lxc config device add violin$ViolinIndex libs disk source=/lib/modules path=/lib/modules' | sg lxd $CGROUP_SUFFIX"
 fi
