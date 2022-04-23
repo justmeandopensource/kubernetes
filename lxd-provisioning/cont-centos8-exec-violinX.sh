@@ -17,6 +17,7 @@ do
         DNSLookup=`echo $?`
 done
 
+ViolinIndex=$((ViolinIndex-1))
 
 eval echo "'/var/lib/snapd/snap/bin/lxc exec violin$ViolinIndex -- /root/cont-centos8-0.sh $ContainerRuntime' | sg lxd"
 eval echo "'/var/lib/snapd/snap/bin/lxc exec violin$ViolinIndex -- /root/cont-centos8-9.sh $GRE $NameServer'  | sg lxd"

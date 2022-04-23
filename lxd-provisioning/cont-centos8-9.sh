@@ -17,6 +17,7 @@ do
         DNSLookup=`echo $?`
 done
 
+ViolinIndex=$((ViolinIndex-1))
 
 echo ''
 echo "=============================================="
