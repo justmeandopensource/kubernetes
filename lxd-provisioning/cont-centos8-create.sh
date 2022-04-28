@@ -123,8 +123,12 @@ then
 			sleep 5
 		done
 
-		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
-		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- service sshd start' | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/GSSAPIAuthentication/s/#//"     /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/GSSAPIAuthentication/s/yes/no/" /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/UseDNS/s/#//"                   /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/UseDNS/s/yes/no/"               /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- systemctl enable sshd'                                           | sg lxd $CGROUP_SUFFIX"
+		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- service sshd start'                                              | sg lxd $CGROUP_SUFFIX"
 		eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
 
 		if [ -f /sys/fs/cgroup/cgroup.controllers ]
@@ -175,8 +179,12 @@ then
                 sleep 5
         done
 
-        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- systemctl enable sshd' | sg lxd $CGROUP_SUFFIX"
-        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- service sshd start' | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/GSSAPIAuthentication/s/#//"     /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/GSSAPIAuthentication/s/yes/no/" /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/UseDNS/s/#//"                   /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+	eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- sed -i "/UseDNS/s/yes/no/"               /etc/ssh/sshd_config'   | sg lxd $CGROUP_SUFFIX"
+        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- systemctl enable sshd' 					    | sg lxd $CGROUP_SUFFIX"
+        eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- service sshd start' 						    | sg lxd $CGROUP_SUFFIX"
         eval echo "'/var/lib/snapd/snap/bin/lxc exec $i -- usermod --password `perl -e "print crypt('root','root');"` root' | sg lxd $CGROUP_SUFFIX"
 
         if [ -f /sys/fs/cgroup/cgroup.controllers ]
