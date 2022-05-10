@@ -51,7 +51,7 @@ sysctl --system
 ```
 ##### Install Kubernetes components
 ```
-apt update && apt install -y kubeadm=1.18.5-00 kubelet=1.18.5-00 kubectl=1.18.5-00
+apt update && apt install -y kubeadm=1.24.x-00 kubelet=1.24.x-00 kubectl=1.24.x-00
 ```
 ##### In case you are using LXC containers for Kubernetes nodes
 Hack required to provision K8s v1.15+ in LXC containers
