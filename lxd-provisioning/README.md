@@ -6,7 +6,7 @@ Create an EC2 instance of type t2.medium size which will be sufficient for runni
 
 #### Installing the LXC on Ubuntu 
 ```
-$ sudo apt-get update && apt-get install lxc -y
+$ sudo apt-get update && sudo apt-get install lxc -y
 $ sudo systemctl status lxc
 $ lxd init
 ```
