@@ -3,6 +3,9 @@
 # This script has been tested on Ubuntu 20.04
 # For other versions of Ubuntu, you might need some tweaking
 
+echo "[TASK 0] Install essential packages"
+apt install -qq -y net-tools curl ssh software-properties-common >/dev/null 2>&1
+
 echo "[TASK 1] Install containerd runtime"
 apt update -qq >/dev/null 2>&1
 apt install -qq -y containerd apt-transport-https >/dev/null 2>&1
