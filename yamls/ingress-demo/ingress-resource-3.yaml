@@ -5,6 +5,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
   name: ingress-resource-3
 spec:
+  ingressClassName: nginx
   rules:
   - host: nginx.example.com
     http:
