@@ -31,7 +31,7 @@ cat <<EOF >/etc/systemd/system/etcd.service
 Description=etcd
 
 [Service]
-Type=notify
+Type=exec
 ExecStart=/usr/local/bin/etcd \\
   --name ${ETCD_NAME} \\
   --initial-advertise-peer-urls http://${NODE_IP}:2380 \\
