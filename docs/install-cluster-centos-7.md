@@ -59,12 +59,14 @@ yum install -y kubeadm-1.18.5-0 kubelet-1.18.5-0 kubectl-1.18.5-0
 ```
 ##### Enable and Start kubelet service
 ```
+systemctl start --now kubelet
+systemctl status --now kubelet
 systemctl enable --now kubelet
 ```
 ## On kmaster
 ##### Initialize Kubernetes Cluster
 ```
-kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16 --v=5
 ```
 ##### Deploy Calico network
 ```
