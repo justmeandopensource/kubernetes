@@ -151,7 +151,7 @@ Description=etcd
 
 [Service]
 Type=notify
-ExecStart=/usr/local/bin/etcd \\
+ExecStart=/usr/local/bin/etcd
   --name ${ETCD_NAME} \\
   --cert-file=/etc/etcd/pki/etcd.pem \\
   --key-file=/etc/etcd/pki/etcd-key.pem \\

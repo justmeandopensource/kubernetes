@@ -32,7 +32,7 @@ Description=etcd
 
 [Service]
 Type=exec
-ExecStart=/usr/local/bin/etcd \\
+ExecStart=/usr/local/bin/etcd
   --name ${ETCD_NAME} \\
   --initial-advertise-peer-urls http://${NODE_IP}:2380 \\
   --listen-peer-urls http://${NODE_IP}:2380 \\
