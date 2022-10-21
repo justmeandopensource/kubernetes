@@ -7,9 +7,9 @@ This documentation guides you in setting up a cluster with two master nodes, one
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
 |Load Balancer|loadbalancer.example.com|172.16.16.100|Ubuntu 20.04|1G|1|
-|Master|kmaster1.example.com|172.16.16.101|Ubuntu 20.04|2G|2|
-|Master|kmaster2.example.com|172.16.16.102|Ubuntu 20.04|2G|2|
-|Worker|kworker1.example.com|172.16.16.201|Ubuntu 20.04|1G|1|
+|Master|kmaster1.example.com|172.16.16.101|Ubuntu 22.04|2G|2|
+|Master|kmaster2.example.com|172.16.16.102|Ubuntu 22.04|2G|2|
+|Worker|kworker1.example.com|172.16.16.201|Ubuntu 22.04|1G|1|
 
 > * Password for the **root** account on all these virtual machines is **kubeadmin**
 > * Perform all the commands as root user unless otherwise specified
@@ -69,21 +69,29 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 ```
-##### Install docker engine
+##### Install containderd
 ```
 {
-  apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  apt update && apt install -y docker-ce=5:19.03.10~3-0~ubuntu-focal containerd.io
+  apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/docker.gpg
+echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  apt update && apt install -y containerd.io
+  sudo mkdir -p /etc/containerd
+  containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
+  sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+  sudo systemctl enable containerd
+  sudo systemctl restart containerd
 }
 ```
 ### Kubernetes Setup
 ##### Add Apt repository
 ```
 {
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
+  sudo wget -q https://packages.cloud.google.com/apt/doc/apt-key.gpg -P /usr/share/keyrings/
+  echo "deb [signed-by=/usr/share/keyrings/apt-key.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  sudo apt-get update && 
+  sudo apt-get install -y kubelet==1.25.3-00 kubeadm=1.25.3-00 kubectl=1.25.3-00
+  sudo apt-mark hold kubelet kubeadm kubectl
 }
 ```
 ##### Install Kubernetes components
