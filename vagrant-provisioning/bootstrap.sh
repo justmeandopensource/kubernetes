@@ -31,7 +31,19 @@ sysctl --system >/dev/null 2>&1
 
 echo "[TASK 5] Install containerd runtime"
 apt update -qq >/dev/null 2>&1
-apt install -qq -y containerd apt-transport-https >/dev/null 2>&1
+apt install -qq -y containerd apt-transport-https
+
+# PATCH
+# https://serverfault.com/questions/1118051/failed-to-run-kubelet-validate-service-connection-cri-v1-runtime-api-is-not-im
+echo "[TASK 5.5] Install containerd version 1.6.12"
+wget https://github.com/containerd/containerd/releases/download/v1.6.12/containerd-1.6.12-linux-amd64.tar.gz
+tar xvf containerd-1.6.12-linux-amd64.tar.gz
+systemctl stop containerd
+cd bin
+cp * /usr/bin/
+systemctl start containerd
+# END PATCH
+
 mkdir /etc/containerd
 containerd config default > /etc/containerd/config.toml
 sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
