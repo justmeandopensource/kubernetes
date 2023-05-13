@@ -13,4 +13,5 @@ echo "[TASK 4] Generate and save cluster join command to /joincluster.sh"
 kubeadm token create --print-join-command > /joincluster.sh 2>/dev/null
 
 echo "[TASK 5] Export KUBECONFIG"
-echo "export KUBECONFIG=/etc/kubernetes/admin.conf" > /root/.bashrc
+echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /root/.bashrc
+echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /home/vagrant/.bashrc

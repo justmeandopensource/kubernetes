@@ -5,6 +5,7 @@
 ## This script is tested only in the generic/ubuntu2204 Vagrant box
 ## If you use a different version of Ubuntu or a different Ubuntu Vagrant box test this again
 #
+DNS="1.1.1.1" ## You can change custom dns here
 
 echo "[TASK 1] Disable and turn off SWAP"
 sed -i '/swap/d' /etc/fstab
@@ -12,7 +13,7 @@ swapoff -a
 
 echo "[TASK 2] Setup DNS and Disable systemd-resolved"
 systemctl disable --now systemd-resolved
-echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+echo "nameserver $DNS" >> /etc/resolv.conf
 
 echo "[TASK 3] Stop and Disable firewall"
 systemctl disable --now ufw >/dev/null 2>&1
