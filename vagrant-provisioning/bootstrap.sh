@@ -11,7 +11,7 @@ sed -i '/swap/d' /etc/fstab
 swapoff -a
 
 echo "[TASK 2] Stop and Disable firewall"
-systemctl disable --now ufw >/dev/null
+systemctl disable --now ufw >/dev/null 2>&1
 
 echo "[TASK 3] Enable and Load Kernel modules"
 cat >>/etc/modules-load.d/containerd.conf<<EOF
