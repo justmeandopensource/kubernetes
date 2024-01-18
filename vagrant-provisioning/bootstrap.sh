@@ -11,7 +11,7 @@ sed -i '/swap/d' /etc/fstab
 swapoff -a
 
 echo "[TASK 2] Stop and Disable firewall"
-systemctl disable --now >/dev/null
+systemctl disable --now ufw >/dev/null
 
 echo "[TASK 3] Enable and Load Kernel modules"
 cat >>/etc/modules-load.d/containerd.conf<<EOF
@@ -27,18 +27,19 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables  = 1
 net.ipv4.ip_forward                 = 1
 EOF
-sysctl --system >/dev/null
+sysctl --system >/dev/null 2>&1
 
 echo "[TASK 5] Install containerd runtime"
-apt update -qq >/dev/null
-apt install -qq -y apt-transport-https ca-certificates curl gnupg lsb-release >/dev/null
+export DEBIAN_FRONTEND=noninteractive
+apt-get update -qq >/dev/null
+apt-get install -qq -y apt-transport-https ca-certificates curl gnupg lsb-release >/dev/null
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-apt update -qq >/dev/null
-apt install -qq -y containerd.io >/dev/null
+apt-get update -qq >/dev/null
+apt-get install -qq -y containerd.io >/dev/null
 containerd config default > /etc/containerd/config.toml
 sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 systemctl restart containerd
@@ -49,7 +50,8 @@ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearm
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' > /etc/apt/sources.list.d/kubernetes.list
 
 echo "[TASK 7] Install Kubernetes components (kubeadm, kubelet and kubectl)"
-apt install -qq -y kubeadm kubelet kubectl >/dev/null
+apt-get update -qq >/dev/null
+apt-get install -qq -y kubeadm kubelet kubectl >/dev/null
 
 echo "[TASK 8] Enable ssh password authentication"
 sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
@@ -57,7 +59,7 @@ echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 systemctl reload sshd
 
 echo "[TASK 9] Set root password"
-echo -e "kubeadmin\nkubeadmin" | passwd root >/dev/null
+echo -e "kubeadmin\nkubeadmin" | passwd root >/dev/null 2>&1
 echo "export TERM=xterm" >> /etc/bash.bashrc
 
 echo "[TASK 10] Update /etc/hosts file"
