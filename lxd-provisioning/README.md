@@ -1,10 +1,10 @@
-### Setting up K8s Cluster using LXC/LXD 
+### Setting up K8s Cluster using LXC/LXD
 > **Note:** For development purpose and not recommended for Production use
 
 #### In case you want to use an AWS EC2 instance
 Create an EC2 instance of type t2.medium size which will be sufficient for running 3 lxc containers each with 2 CPUs and 2Gi of memory.
 
-#### Installing the LXC on Ubuntu 
+#### Installing the LXC on Ubuntu
 ```
 $ sudo apt-get update && sudo apt-get install lxc -y
 $ sudo systemctl status lxc
@@ -31,15 +31,15 @@ $ lxc profile list
 
 #### It's time to create node for k8s cluster
 ```
-$ lxc launch ubuntu:20.04 kmaster --profile k8s
+$ lxc launch ubuntu:22.04 kmaster --profile k8s
 Creating kmaster
 Starting kmaster
 
-$ lxc launch ubuntu:20.04 kworker1 --profile k8s
+$ lxc launch ubuntu:22.04 kworker1 --profile k8s
 Creating kworker1
 Starting kworker1
 
-$ lxc launch ubuntu:20.04 kworker2 --profile k8s
+$ lxc launch ubuntu:22.04 kworker2 --profile k8s
 Creating kworker2
 Starting kworker2
 ```
@@ -55,6 +55,11 @@ $ lxc list
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
 | kworker2  | RUNNING | 10.127.221.151 (eth0) | fd42:d04d:d3e7:433:216:3eff:fe28:77dc (eth0) | PERSISTENT | 0         |
 +-----------+---------+-----------------------+----------------------------------------------+------------+-----------+
+```
+#### IMPORTANT! Sysctl setting on host linux machine
+Run the below command on the Linux host where you are running lxd containers. Otherwise kube-proxy pods will fail.
+```
+sudo sysctl -w net.netfilter.nf_conntrack_max=524288
 ```
 #### Now, run bootstrap script on all node.
 It is mandatory to run this bootstrap script on master node first.
@@ -104,7 +109,7 @@ Kubernetes master is running at https://10.127.221.187:6443
 KubeDNS is running at https://10.127.221.187:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
-#### Let's deploy sample nginx 
+#### Let's deploy sample nginx
 ```
 $ kubectl create deploy nginx --image nginx
 deployment.apps/nginx created
