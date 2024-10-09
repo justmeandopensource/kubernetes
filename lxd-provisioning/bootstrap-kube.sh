@@ -33,7 +33,7 @@ echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/default/kubelet
 systemctl restart kubelet
 
 echo "[TASK 5] Enable ssh password authentication"
-sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 systemctl reload sshd
 
