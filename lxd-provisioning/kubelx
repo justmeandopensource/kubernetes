@@ -1,48 +1,99 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-usage()
-{
-  echo "Usage: kubelx [provision|destroy]"
+set -euo pipefail
+
+NODES=("kmaster" "kworker1" "kworker2")
+PROFILE_NAME="k8s"
+UBUNTU_VERSION="22.04"
+PROFILE_CONFIG_FILE="k8s-profile-config"
+BOOTSTRAP_SCRIPT="bootstrap-kube.sh"
+
+usage() {
+  echo "Usage: $0 [provision|destroy]" >&2
   exit 1
 }
 
-NODES="kmaster kworker1 kworker2"
+log() {
+  echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*" >&2
+}
 
-kubeprovision()
-{
-  # check if we have k8s profile or create one
-  lxc profile list | grep -qo k8s || (lxc profile create k8s && cat k8s-profile-config | lxc profile edit k8s)
-  echo
-  for node in $NODES
-  do
-    echo "==> Bringing up $node"
-    lxc launch ubuntu:22.04 $node --profile k8s
-    sleep 10
-    echo "==> Running provisioner script"
-    cat bootstrap-kube.sh | lxc exec $node bash
-    echo
+check_dependencies() {
+  local deps=("lxc")
+  for dep in "${deps[@]}"; do
+    if ! command -v "$dep" &> /dev/null; then
+      log "Error: $dep is not installed. Please install it and try again."
+      exit 1
+    fi
   done
 }
 
-kubedestroy()
-{
-  for node in $NODES
-  do
-    echo "==> Destroying $node..."
-    lxc delete --force $node
-  done
+create_k8s_profile() {
+  if ! lxc profile list | grep -q "$PROFILE_NAME"; then
+    log "Creating $PROFILE_NAME profile"
+    lxc profile create "$PROFILE_NAME"
+    if [[ -f "$PROFILE_CONFIG_FILE" ]]; then
+      lxc profile edit "$PROFILE_NAME" < "$PROFILE_CONFIG_FILE"
+    else
+      log "Warning: $PROFILE_CONFIG_FILE not found. Profile created but not configured."
+    fi
+  else
+    log "$PROFILE_NAME profile already exists"
+  fi
 }
 
-case "$1" in
-  provision)
-    echo -e "\nProvisioning Kubernetes Cluster...\n"
-    kubeprovision
-    ;;
-  destroy)
-    echo -e "\nDestroying Kubernetes Cluster...\n"
-    kubedestroy
-    ;;
-  *)
-    usage
-    ;;
-esac
+provision_node() {
+  local node=$1
+  log "Bringing up $node"
+  if ! lxc info "$node" &> /dev/null; then
+    lxc launch "ubuntu:$UBUNTU_VERSION" "$node" --profile "$PROFILE_NAME"
+    log "Running provisioner script"
+    if [[ -f "$BOOTSTRAP_SCRIPT" ]]; then
+      lxc file push "$BOOTSTRAP_SCRIPT" "$node/tmp/"
+      lxc exec "$node" -- bash "/tmp/$BOOTSTRAP_SCRIPT"
+    else
+      log "Error: $BOOTSTRAP_SCRIPT not found. Node created but not provisioned."
+    fi
+  else
+    log "Warning: $node already exists. Skipping creation."
+  fi
+}
+
+kubeprovision() {
+  create_k8s_profile
+  for node in "${NODES[@]}"; do
+    provision_node "$node"
+  done
+  log "Kubernetes cluster provisioned successfully"
+}
+
+kubedestroy() {
+  for node in "${NODES[@]}"; do
+    if lxc info "$node" &> /dev/null; then
+      log "Destroying $node"
+      lxc delete --force "$node"
+    else
+      log "Node $node does not exist. Skipping."
+    fi
+  done
+  log "Kubernetes cluster destroyed successfully"
+}
+
+main() {
+  check_dependencies
+
+  case "$1" in
+    provision)
+      log "Provisioning Kubernetes Cluster"
+      kubeprovision
+      ;;
+    destroy)
+      log "Destroying Kubernetes Cluster"
+      kubedestroy
+      ;;
+    *)
+      usage
+      ;;
+  esac
+}
+
+main "$@"

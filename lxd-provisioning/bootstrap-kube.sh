@@ -1,81 +1,110 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# This script has been tested on Ubuntu 22.04
-# For other versions of Ubuntu, you might need some tweaking
+# Kubernetes Bootstrapping Script
+# Tested on Ubuntu 22.04 - May need tweaking for other versions
 
-echo "[TASK 1] Install essential packages"
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq >/dev/null
-apt-get install -qq -y net-tools curl ssh software-properties-common >/dev/null
+# Configuration
+KUBERNETES_VERSION="1.31"
+CALICO_VERSION="3.28.2"
+POD_NETWORK_CIDR="192.168.0.0/16"
+ROOT_PASSWORD="kubeadmin"
 
-echo "[TASK 2] Install containerd runtime"
-apt-get install -qq -y apt-transport-https ca-certificates curl gnupg lsb-release >/dev/null
-mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-apt-get update -qq >/dev/null
-apt-get install -qq -y containerd.io >/dev/null
-containerd config default > /etc/containerd/config.toml
-sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
-systemctl restart containerd
-systemctl enable containerd >/dev/null
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
 
-echo "[TASK 3] Set up kubernetes repo"
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' > /etc/apt/sources.list.d/kubernetes.list
+handle_error() {
+    log "Error on line $1"
+    exit 1
+}
 
-echo "[TASK 4] Install Kubernetes components (kubeadm, kubelet and kubectl)"
-apt-get update -qq >/dev/null
-apt-get install -qq -y kubeadm kubelet kubectl >/dev/null
-echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/default/kubelet
-systemctl restart kubelet
+trap 'handle_error $LINENO' ERR
 
-echo "[TASK 5] Enable ssh password authentication"
-sed -i 's/PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*
-echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
-systemctl reload sshd
+install_packages() {
+    local packages=("$@")
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq
+    apt-get install -qq -y "${packages[@]}"
+}
 
-echo "[TASK 6] Set root password"
-echo -e "kubeadmin\nkubeadmin" | passwd root >/dev/null 2>&1
-echo "export TERM=xterm" >> /etc/bash.bashrc
+main_tasks() {
+    log "TASK 1: Installing essential packages"
+    install_packages net-tools curl ssh software-properties-common
 
-#######################################
-# To be executed only on master nodes #
-#######################################
+    log "TASK 2: Installing containerd runtime"
+    install_packages apt-transport-https ca-certificates curl gnupg lsb-release
+    mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+    install_packages containerd.io
+    containerd config default > /etc/containerd/config.toml
+    sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+    systemctl restart containerd
+    systemctl enable containerd
 
-if [[ $(hostname) =~ .*master.* ]]
-then
+    log "TASK 3: Setting up Kubernetes repo"
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION}/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${KUBERNETES_VERSION}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list
 
-  echo "[TASK 7] Pull required containers"
-  kubeadm config images pull >/dev/null 2>&1
+    log "TASK 4: Installing Kubernetes components"
+    install_packages kubeadm kubelet kubectl
+    echo 'KUBELET_EXTRA_ARGS="--fail-swap-on=false"' > /etc/default/kubelet
+    systemctl restart kubelet
 
-  echo "[TASK 8] Initialize Kubernetes Cluster"
-  kubeadm init --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all >> /root/kubeinit.log 2>&1
+    log "TASK 5: Enabling SSH password authentication"
+    sed -i 's/PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*
+    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+    systemctl reload sshd
 
-  echo "[TASK 9] Copy kube admin config to root user .kube directory"
-  mkdir /root/.kube
-  cp /etc/kubernetes/admin.conf /root/.kube/config
+    log "TASK 6: Setting root password"
+    echo "root:${ROOT_PASSWORD}" | chpasswd
+    echo "export TERM=xterm" >> /etc/bash.bashrc
+}
 
-  echo "[TASK 10] Deploy Calico network"
-  kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml >/dev/null
-  kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml >/dev/null
+# Master node specific tasks
+master_tasks() {
+    log "TASK 7: Pulling required containers"
+    kubeadm config images pull
 
-  echo "[TASK 11] Generate and save cluster join command to /joincluster.sh"
-  joinCommand=$(kubeadm token create --print-join-command 2>/dev/null)
-  echo "$joinCommand --ignore-preflight-errors=all" > /joincluster.sh
+    log "TASK 8: Initializing Kubernetes Cluster"
+    kubeadm init --pod-network-cidr="${POD_NETWORK_CIDR}" --ignore-preflight-errors=all >> /root/kubeinit.log 2>&1
 
-fi
+    log "TASK 9: Copying kube admin config"
+    mkdir -p /root/.kube
+    cp /etc/kubernetes/admin.conf /root/.kube/config
 
-#######################################
-# To be executed only on worker nodes #
-#######################################
+    log "TASK 10: Deploying Calico network"
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/tigera-operator.yaml
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/custom-resources.yaml
 
-if [[ $(hostname) =~ .*worker.* ]]
-then
-  echo "[TASK 7] Join node to Kubernetes Cluster"
-  apt install -qq -y sshpass >/dev/null 2>&1
-  sshpass -p "kubeadmin" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no kmaster.lxd:/joincluster.sh /joincluster.sh 2>/tmp/joincluster.log
-  bash /joincluster.sh >> /tmp/joincluster.log 2>&1
-fi
+    log "TASK 11: Generating cluster join command"
+    joinCommand=$(kubeadm token create --print-join-command 2>/dev/null)
+    echo "$joinCommand --ignore-preflight-errors=all" > /joincluster.sh
+    chmod +x /joincluster.sh
+}
+
+# Worker node specific tasks
+worker_tasks() {
+    log "TASK 7: Joining node to Kubernetes Cluster"
+    install_packages sshpass
+    sshpass -p "${ROOT_PASSWORD}" scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no kmaster.lxd:/joincluster.sh /joincluster.sh
+    bash /joincluster.sh >> /tmp/joincluster.log 2>&1
+}
+
+main() {
+    main_tasks
+
+    if [[ $(hostname) =~ .*master.* ]]; then
+        master_tasks
+    elif [[ $(hostname) =~ .*worker.* ]]; then
+        worker_tasks
+    else
+        log "Unknown node type. Exiting."
+        exit 1
+    fi
+
+    log "Bootstrap completed successfully"
+}
+
+main
