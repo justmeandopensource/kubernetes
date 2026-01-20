@@ -6,9 +6,11 @@
 ```
 {
   wget -q --show-progress \
-    https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
-    https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
-  
+    https://github.com/cloudflare/cfssl/releases/download/v1.6.5/cfssl_1.6.5_linux_amd64 \
+    https://github.com/cloudflare/cfssl/releases/download/v1.6.5/cfssljson_1.6.5_linux_amd64
+
+  mv cfssl_1.6.5_linux_amd64 cfssl
+  mv cfssljson_1.6.5_linux_amd64 cfssljson
   chmod +x cfssl cfssljson
   sudo mv cfssl cfssljson /usr/local/bin/
 }
